@@ -1,0 +1,63 @@
+\documentclass{article}
+
+
+\usepackage[margin=1in]{geometry} % full-width
+
+% AMS Packages
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{xspace}
+\usepackage{todo}
+
+
+
+
+\title{Cryptarithmetic\\ \normalsize{Incomplete Draft}}
+
+\begin{document}
+	\maketitle
+\section{Cryptarithmetic Problem Statement}
+A common sample problem to illustrate the key concepts of constrain satisfaction paradigm is the cryptarithmetic problem. The problem is to find a mapping from letters to digits such that a given arithmetic equation holds true. For example, consider the following equation:
+\begin{equation}
+    \begin{array}{lr}
+ &TWO\\
+ +&TWO\\
+ \hline
+ &FOUR
+\end{array}
+\end{equation}
+where we want to assign each letter a number from $0$ to $9$ (except we do not want $T$ or $F$ to be $0$ as customary in arithmetic to ``avoid'' leading zeros) so that they add as in arithmetic. 
+
+
+    \section{Two Original ASP Programs}
+    Here we provide two distinct solutions to the crypto arithmetic problem in ASP. The solutions were designed independently by two researchers in the field. The apriori agreement was to use binary predicate symbol {\tt asn/2} as the only output predicate that maps letters of the problem into numbers and no input predicates. 
+
+    \paragraph{Yuliya's Solution}
+    \lstinputlisting[language=Prolog, caption="Yuliya's ASP encoding for two+two=four"]
+{cryptoYuliya.lp}
+
+    \paragraph{Vladimir's Solution}
+    \lstinputlisting[language=Prolog, caption="Vladimir's ASP encoding for two+two=four"]
+{cryptoVladimir.lp}
+
+It is easy to see that solutions differ. %To begin with they use different signatures to solve the problem. 
+Yet, we would like to reason whether these programs are essntially equivalent without having to run these and compare their answer sets. We follow approach of {\em Reasoning about Logic Programming Solutions
+to the N-Queens Puzzle} by Vladimir Lifschitz to perform this task.
+
+\section{Program's rewritten to bypass common abbreviations}
+
+    \paragraph{Yuliya's Solution in ``Canonical form''}
+ \lstinputlisting[language=Prolog, caption="Yuliya's ASP encoding with abbreviations removed"]
+{cryptoYuliyaCannonical.lp}
+
+    \paragraph{Vladimir's Solution in ``Canonical form''}
+ \lstinputlisting[language=Prolog, caption="Vladimir's ASP encoding with abbreviations removed"]
+{cryptoVladimirCannonical.lp}
+
+\section{Furmula representations    of two solutions}
+TBC
+
+\end{document}    
