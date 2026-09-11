@@ -36,26 +36,31 @@ where we want to assign each letter a number from $0$ to $9$ (except we do not w
     Here we provide two distinct solutions to the crypto arithmetic problem in ASP. The solutions were designed independently by two researchers in the field. The apriori agreement was to use binary predicate symbol {\tt asn/2} as the only output predicate that maps letters of the problem into numbers and no input predicates. 
 
     \paragraph{Yuliya's Solution}
-    \lstinputlisting[language=Prolog, caption="Yuliya's ASP encoding for two+two=four"]
+    \lstinputlisting[language=Prolog, numbers=left, caption="Yuliya's ASP encoding for two+two=four"]
 {cryptoYuliya.lp}
 
     \paragraph{Vladimir's Solution}
-    \lstinputlisting[language=Prolog, caption="Vladimir's ASP encoding for two+two=four"]
+    \lstinputlisting[language=Prolog, numbers=left, caption="Vladimir's ASP encoding for two+two=four"]
 {cryptoVladimir.lp}
 
-It is easy to see that solutions differ. %To begin with they use different signatures to solve the problem. 
-Yet, we would like to reason whether these programs are essntially equivalent without having to run these and compare their answer sets. We follow approach of {\em Reasoning about Logic Programming Solutions
+It is easy to see that solutions differ. Answer set solver {\sc clingo} takes orders of magnitude longer to find solutions to this puzzle using Vladimir's encoding.
+ %To begin with they use different signatures to solve the problem. 
+Yet, we would like to reason whether these programs are essentially equivalent (semantically) without having to run these and compare their answer sets. We follow approach of {\em Reasoning about Logic Programming Solutions
 to the N-Queens Puzzle} by Vladimir Lifschitz to perform this task.
 
 \section{Program's rewritten to bypass common abbreviations}
 
     \paragraph{Yuliya's Solution in ``Canonical form''}
- \lstinputlisting[language=Prolog, caption="Yuliya's ASP encoding with abbreviations removed"]
-{cryptoYuliyaCannonical.lp}
+
+    Lines 1, 3, and 7 in the original encoding by Yuliya are abbreviations for the following code.
+     \lstinputlisting[language=Prolog, caption="Yuliya's Part ASP encoding with abbreviations removed"]
+{cryptoYuliyaCannonicalPart.lp}
 
     \paragraph{Vladimir's Solution in ``Canonical form''}
- \lstinputlisting[language=Prolog, caption="Vladimir's ASP encoding with abbreviations removed"]
-{cryptoVladimirCannonical.lp}
+        Lines 1 and 3 in the original encoding by Vladimir are abbreviations for the following code.
+
+ \lstinputlisting[language=Prolog, caption="Vladimir's Part ASP encoding with abbreviations removed"]
+{cryptoVladimirCannonicalPart.lp}
 
 \section{Furmula representations    of two solutions}
 TBC
