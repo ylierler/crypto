@@ -12,13 +12,43 @@
 \usepackage{xspace}
 \usepackage{todo}
 
+\newcommand{\ar}{\leftarrow}
 
 
-
-\title{Cryptarithmetic\\ \normalsize{Incomplete Draft}}
+\title{Queen C and Cryptarithmetic\\ \normalsize{Incomplete Draft}}
 
 \begin{document}
 	\maketitle
+\section{N-Queens Program C}
+The lines presented below change Program B in {\em Reasoning about Logic Programming Solutions
+to the N-Queens Puzzle} by Vladimir Lifschitz 
+to Program C. In particular Program C is obtained by modifying Program B
+as follows 
+\begin{itemize}
+\item replace the last two rules of Program B with the content of the  presneted lines.
+\end{itemize}
+    \lstinputlisting[language=Prolog, numbers=left, caption="Part of Program C"]
+{queen4.lp}
+
+We now transcribe these lines in a ``cannonical manner'':
+
+\begin{align}
+&d1(X,Y,X-Y+n) \ar X = 1..n\wedge  Y = 1..n.\label{r:d1}\\
+&d2(X,Y,X+Y-1) \ar X = 1..n\wedge Y = 1..n.\\
+&\ar Z = 1..n*2-1\wedge not\ count \{ q(X,Y) : d1(X,Y,Z) \} \leq 1.\label{r:countd1}\\
+&\ar Z = 1..n*2-1\wedge not\ count   \{ q(X,Y) : d2(X,Y,Z) \} \leq 1.\label{r:countd2}    
+\end{align}
+
+We now transform these rules into formulas following the approach of {\em Reasoning about Logic Programming Solutions
+to the N-Queens Puzzle}.
+
+Rule~\eqref{r:d1} is captured by the following formula:
+\begin{align}
+&\forall I \forall J \exists K (d1(I,J,K) \leftrightarrow (I = 1..n\wedge  J = 1..n \wedge K = I-J+n)).\label{f:d1}
+\end{align}
+where $I,J,K$ are integer variables.
+
+    \newpage
 \section{Cryptarithmetic Problem Statement}
 A common sample problem to illustrate the key concepts of constrain satisfaction paradigm is the cryptarithmetic problem. The problem is to find a mapping from letters to digits such that a given arithmetic equation holds true. For example, consider the following equation:
 \begin{equation}
@@ -63,6 +93,9 @@ to the N-Queens Puzzle} by Vladimir Lifschitz to perform this task.
 {cryptoVladimirCannonicalPart.lp}
 
 \section{Furmula representations    of two solutions}
-TBC
+\paragraph{Yuliya's Solution in Furmula representation}
 
+\begin{align}
+&named(\alpha). & \alpha\in \{t,w,o,f,o,u,r\} \\
+\end{align}
 \end{document}    
