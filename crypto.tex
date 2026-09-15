@@ -101,15 +101,18 @@ With that when we form the second-order completion for Program C.
 To begin with we from the first-order completion for Program C. [Appendix B, AnthemP2P]
 The first-order completion  is the conjunction of (L26), (L18), (L20), ~\eqref{f:countd1}, and~\eqref{f:countd2} and completed definitions for $d1$ and $d2$: 
 \begin{align}
-&\forall I J K 
-X Y Z((1\leq I\leq K\wedge 1\leq J\leq K \wedge K=n 
-\wedge X=I \wedge Y=J \wedge Z=I-J+K) 
-\leftrightarrow  d1(X,Y,Z) ).\label{compf:d1}\\
-&\forall  I J K 
+    &\forall 
 X Y Z
-((1\leq I\leq K\wedge 1\leq J\leq K \wedge K=n
+(d1(X,Y,Z)
+\leftrightarrow \exists I J K    
+(1\leq I\leq K\wedge 1\leq J\leq K \wedge K=n 
+\wedge X=I \wedge Y=J \wedge Z=I-J+K) 
+   ).\label{compf:d1}\\
+&\forall  
+X Y Z
+(d2(X,Y,Z) \leftrightarrow \exists I J K
+    (1\leq I\leq K\wedge 1\leq J\leq K \wedge K=n
 \wedge X=I \wedge Y=J \wedge Z=I+J-1)
-\leftrightarrow d2(X,Y,Z)
 ).\label{compf:d2}
 \end{align}
 The second-order completion in the presence of set definition formulas is now defined as in [Appendix B, AnthemP2P] augmenting it with these formulas. Namely, it is first-order completion conjoined with the conjunction of set definition formulas and then all private symbols are replaced by predicate variables and binding these variables by an existential quantifier.
@@ -121,16 +124,20 @@ The second-order completion has the form
 & (L20) \wedge (L19)\wedge\\
   & \eqref{f:countd1}\wedge\\
   & \eqref{f:countd2}\wedge\\
-    &  \big( \forall I J K 
-X Y Z((1\leq I\leq K\wedge 1\leq J\leq K \wedge K=n 
-\wedge X=I \wedge Y=J \wedge Z=I-J+K) 
-\leftrightarrow  D1(X,Y,Z) ) \big) \wedge \\
-& \big(\forall  I J K 
+      &\forall 
 X Y Z
-((1\leq I\leq K\wedge 1\leq J\leq K \wedge K=n
+(D1(X,Y,Z)
+\leftrightarrow \exists I J K    
+(1\leq I\leq K\wedge 1\leq J\leq K \wedge K=n 
+\wedge X=I \wedge Y=J \wedge Z=I-J+K) 
+)\wedge\\
+&\forall  
+X Y Z
+(D2(X,Y,Z) \leftrightarrow \exists I J K
+    (1\leq I\leq K\wedge 1\leq J\leq K \wedge K=n
 \wedge X=I \wedge Y=J \wedge Z=I+J-1)
-\leftrightarrow D2(X,Y,Z) 
-) \big)\wedge\\
+)
+\wedge\\
 & \big(\forall N V(V\in s_6(N) \leftrightarrow \exists I J( V=(I,J)\wedge q(I,J)\wedge D1(I,J,N)))\big)\wedge\\
 & \big(\forall N V(V\in s_7(N) \leftrightarrow \exists I J( V=(I,J)\wedge q(I,J)\wedge D2(I,J,N)))\big)\Big)
 \end{align*}
