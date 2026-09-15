@@ -21,7 +21,7 @@
 	\maketitle
 \section{N-Queens Program C}
 The lines presented below change Program B in {\em Reasoning about Logic Programming Solutions
-to the N-Queens Puzzle} by Vladimir Lifschitz 
+to the N-Queens Puzzle} by Vladimir Lifschitz [QVL]
 to Program C. In particular Program C is obtained by modifying Program B
 as follows 
 \begin{itemize}
@@ -39,8 +39,7 @@ We now transcribe these lines in a ``cannonical manner'':
 &\ar Z = 1..n\times 2-1\wedge not\ count   \{ q(X,Y) : d2(X,Y,Z) \} \leq 1.\label{r:countd2}    
 \end{align}
 
-We now transform these rules into formulas following the approach of {\em Reasoning about Logic Programming Solutions
-to the N-Queens Puzzle}. To do so, we start by rewriting these rules in a numeric normal form.
+We now transform these rules into formulas following the approach of [QVL]. To do so, we start by rewriting these rules in a numeric normal form.
 
 \begin{align}
 &d1(X,Y,X-Y+U) \ar X = 1..U\wedge  Y = 1..U\wedge U=n.\label{nr:d1}\\
@@ -54,14 +53,15 @@ In the sequel, we use letters $I,J,K,N$ and their variants $I_1,J_1,\ldots$ to d
 
 Rules~\eqref{nr:d1} and ~\eqref{nr:d2} are captured by the following formulas:
 \begin{align}
-&\forall I \forall J \forall  K (d1(I,J,I-J+K) \rightarrow (1\leq I\leq K\wedge 1\leq J\leq K \wedge K=n)).\label{f:d1}\\
-&\forall I \forall J \forall K (d2(I,J,I+J-1) \rightarrow (1\leq I\leq K\wedge 1\leq J\leq K \wedge K=n)).\label{f:d2}
+&\forall I J  K ((1\leq I\leq K\wedge 1\leq J\leq K \wedge K=n) 
+\rightarrow  d1(I,J,I-J+K) ).\label{f:d1}\\
+&\forall I J K ((1\leq I\leq K\wedge 1\leq J\leq K \wedge K=n)\rightarrow d2(I,J,I+J-1)).\label{f:d2}
 \end{align}
 
 The representations of rules~\eqref{nr:countd1} and~\eqref{nr:countd2} include the constants $s_6$ and $s_7$, which are defined as follows:
 \begin{align}
-&\forall N V(V\in s_6(N) \leftrightarrow \exists I J( (I,J)\wedge q(I,J)\wedge d1(I,J,N))).\label{f:s6}\\
-&\forall N V(V\in s_7(N) \leftrightarrow \exists I J( (I,J)\wedge q(I,J)\wedge d2(I,J,N))).\label{f:s7}
+&\forall N V(V\in s_6(N) \leftrightarrow \exists I J( V=(I,J)\wedge q(I,J)\wedge d1(I,J,N))).\label{f:s6}\\
+&\forall N V(V\in s_7(N) \leftrightarrow \exists I J( V=(I,J)\wedge q(I,J)\wedge d2(I,J,N))).\label{f:s7}
 \end{align}
 Now,  
 rules~\eqref{nr:countd1} and~\eqref{nr:countd2}  
@@ -70,6 +70,73 @@ are captured by the following formulas:
         &\forall K N\neg(   1\leq K\leq N\times 2-1\wedge \neg count(s_6(N))\leq 1\wedge N=n).\label{f:countd1}\\
         &\forall K N\neg(   1\leq K\leq N\times 2-1\wedge \neg count(s_7(N))\leq 1\wedge N=n).\label{f:countd2}
 \end{align}
+
+
+To sum up,  rules of Program C are represented by formulas  (L11), (L18), (L20), where by letter L we annotate numbers coming from [QVL] and~\eqref{f:d1},~\eqref{f:d2},~\eqref{f:countd1},~\eqref{f:countd2}.  
+[consider L-formulas rewritten to respect ``normalization of $n$'']
+
+We are now concerned with building completion for Program C.
+
+Sentences~\ref{f:d1} and~\ref{f:d2} are not completable. To make them completable we rewrite them using intuitionisticly equivalent transformations as follows  
+\begin{align}
+&\forall I J K 
+X Y Z((1\leq I\leq K\wedge 1\leq J\leq K \wedge K=n 
+\wedge X=I \wedge Y=J \wedge Z=I-J+K) 
+\rightarrow  d1(X,Y,Z) ).\label{cf:d1}\\
+&\forall I J K 
+X Y Z
+((1\leq I\leq K\wedge 1\leq J\leq K \wedge K=n
+\wedge X=I \wedge Y=J \wedge Z=I+J-1)
+\rightarrow d2(X,Y,Z)
+).\label{cf:d2}
+\end{align}
+Similarly, (L11) is not completable and was rewritten as (L25).
+The set $\Gamma_C$, consisting of sentences (L25),  (L18), (L20),
+~\eqref{cf:d1},~\eqref{cf:d2},~\eqref{f:countd1}, and~\eqref{f:countd2}, is completable.
+
+We now note that we assume our user guide to denote (ii) no predicate symbols as input and 
+(ii) predicate symbol $q/2$ as the only output one.
+Thus, predicate symbols $d1$ and $d2$ are private.
+With that when we form the second-order completion for Program C.
+To begin with we from the first-order completion for Program C. [Appendix B, AnthemP2P]
+The first-order completion  is the conjunction of (L26), (L18), (L20), ~\eqref{f:countd1}, and~\eqref{f:countd2} and completed definitions for $d1$ and $d2$: 
+\begin{align}
+&\forall I J K 
+X Y Z((1\leq I\leq K\wedge 1\leq J\leq K \wedge K=n 
+\wedge X=I \wedge Y=J \wedge Z=I-J+K) 
+\leftrightarrow  d1(X,Y,Z) ).\label{compf:d1}\\
+&\forall  I J K 
+X Y Z
+((1\leq I\leq K\wedge 1\leq J\leq K \wedge K=n
+\wedge X=I \wedge Y=J \wedge Z=I+J-1)
+\leftrightarrow d2(X,Y,Z)
+).\label{compf:d2}
+\end{align}
+The second-order completion in the presence of set definition formulas is now defined as in [Appendix B, AnthemP2P] augmenting it with these formulas. Namely, it is first-order completion conjoined with the conjunction of set definition formulas and then all private symbols are replaced by predicate variables and binding these variables by an existential quantifier.
+
+The second-order completion has the form
+\begin{align*}
+&\exists D1 D2\Big( ~  (L26) \wedge \\
+&  (L18) \wedge (L17) \wedge\\
+& (L20) \wedge (L19)\wedge\\
+  & \eqref{f:countd1}\wedge\\
+  & \eqref{f:countd2}\wedge\\
+    &  \big( \forall I J K 
+X Y Z((1\leq I\leq K\wedge 1\leq J\leq K \wedge K=n 
+\wedge X=I \wedge Y=J \wedge Z=I-J+K) 
+\leftrightarrow  D1(X,Y,Z) ) \big) \wedge \\
+& \big(\forall  I J K 
+X Y Z
+((1\leq I\leq K\wedge 1\leq J\leq K \wedge K=n
+\wedge X=I \wedge Y=J \wedge Z=I+J-1)
+\leftrightarrow D2(X,Y,Z) 
+) \big)\wedge\\
+& \big(\forall N V(V\in s_6(N) \leftrightarrow \exists I J( V=(I,J)\wedge q(I,J)\wedge D1(I,J,N)))\big)\wedge\\
+& \big(\forall N V(V\in s_7(N) \leftrightarrow \exists I J( V=(I,J)\wedge q(I,J)\wedge D2(I,J,N)))\big)\Big)
+\end{align*}
+
+
+
 
 
     \newpage
