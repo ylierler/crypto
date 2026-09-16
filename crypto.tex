@@ -35,17 +35,18 @@ We now transcribe these lines in a ``cannonical manner'':
 \begin{align}
 &d1(X,Y,X-Y+n) \ar X = 1..n\wedge  Y = 1..n.\label{r:d1}\\
 &d2(X,Y,X+Y-1) \ar X = 1..n\wedge Y = 1..n.\label{r:d2}\\
-&\ar Z = 1..n\times 2-1\wedge not\ count \{ q(X,Y) : d1(X,Y,Z) \} \leq 1.\label{r:countd1}\\
-&\ar Z = 1..n\times 2-1\wedge not\ count   \{ q(X,Y) : d2(X,Y,Z) \} \leq 1.\label{r:countd2}    
+&\ar Z = 1..n\times 2-1\wedge not\ count \{ X,Y: q(X,Y) , d1(X,Y,Z) \} \leq 1.\label{r:countd1}\\
+&\ar Z = 1..n\times 2-1\wedge not\ count   \{X,Y:  q(X,Y) , d2(X,Y,Z) \} \leq 1.\label{r:countd2}    
 \end{align}
 
+\section{Program C as a forumla}
 We now transform these rules into formulas following the approach of [QVL]. To do so, we start by rewriting these rules in a numeric normal form.
 
 \begin{align}
 &d1(X,Y,X-Y+U) \ar X = 1..U\wedge  Y = 1..U\wedge U=n.\label{nr:d1}\\
 &d2(X,Y,X+Y-1) \ar X = 1..U\wedge Y = 1..U\wedge U=n.\label{nr:d2}\\
-&\ar Z = 1..U\times 2-1\wedge not\ count \{ q(X,Y) : d1(X,Y,Z) \} \leq 1\wedge U=n.\label{nr:countd1}\\
-&\ar Z = 1..U\times 2-1\wedge not\ count   \{ q(X,Y) : d2(X,Y,Z) \} \leq 1\wedge U=n.\label{nr:countd2}    
+&\ar Z = 1..U\times 2-1\wedge not\ count \{ X,Y: q(X,Y) , d1(X,Y,Z) \} \leq 1\wedge U=n.\label{nr:countd1}\\
+&\ar Z = 1..U\times 2-1\wedge not\ count   \{X,Y:  q(X,Y) , d2(X,Y,Z) \} \leq 1\wedge U=n.\label{nr:countd2}    
 \end{align}
 
 In the sequel, we use letters $I,J,K,N$ and their variants $I_1,J_1,\ldots$ to denote integer variables. Letters $X,Y,Z,V,U$ and their variants $X_1,Y_1,\ldots$ are used to denote general variables.  
@@ -60,24 +61,24 @@ Rules~\eqref{nr:d1} and ~\eqref{nr:d2} are captured by the following formulas:
 
 The representations of rules~\eqref{nr:countd1} and~\eqref{nr:countd2} include the constants $s_6$ and $s_7$, which are defined as follows:
 \begin{align}
-&\forall N V(V\in s_6(N) \leftrightarrow \exists I J( V=(I,J)\wedge q(I,J)\wedge d1(I,J,N))).\label{f:s6}\\
-&\forall N V(V\in s_7(N) \leftrightarrow \exists I J( V=(I,J)\wedge q(I,J)\wedge d2(I,J,N))).\label{f:s7}
+&\forall K V(V\in s_6(K) \leftrightarrow \exists I J( V=(I,J)\wedge q(I,J)\wedge d1(I,J,K))).\label{f:s6}\\
+&\forall K V(V\in s_7(K) \leftrightarrow \exists I J( V=(I,J)\wedge q(I,J)\wedge d2(I,J,K))).\label{f:s7}
 \end{align}
 Now,  
 rules~\eqref{nr:countd1} and~\eqref{nr:countd2}  
 are captured by the following formulas:
 \begin{align}
-        &\forall K N\neg(   1\leq K\leq N\times 2-1\wedge \neg count(s_6(N))\leq 1\wedge N=n).\label{f:countd1}\\
-        &\forall K N\neg(   1\leq K\leq N\times 2-1\wedge \neg count(s_7(N))\leq 1\wedge N=n).\label{f:countd2}
+        &\forall K N\neg(   1\leq K\leq N\times 2-1\wedge \neg count(s_6(K))\leq 1\wedge N=n).\label{f:countd1}\\
+        &\forall K N\neg(   1\leq K\leq N\times 2-1\wedge \neg count(s_7(K))\leq 1\wedge N=n).\label{f:countd2}
 \end{align}
 
 
 To sum up,  rules of Program C are represented by formulas  (L11), (L18), (L20), where by letter L we annotate numbers coming from [QVL] and~\eqref{f:d1},~\eqref{f:d2},~\eqref{f:countd1},~\eqref{f:countd2}.  
-[consider L-formulas rewritten to respect ``normalization of $n$'']
 
+\section{Completion of Program C}
 We are now concerned with building completion for Program C.
 
-Sentences~\ref{f:d1} and~\ref{f:d2} are not completable. To make them completable we rewrite them using intuitionisticly equivalent transformations as follows  
+Sentences~\eqref{f:d1} and~\eqref{f:d2} are not completable. To make them completable we rewrite them using intuitionisticly equivalent transformations as follows  
 \begin{align}
 &\forall I J K 
 X Y Z((1\leq I\leq K\wedge 1\leq J\leq K \wedge K=n 
@@ -94,11 +95,11 @@ Similarly, (L11) is not completable and was rewritten as (L25).
 The set $\Gamma_C$, consisting of sentences (L25),  (L18), (L20),
 ~\eqref{cf:d1},~\eqref{cf:d2},~\eqref{f:countd1}, and~\eqref{f:countd2}, is completable.
 
-We now note that we assume our user guide to denote (ii) no predicate symbols as input and 
+We now note that we assume our user guide to denote (i) no predicate symbols as input and 
 (ii) predicate symbol $q/2$ as the only output one.
 Thus, predicate symbols $d1$ and $d2$ are private.
-With that when we form the second-order completion for Program C.
-To begin with we from the first-order completion for Program C. [Appendix B, AnthemP2P]
+With that when we form the second-order completion for Program~C.
+To begin with we from the first-order completion for Program~C. [Appendix B, AnthemP2P]
 The first-order completion  is the conjunction of (L26), (L18), (L20), ~\eqref{f:countd1}, and~\eqref{f:countd2} and completed definitions for $d1$ and $d2$: 
 \begin{align}
     &\forall 
@@ -118,33 +119,227 @@ X Y Z
 The second-order completion in the presence of set definition formulas is now defined as in [Appendix B, AnthemP2P] augmenting it with these formulas. Namely, it is first-order completion conjoined with the conjunction of set definition formulas and then all private symbols are replaced by predicate variables and binding these variables by an existential quantifier.
 
 The second-order completion has the form
-\begin{align*}
-&\exists D1 D2\Big( ~  (L26) \wedge \\
-&  (L18) \wedge (L17) \wedge\\
-& (L20) \wedge (L19)\wedge\\
-  & \eqref{f:countd1}\wedge\\
-  & \eqref{f:countd2}\wedge\\
+\begin{align}   
+&\exists D1 D2\Big( ~  (L26) \wedge %\nonumber\\
+%& 
+ (L18) \wedge (L17) \wedge %\nonumber\\
+%&
+ (L20) \wedge (L19)\wedge %\nonumber\\
+ % & 
+  \eqref{f:countd1}\wedge %\nonumber\\
+  %& 
+  \eqref{f:countd2}\wedge \nonumber\\
       &\forall 
 X Y Z
 (D1(X,Y,Z)
 \leftrightarrow \exists I J K    
 (1\leq I\leq K\wedge 1\leq J\leq K \wedge K=n 
 \wedge X=I \wedge Y=J \wedge Z=I-J+K) 
-)\wedge\\
+)\wedge\label{d1:eq}\\
 &\forall  
 X Y Z
 (D2(X,Y,Z) \leftrightarrow \exists I J K
     (1\leq I\leq K\wedge 1\leq J\leq K \wedge K=n
 \wedge X=I \wedge Y=J \wedge Z=I+J-1)
 )
-\wedge\\
-& \big(\forall N V(V\in s_6(N) \leftrightarrow \exists I J( V=(I,J)\wedge q(I,J)\wedge D1(I,J,N)))\big)\wedge\\
-& \big(\forall N V(V\in s_7(N) \leftrightarrow \exists I J( V=(I,J)\wedge q(I,J)\wedge D2(I,J,N)))\big)\Big)
-\end{align*}
+\wedge\label{d2:eq}\\
+& \big(\forall K V(V\in s_6(K) \leftrightarrow \exists I J( V=(I,J)\wedge q(I,J)\wedge D1(I,J,K)))\big)\wedge\label{cd1:set}\\
+& \big(\forall K V(V\in s_7(K) \leftrightarrow \exists I J( V=(I,J)\wedge q(I,J)\wedge D2(I,J,K)))\big)\Big)\label{cd2:set}
+\end{align}
+which is equivalent to
+\begin{align}
+    &  (L26) \wedge %\nonumber\\
+%& 
+ (L18) \wedge (L17) \wedge %\nonumber\\
+%&
+ (L20) \wedge (L19)\wedge \nonumber\\
+  & 
+  \eqref{f:countd1}\wedge %\nonumber\\
+  %& 
+  \eqref{f:countd2}\wedge
+\exists D1 D2\Big(  
+\eqref{d1:eq}\wedge\eqref{d2:eq}
+\wedge\eqref{cd1:set}
+\wedge\eqref{cd2:set}
+\Big) \label{eq:complP2}
+\end{align}
+\section{Equivalence of Completions of Programs B and C}
+
+We now show how to derive the equivalence between the completion of $\Gamma_B$ [QVL] and the completion of $\Gamma_C$ as captured above in classical logic from 
+\begin{itemize}
+\item KB, a knowledge base describing integers, precomputed terms, sets and cardinalities
+(see Section 6 [QVL]),
+\item  UG, the pair of user guide asuumption formulas $\exists N(n = N)$ and $n \geq 1$, expressing that $n$ is a
+placehodler for a positive integer, and
+\item SD, the set definition formulas (L17), (L19),  (L21), and (L23), which characterize the
+constants $s_2, s_3, s_4$ and $s_5$, respectively.
+\end{itemize}
+
+Let us recall that the completion of $\Gamma_B$ is the conjunction of  (L18), (L20), (L22), (L24), and (L26).
+In light of the composition of the completion of $\Gamma_B$ and the completion of $\Gamma_C$, it is sufficient to show the equivalence of the following formulas (in light of assumptions listed):
+formula~\eqref{eq:complP2} and the conjunction of formulas (L21), (L22), (L23), and (L24).
 
 
 
 
+
+We start by observing that 
+conjunctive term~\eqref{d1:eq} is equivalent to
+\begin{align}
+&\forall   
+X Y Z
+(D1(X,Y,Z)
+\leftrightarrow \exists I J     
+(1\leq I\leq n\wedge 1\leq J\leq n
+\wedge X=I \wedge Y=J \wedge Z=I-J+n) 
+)\label{sd1:eq}
+\end{align}
+Similarly, conjunctive term~\eqref{d2:eq} is equivalent to
+\begin{align}   
+&\forall   
+X Y Z
+(D2(X,Y,Z)
+\leftrightarrow \exists I J     
+(1\leq I\leq n\wedge 1\leq J\leq n
+\wedge X=I \wedge Y=J \wedge Z=I+J-1) 
+)\label{sd2:eq}
+\end{align}
+
+In presence of~\eqref{d1:eq} (consider its simplified form~\eqref{sd1:eq}), conjunctive term~\eqref{cd1:set}
+is equivalent to
+\begin{align*}
+    & \big(\forall K V(V\in s_6(K) \leftrightarrow \exists I J( V=(I,J)\wedge q(I,J)\wedge 
+     \exists I_1 J_1     
+(1\leq I_1\leq n\wedge 1\leq J_1\leq n
+\wedge I=I_1 \wedge J=J_1 \wedge K=I_1-J_1+n)
+\end{align*}    
+which in turn can be simplified as
+\begin{align*}
+    & \forall K V(V\in s_6(K) \leftrightarrow \exists I J( V=(I,J)\wedge q(I,J)\wedge 
+1\leq I\leq n\wedge 1\leq J\leq n
+ \wedge K=I-J+n)) %\label{scd1:set}
+\end{align*}    
+In prsense of (L26), the last formula is equivalent
+to
+\begin{align}
+    & \forall K V(V\in s_6(K) \leftrightarrow \exists I J( V=(I,J)\wedge q(I,J)
+ \wedge K=I-J+n)) \label{simpscd1:set}
+\end{align}    
+
+In presence of~\eqref{d2:eq} (consider its simplified form~\eqref{sd2:eq}), conjunctive term~\eqref{cd1:set}
+is equivalent to
+\begin{align*}
+    & \forall K V(V\in s_7(K) \leftrightarrow \exists I J( V=(I,J)\wedge q(I,J)\wedge 
+1\leq I\leq n\wedge 1\leq J\leq n
+ \wedge K=I+J-1)) %\label{scd2:set}
+\end{align*}    
+In prsense of (L26),the last formula is equivalent
+to
+\begin{align}
+    & \forall K V(V\in s_7(K) \leftrightarrow \exists I J( V=(I,J)\wedge q(I,J)\wedge 
+ K=I+J-1) \label{simpscd2:set}
+\end{align}    
+
+
+
+
+It is now easy to see that
+the following conjunctive term of~\eqref{eq:complP2}
+\begin{align}
+&\exists D1 D2\Big(  
+\eqref{d1:eq}\wedge\eqref{d2:eq}
+\wedge\eqref{cd1:set}
+\wedge\eqref{cd2:set}
+\Big) \label{eq:existpart}
+\end{align}
+is equivalent to
+ the conjunction of~\eqref{simpscd1:set} and~\eqref{simpscd2:set}.
+
+We are now left to show that the conjunction of 
+   \eqref{f:countd1}, \eqref{f:countd2},  \eqref{simpscd1:set}, and ~\eqref{simpscd2:set} 
+is equivalent to the conjunction of
+ (L21), (L22), (L23), and (L24) in our context.
+
+
+
+ Observe how \eqref{f:countd1}, \eqref{f:countd2} can be simplified as follows:
+ \begin{align}
+        &\forall K \neg(   1\leq K\leq n\times 2-1\wedge \neg count(s_6(K))\leq 1).\label{sf:countd1}\\
+        &\forall K \neg(   1\leq K\leq n\times 2-1\wedge \neg count(s_7(K))\leq 1).\label{sf:countd2}
+\end{align}
+
+Now, let us remind ourselves that formulas (L21), (L22), (L23), and (L24) are as follows:
+\[
+\forall K N V \,
+\bigl(
+V \in s_4(K,N)
+\leftrightarrow
+\exists I J \,
+(V = (I,J) \land q(I,J) \land K = I - J + N)
+\bigr),
+\tag{L21}
+\]
+\[
+\forall K N \,
+\neg
+\bigl(
+1 \leq K \leq 2 \times N - 1
+\land
+\neg \operatorname{count}(s_4(K,N)) \leq 1
+\land
+N = n
+\bigr),
+\tag{L22}
+\]
+\[
+\forall K V \,
+\bigl(
+V \in s_5(K)
+\leftrightarrow
+\exists I J \,
+(V = (I,J) \land q(I,J) \land K = I + J - 1)
+\bigr),
+\tag{L23}
+\]
+\[
+\forall K N \,
+\neg
+\bigl(
+1 \leq K \leq 2 \times N - 1
+\land
+\neg \operatorname{count}(s_5(K)) \leq 1
+\land
+N = n
+\bigr).
+\tag{L24}
+\]
+
+We simplify  (L22) and (L24) as follows
+ \begin{align}
+        &\forall K \neg(   1\leq K\leq n\times 2-1\wedge \neg count(s_4(K,n))\leq 1).\label{f:sl22}\\
+        &\forall K \neg(   1\leq K\leq n\times 2-1\wedge \neg count(s_5(K))\leq 1).\label{f:sl24}            
+ \end{align}
+
+ We now note that~\eqref{simpscd2:set} is identical to (L23) modulo name $s_7$ and $s_5$;
+ similarly,~\eqref{sf:countd2} is identical to~\eqref{f:sl24}  modulo name $s_7$ and $s_5$.
+
+We are now left to establish the exact relationship between~\eqref{sf:countd1}
+and~\eqref{f:sl22}
+ in light of relationship between~\eqref{simpscd1:set} and (L21). 
+ Let us consider an instance of (L21) for a particular value of $N$, i.e, $N=n$:
+ \begin{align*}
+& \forall K V \,
+\bigl(
+V \in s_4(K,n)
+\leftrightarrow
+\exists I J \,
+(V = (I,J) \land q(I,J) \land K = I - J + n)
+\bigr)
+ \end{align*}
+This instance of (L21) is identical to~\eqref{simpscd1:set} modulo name $s_4(K,n)$ and $s_6(K)$.
+Formulas~\eqref{sf:countd1}
+and~\eqref{f:sl22} 
+are also identical modulo names $s_6(K)$ and $s_4(K,n)$.
 
     \newpage
 \section{Cryptarithmetic Problem Statement}
