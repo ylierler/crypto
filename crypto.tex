@@ -14,6 +14,7 @@
 
 \newcommand{\ar}{\leftarrow}
 
+\newcommand{\sub}[3]{#1_{#2}^{#3}}
 
 \title{Queen C and Cryptarithmetic\\ \normalsize{Incomplete Draft}}
 
@@ -116,13 +117,18 @@ X Y Z
 \wedge X=I \wedge Y=J \wedge Z=I+J-1)
 ).\label{compf:d2}
 \end{align}
-We now recall 
+We now present a definition inspired by the concept of  
 the second-order completion  defined  in [Appendix B, AnthemP2P].
-We make one modification to that definition though.
- The second-order completion COMP is defined as the first-order completion where all private symbols are replaced by predicate variables.
-The extedned completion COMP+ is defined as the conjunction of COMP with the conjunction of set definition formulas where all function constants denoting sets ($s_i$) are replaced by function symbol variables and all predicate and function symbol variables are bound by existential quantifiers.
+Given program $P$, COMP($P$) is defined as the first-order completion
+of formula representation of $P$, 
+where all private symbols are replaced by predicate variables.
+The extended completion $COMP^+(P)$ is defined as the conjunction of $COMP(P)$ with the conjunction of set definition formulas, where within that conjunction all function constants denoting sets ($s_i$) are replaced by function symbol variables and all predicate and function symbol variables are bound by existential quantifiers.
 
-Recall that (L18) has the form
+
+We utilize the following notation for a substitution: for a formula $F$, by $\sub{F}{t}{t'}$ we denote the formula constructed from $F$ by replacing all occurrences of term $t$ in $F$ with term $t'$. Similarly, for a formula $F$, by $\sub{F}{p}{p'}$ we denote the formula constructed from $F$ by replacing all occurrences of predicate symbol $p$ in $F$ with predicate symbol $p'$.
+We allow ourself to abuse this notation and use a list composed of terms and predicate symbols.
+For example,
+recall that (L18) has the form
 \[
 \forall I \neg\bigl(
 1 \leq I \leq n
@@ -130,7 +136,7 @@ Recall that (L18) has the form
 \neg\bigl(1 \leq \operatorname{count}(s2(I)) \leq 1\bigr)
 \bigr)
 \]
-In the sequel we may write (L18)$_{S_2}$ to denote the formula obtained from (L18) by replacing $s2$ with a function symbol variable $S_2$, namely,
+Thus, $\sub{(L18)}{s_2}{S_2}$ stands for
 \[
 \forall I \neg\bigl(
 1 \leq I \leq n
@@ -138,75 +144,156 @@ In the sequel we may write (L18)$_{S_2}$ to denote the formula obtained from (L1
 \neg\bigl(1 \leq \operatorname{count}(S_2(I)) \leq 1\bigr)
 \bigr)
 \]
-The same applies to other formulas.
-Similarly, we write \eqref{compf:d1}$_{D1}$ to denote the formula obtained from~\eqref{compf:d1} by replacing $d1$ with a predicate symbol variable $D1$, anmely,
+Similarly, $\sub{\eqref{compf:d1}}{d1}{D_1}$ stands for
 \[
 \forall X Y Z
-(D1(X,Y,Z) \leftrightarrow \exists I J K
+(D_1(X,Y,Z) \leftrightarrow \exists I J K
     (1\leq I\leq K\wedge 1\leq J\leq K \wedge K=n
 \wedge X=I \wedge Y=J \wedge Z=I+J-1)
 )
 \]
-Reference \eqref{compf:d2}$_{D2}$ is understood in the same manner.
+Also, $\sub{\eqref{f:s6}}{s_6,d1}{S_6,D_1}$ stands for
+\[
+\big(\forall K V(V\in S_6(K) \leftrightarrow \exists I J( V=(I,J)\wedge q(I,J)\wedge D_1(I,J,K)))\big).
+\]
 
-The extended completion of Program C follows
+The extended completion of Program C, namely $COMP^+(C)$ follows
 \begin{align}   
-&\exists D1 D2 
-SLIST\Big(
+&\exists D_1~D_2~ 
+S_2~S_3~S_6~S_7\Big(
 ~  (L26) \wedge %\nonumber\\
 %& 
- (L18)_{S_2} \wedge (L17)_{S_2} \wedge %\nonumber\\
+ \sub{(L18)}{s_2}{S_2}
+ \wedge 
 %&
- (L20) \wedge (L19)\wedge %\nonumber\\
+ \sub{(L20)}{s_3}{S_3} \wedge %\nonumber\\
  % & 
-  \eqref{f:countd1}\wedge %\nonumber\\
+  \sub{\eqref{f:countd1}}{s_6}{S_6}\wedge %\nonumber\\
   %& 
-  \eqref{f:countd2}\wedge \nonumber\\
-      &\forall 
-X Y Z
-(D1(X,Y,Z)
-\leftrightarrow \exists I J K    
-(1\leq I\leq K\wedge 1\leq J\leq K \wedge K=n 
-\wedge X=I \wedge Y=J \wedge Z=I-J+K) 
-)\wedge\label{d1:eq}\\
-&\forall  
-X Y Z
-(D2(X,Y,Z) \leftrightarrow \exists I J K
-    (1\leq I\leq K\wedge 1\leq J\leq K \wedge K=n
-\wedge X=I \wedge Y=J \wedge Z=I+J-1)
-)
+  \sub{\eqref{f:countd2}}{s_7}{S_7}\wedge \nonumber\\
+      &      \sub{\eqref{compf:d1}}{d1}{D1}
+%      \forall 
+%X Y Z
+%(D1(X,Y,Z)
+%\leftrightarrow \exists I J K    
+%(1\leq I\leq K\wedge 1\leq J\leq K \wedge K=n 
+%\wedge X=I \wedge Y=J \wedge Z=I-J+K) 
+%)
+\wedge\label{d1:eq}\\
+&      \sub{\eqref{compf:d2}}{d2}{D2}
+%\forall  
+%X Y Z
+%(D2(X,Y,Z) \leftrightarrow \exists I J K
+%    (1\leq I\leq K\wedge 1\leq J\leq K \wedge K=n
+%\wedge X=I \wedge Y=J \wedge Z=I+J-1)
+%)
+%
 \wedge\label{d2:eq}\\
-& \big(\forall K V(V\in s_6(K) \leftrightarrow \exists I J( V=(I,J)\wedge q(I,J)\wedge D1(I,J,K)))\big)\wedge\label{cd1:set}\\
-& \big(\forall K V(V\in s_7(K) \leftrightarrow \exists I J( V=(I,J)\wedge q(I,J)\wedge D2(I,J,K)))\big)\Big)\label{cd2:set}
+&\sub{(L17)}{s_2}{S_2}  \wedge \sub{(L19)}{s_3}{S_3}  \wedge\nonumber\\
+& 
+\sub{\eqref{f:s6}}{s_6,d_1}{S_6,D1}
+\wedge\label{cd1:set}\\
+&
+\sub{\eqref{f:s7}}{s_7,d2}{S_7,D2}
+ \Big)\label{cd2:set}
 \end{align}
-which is equivalent to
-\begin{align}
-    &  (L26) \wedge %\nonumber\\
-%& 
- (L18) \wedge (L17) \wedge %\nonumber\\
-%&
- (L20) \wedge (L19)\wedge \nonumber\\
-  & 
-  \eqref{f:countd1}\wedge %\nonumber\\
-  %& 
-  \eqref{f:countd2}\wedge
-\exists D1 D2\Big(  
-\eqref{d1:eq}\wedge\eqref{d2:eq}
-\wedge\eqref{cd1:set}
-\wedge\eqref{cd2:set}
-\Big) \label{eq:complP2}
-\end{align}
-\section{Equivalence of Completions of Programs B and C}
 
-We now show how to derive the equivalence between the completion of $\Gamma_B$ [QVL] and the completion of $\Gamma_C$ as captured above in classical logic from 
+Let us recall that the firt-order completion of $\Gamma_B$ is the conjunction of  (L18), (L20), (L22), (L24), and (L26).
+The extended completion of Program B, namely $COMP^+(B)$ follows
+\begin{align}
+    & \exists S_2~S_3~S_4~S_5 \big((L26) \wedge  %\nonumber\\
+\sub{(L18)}{s_2}{S_2}
+ \wedge 
+%&
+ \sub{(L20)}{s_3}{S_3} \wedge %\nonumber\\
+\sub{(L22)}{s_4}{S_4} \wedge %\nonumber\\
+\sub{(L24)}{s_5}{S_5} \wedge \nonumber\\
+&\sub{(L17)}{s_2}{S_2}
+ \wedge 
+%&
+ \sub{(L19)}{s_3}{S_3} \wedge \nonumber\\
+&\sub{(L21)}{s_4}{S_4} \wedge %\nonumber\\
+\sub{(L23)}{s_5}{S_5} \big) \nonumber
+\end{align}
+
+
+
+\section{Equivalence of Extended Completions of Programs B and C}
+
+We now show how to derive the equivalence between the extended completion of program $B$ and the extended completion of program $C$, namely between $COMP^+(B)$ and $COMP^+(C)$ (listed in previous section), in classical logic from
 \begin{itemize}
 \item KB, a knowledge base describing integers, precomputed terms, sets and cardinalities
 (see Section 6 [QVL]),
 \item  UG, the pair of user guide asuumption formulas $\exists N(n = N)$ and $n \geq 1$, expressing that $n$ is a
-placehodler for a positive integer, and
-\item SD, the set definition formulas (L12), (L17), (L19),  (L21), and (L23), which characterize the
-constants $s_1, s_2, s_3, s_4$ and $s_5$, respectively.
+placehodler for a positive integer.
 \end{itemize}
+
+We start by noting that  $COMP^+(B)$ is equivalent to the following formula:
+\begin{align}
+    & (L26) \wedge 
+  \exists  
+S_2~S_3\big( \sub{(L18)}{s_2}{S_2}
+ \wedge 
+%&
+ \sub{(L20)}{s_3}{S_3} \wedge
+ \sub{(L17)}{s_2}{S_2}  \wedge \sub{(L19)}{s_3}{S_3}\big)  \wedge\nonumber\\
+ \exists S_4\Big(
+  \sub{(L22)}{s_4}{S_4} \wedge
+  \sub{(L21)}{s_4}{S_4} \Big)\wedge \nonumber\\
+\exists S_4\Big(
+  \sub{(L24)}{s_5}{S_5} 
+  \sub{(L23)}{s_5}{S_5} \Big) 
+  \wedge\nonumber\\
+\end{align}
+
+
+Check above and continue=============================
+
+
+We then continue by noting that $COMP^+(C)$ is equivalent to the following formula:
+\begin{align}
+    & (L26) \wedge 
+  \exists  
+S_2~S_3\big( \sub{(L18)}{s_2}{S_2}
+ \wedge 
+%&
+ \sub{(L20)}{s_3}{S_3} \wedge
+ \sub{(L17)}{s_2}{S_2}  \wedge \sub{(L19)}{s_3}{S_3}\big)  \wedge\nonumber\\
+&   \exists D_1~~S_6\Big(
+  \sub{\eqref{f:countd1}}{s_6}{S_6}\wedge \nonumber\\ 
+&\sub{\eqref{f:s6}}{s_6,d_1}{S_6,D1}
+\wedge\label{cd1:set}\\
+      &      \sub{\eqref{compf:d1}}{d1}{D1}
+%      \forall 
+%X Y Z
+%(D1(X,Y,Z)
+%\leftrightarrow \exists I J K    
+%(1\leq I\leq K\wedge 1\leq J\leq K \wedge K=n 
+%\wedge X=I \wedge Y=J \wedge Z=I-J+K) 
+%)
+\Big)
+\wedge\label{d1:eq}\\
+&  \exists
+D_2~S_7\Big(
+%& 
+ %\nonumber\\
+ % & 
+  %& 
+  \sub{\eqref{f:countd2}}{s_7}{S_7}\wedge \nonumber\\
+&      \sub{\eqref{compf:d2}}{d2}{D2}
+%\forall  
+%X Y Z
+%(D2(X,Y,Z) \leftrightarrow \exists I J K
+%    (1\leq I\leq K\wedge 1\leq J\leq K \wedge K=n
+%\wedge X=I \wedge Y=J \wedge Z=I+J-1)
+%)
+%
+\wedge\label{d2:eq}\\
+&
+\sub{\eqref{f:s7}}{s_7,d2}{S_7,D2}
+ \Big)\label{cd2:set}
+\end{align}
+
 
 Let us recall that the completion of $\Gamma_B$ is the conjunction of  (L18), (L20), (L22), (L24), and (L26).
 In light of the composition of the completion of $\Gamma_B$ and the completion of $\Gamma_C$, it is sufficient to show the equivalence of the following formulas (in light of assumptions listed):
