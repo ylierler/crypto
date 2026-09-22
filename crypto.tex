@@ -159,7 +159,7 @@ Also, $\sub{\eqref{f:s6}}{s_6,d1}{S_6,D_1}$ stands for
 
 The extended completion of Program C, namely $COMP^+(C)$ follows
 \begin{align}   
-&\exists D_1~D_2~ 
+\exists D_1~D_2~ 
 S_2~S_3~S_6~S_7\Big(
 ~  (L26) \wedge %\nonumber\\
 %& 
@@ -170,17 +170,12 @@ S_2~S_3~S_6~S_7\Big(
  % & 
   \sub{\eqref{f:countd1}}{s_6}{S_6}\wedge %\nonumber\\
   %& 
-  \sub{\eqref{f:countd2}}{s_7}{S_7}\wedge \nonumber\\
-      &      \sub{\eqref{compf:d1}}{d1}{D1}
-%      \forall 
-%X Y Z
-%(D1(X,Y,Z)
-%\leftrightarrow \exists I J K    
-%(1\leq I\leq K\wedge 1\leq J\leq K \wedge K=n 
-%\wedge X=I \wedge Y=J \wedge Z=I-J+K) 
-%)
-\wedge\label{d1:eq}\\
-&      \sub{\eqref{compf:d2}}{d2}{D2}
+  \sub{\eqref{f:countd2}}{s_7}{S_7}\wedge %\nonumber\\
+      %&
+            \sub{\eqref{compf:d1}}{d1}{D1}
+\wedge%\label{d1:eq}\\
+%&      
+\sub{\eqref{compf:d2}}{d2}{D_2}\nonumber\\
 %\forall  
 %X Y Z
 %(D2(X,Y,Z) \leftrightarrow \exists I J K
@@ -188,31 +183,32 @@ S_2~S_3~S_6~S_7\Big(
 %\wedge X=I \wedge Y=J \wedge Z=I+J-1)
 %)
 %
-\wedge\label{d2:eq}\\
-&\sub{(L17)}{s_2}{S_2}  \wedge \sub{(L19)}{s_3}{S_3}  \wedge\nonumber\\
-& 
-\sub{\eqref{f:s6}}{s_6,d_1}{S_6,D1}
-\wedge\label{cd1:set}\\
-&
-\sub{\eqref{f:s7}}{s_7,d2}{S_7,D2}
- \Big)\label{cd2:set}
+%\wedge\label{d2:eq}\\
+%&
+\sub{(L17)}{s_2}{S_2}  \wedge \sub{(L19)}{s_3}{S_3}  \wedge%\nonumber\\
+%& 
+\sub{\eqref{f:s6}}{s_6,d_1}{S_6,D_1}
+\wedge%\label{cd1:set}\\
+%&
+\sub{\eqref{f:s7}}{s_7,d2}{S_7,D_2}
+ \Big)\nonumber%\label{cd2:set}
 \end{align}
 
 Let us recall that the firt-order completion of $\Gamma_B$ is the conjunction of  (L18), (L20), (L22), (L24), and (L26).
 The extended completion of Program B, namely $COMP^+(B)$ follows
 \begin{align}
-    & \exists S_2~S_3~S_4~S_5 \big((L26) \wedge  %\nonumber\\
+     \exists S_2~S_3~S_4~S_5 \big((L26) \wedge  %\nonumber\\
 \sub{(L18)}{s_2}{S_2}
  \wedge 
 %&
  \sub{(L20)}{s_3}{S_3} \wedge %\nonumber\\
 \sub{(L22)}{s_4}{S_4} \wedge %\nonumber\\
 \sub{(L24)}{s_5}{S_5} \wedge \nonumber\\
-&\sub{(L17)}{s_2}{S_2}
+\sub{(L17)}{s_2}{S_2}
  \wedge 
 %&
- \sub{(L19)}{s_3}{S_3} \wedge \nonumber\\
-&\sub{(L21)}{s_4}{S_4} \wedge %\nonumber\\
+ \sub{(L19)}{s_3}{S_3} \wedge %\nonumber\\
+\sub{(L21)}{s_4}{S_4} \wedge %\nonumber\\
 \sub{(L23)}{s_5}{S_5} \big) \nonumber
 \end{align}
 
@@ -230,40 +226,39 @@ placehodler for a positive integer.
 
 We start by noting that  $COMP^+(B)$ is equivalent to the following formula:
 \begin{align}
-    & (L26) \wedge 
+     (L26) \wedge 
   \exists  
 S_2~S_3\big( \sub{(L18)}{s_2}{S_2}
  \wedge 
 %&
  \sub{(L20)}{s_3}{S_3} \wedge
  \sub{(L17)}{s_2}{S_2}  \wedge \sub{(L19)}{s_3}{S_3}\big)  \wedge\nonumber\\
- \exists S_4\Big(
+  \exists S_4\big(
   \sub{(L22)}{s_4}{S_4} \wedge
-  \sub{(L21)}{s_4}{S_4} \Big)\wedge \nonumber\\
-\exists S_4\Big(
-  \sub{(L24)}{s_5}{S_5} 
-  \sub{(L23)}{s_5}{S_5} \Big) 
-  \wedge\nonumber\\
+  \sub{(L21)}{s_4}{S_4} \big)\wedge \nonumber\\
+\exists S_5\big(
+  \sub{(L24)}{s_5}{S_5} \wedge
+  \sub{(L23)}{s_5}{S_5} \big) 
+  \nonumber
 \end{align}
 
-
-Check above and continue=============================
-
-
-We then continue by noting that $COMP^+(C)$ is equivalent to the following formula:
+Similarly,  $COMP^+(C)$ is equivalent to the following formula:
 \begin{align}
-    & (L26) \wedge 
+    %&
+     (L26) \wedge 
   \exists  
 S_2~S_3\big( \sub{(L18)}{s_2}{S_2}
  \wedge 
 %&
  \sub{(L20)}{s_3}{S_3} \wedge
  \sub{(L17)}{s_2}{S_2}  \wedge \sub{(L19)}{s_3}{S_3}\big)  \wedge\nonumber\\
-&   \exists D_1~~S_6\Big(
-  \sub{\eqref{f:countd1}}{s_6}{S_6}\wedge \nonumber\\ 
-&\sub{\eqref{f:s6}}{s_6,d_1}{S_6,D1}
-\wedge\label{cd1:set}\\
-      &      \sub{\eqref{compf:d1}}{d1}{D1}
+%&   
+\exists D_1~~S_6\big(
+  \sub{\eqref{f:countd1}}{s_6}{S_6}
+\wedge%\label{cd1:set}\\
+      %&
+            \sub{\eqref{compf:d1}}{d1}{D_1}\wedge
+\sub{\eqref{f:s6}}{s_6,d_1}{S_6,D_1}
 %      \forall 
 %X Y Z
 %(D1(X,Y,Z)
@@ -271,61 +266,87 @@ S_2~S_3\big( \sub{(L18)}{s_2}{S_2}
 %(1\leq I\leq K\wedge 1\leq J\leq K \wedge K=n 
 %\wedge X=I \wedge Y=J \wedge Z=I-J+K) 
 %)
-\Big)
-\wedge\label{d1:eq}\\
-&  \exists
-D_2~S_7\Big(
+\big)\wedge\nonumber\\
+%\wedge\label{d1:eq}\\
+%& 
+ \exists
+D_2~S_7\big(
 %& 
  %\nonumber\\
  % & 
   %& 
-  \sub{\eqref{f:countd2}}{s_7}{S_7}\wedge \nonumber\\
-&      \sub{\eqref{compf:d2}}{d2}{D2}
-%\forall  
-%X Y Z
-%(D2(X,Y,Z) \leftrightarrow \exists I J K
-%    (1\leq I\leq K\wedge 1\leq J\leq K \wedge K=n
-%\wedge X=I \wedge Y=J \wedge Z=I+J-1)
-%)
-%
-\wedge\label{d2:eq}\\
-&
-\sub{\eqref{f:s7}}{s_7,d2}{S_7,D2}
- \Big)\label{cd2:set}
+  \sub{\eqref{f:countd2}}{s_7}{S_7}
+\wedge%\label{d2:eq}\\
+%&
+ \sub{\eqref{compf:d2}}{d2}{D_2}\wedge 
+\sub{\eqref{f:s7}}{s_7,d2}{S_7,D_2}
+ \big)\nonumber %\label{cd2:set}
 \end{align}
 
-
-Let us recall that the completion of $\Gamma_B$ is the conjunction of  (L18), (L20), (L22), (L24), and (L26).
-In light of the composition of the completion of $\Gamma_B$ and the completion of $\Gamma_C$, it is sufficient to show the equivalence of the following formulas (in light of assumptions listed):
-formula~\eqref{eq:complP2} and the conjunction of formulas (L21), (L22), (L23), and (L24).
+It is obvious that the first conjunctive terms of the last two formulas are identical.
+We now focus on establishing the relationship between the second conjunctive terms of the last two formulas, namely, we show that the following formulas are equivalent {\color{blue} in light of KB and UG?}:
+\begin{align}
+  \exists   S_4\big(
+  \sub{(L22)}{s_4}{S_4} \wedge
+  \sub{(L21)}{s_4}{S_4} \big) \leftrightarrow
+  \exists D_1~~S_6\big(
+  \sub{\eqref{f:countd1}}{s_6}{S_6}\wedge %\nonumber\\ 
+            \sub{\eqref{compf:d1}}{d1}{D_1}
+\wedge%\label{cd1:set}\\
+\sub{\eqref{f:s6}}{s_6,d_1}{S_6,D_1}
+\big)\label{eq:1}              
+\end{align}
+We also show that the third conjunctive terms of these two formulas are equivalent, namely,
+{\color{blue} in light of KB and UG?}:
+\begin{align}
+    \exists S_5\big(
+    \sub{(L24)}{s_5}{S_5} \wedge
+    \sub{(L23)}{s_5}{S_5} \big) 
+    \leftrightarrow
+     \exists
+D_2~S_7\big(
+  \sub{\eqref{f:countd2}}{s_7}{S_7}\wedge %\nonumber\\
+ \sub{\eqref{compf:d2}}{d2}{D_2}\wedge
+\sub{\eqref{f:s7}}{s_7,d2}{S_7,D_2}
+ \big)
+\label{eq:2}
+\end{align} 
 
 
 
 
 
 We start by observing that 
-conjunctive term~\eqref{d1:eq} is equivalent to
+conjunctive term~$\sub{\eqref{f:countd1}}{s_6}{S_6}$ in \eqref{eq:1}  is equivalent to
+\begin{align}       
+&\forall K \neg(   1\leq K\leq n\times 2-1\wedge \neg count(S_6(K))\leq 1).\label{simpcd1:eq}
+\end{align}
+
+Also, 
+conjunctive term~$\sub{\eqref{compf:d1}}{d1}{D1}$ in \eqref{eq:1} is equivalent to
 \begin{align}
 &\forall   
 X Y Z
-(D1(X,Y,Z)
-\leftrightarrow \exists I J     
-(1\leq I\leq n\wedge 1\leq J\leq n
-\wedge X=I \wedge Y=J \wedge Z=I-J+n) 
+(D_1(X,Y,Z)
+\leftrightarrow \exists I_1 J_1     
+(1\leq I_1\leq n\wedge 1\leq J_1\leq n
+\wedge X=I_1 \wedge Y=J_1 \wedge Z=I_1-J_1+n) 
 )\label{sd1:eq}
 \end{align}
-Similarly, conjunctive term~\eqref{d2:eq} is equivalent to
-\begin{align}   
-&\forall   
-X Y Z
-(D2(X,Y,Z)
-\leftrightarrow \exists I J     
-(1\leq I\leq n\wedge 1\leq J\leq n
-\wedge X=I \wedge Y=J \wedge Z=I+J-1) 
-)\label{sd2:eq}
+
+
+In presence of~$\sub{\eqref{compf:d1}}{d1}{D1}$ (consider its simplified form~\eqref{sd1:eq}), conjunctive term~$\sub{\eqref{f:s6}}{s_6,d_1}{S_6,D_1}$ in \eqref{eq:1} 
+is equivalent to
+\begin{align}
+    & \forall K V(V\in S_6(K) \leftrightarrow \exists I J( V=(I,J)\wedge q(I,J)\wedge 
+     \exists I_1 J_1     
+(1\leq I_1\leq n\wedge 1\leq J_1\leq n
+\wedge I=I_1 \wedge J=J_1 \wedge K=I_1-J_1+n) 
+    ))\label{cd1:set}       
 \end{align}
 
-In presence of~\eqref{d1:eq} (consider its simplified form~\eqref{sd1:eq}), conjunctive term~\eqref{cd1:set}
+============================
+In presence of~$\sub{\eqref{compf:d1}}{d1}{D1}$ (consider its simplified form~\eqref{sd1:eq}), formula~\eqref{simpcd1:eq} 
 is equivalent to
 \begin{align*}
     & \big(\forall K V(V\in s_6(K) \leftrightarrow \exists I J( V=(I,J)\wedge q(I,J)\wedge 
@@ -346,7 +367,41 @@ to
  \wedge K=I-J+n)) \label{simpscd1:set}
 \end{align}    
 
-In presence of~\eqref{d2:eq} (consider its simplified form~\eqref{sd2:eq}), conjunctive term~\eqref{cd1:set}
+
+======
+Similarly, conjunctive term~$\sub{\eqref{compf:d2}}{d2}{D_2}$ in \eqref{eq:2} is equivalent to
+\begin{align}   
+&\forall   
+X Y Z
+(D_2(X,Y,Z)
+\leftrightarrow \exists I J     
+(1\leq I\leq n\wedge 1\leq J\leq n
+\wedge X=I \wedge Y=J \wedge Z=I+J-1) 
+)\label{sd2:eq}
+\end{align}
+
+In presence of~$\sub{\eqref{compf:d1}}{d1}{D1}$ (consider its simplified form~\eqref{sd1:eq}), conjunctive term~\eqref{cd1:set}
+is equivalent to
+\begin{align*}
+    & \big(\forall K V(V\in s_6(K) \leftrightarrow \exists I J( V=(I,J)\wedge q(I,J)\wedge 
+     \exists I_1 J_1     
+(1\leq I_1\leq n\wedge 1\leq J_1\leq n
+\wedge I=I_1 \wedge J=J_1 \wedge K=I_1-J_1+n)
+\end{align*}    
+which in turn can be simplified as
+\begin{align*}
+    & \forall K V(V\in s_6(K) \leftrightarrow \exists I J( V=(I,J)\wedge q(I,J)\wedge 
+1\leq I\leq n\wedge 1\leq J\leq n
+ \wedge K=I-J+n)) %\label{scd1:set}
+\end{align*}    
+In prsense of (L26), the last formula is equivalent
+to
+\begin{align}
+    & \forall K V(V\in s_6(K) \leftrightarrow \exists I J( V=(I,J)\wedge q(I,J)
+ \wedge K=I-J+n)) \label{simpscd1:set}
+\end{align}    
+
+In presence of~$\sub{\eqref{compf:d2}}{d2}{D_2}$ (consider its simplified form~\eqref{sd2:eq}), conjunctive term~\eqref{cd1:set}
 is equivalent to
 \begin{align*}
     & \forall K V(V\in s_7(K) \leftrightarrow \exists I J( V=(I,J)\wedge q(I,J)\wedge 
@@ -366,8 +421,8 @@ to
 It is now easy to see that
 the following conjunctive term of~\eqref{eq:complP2}
 \begin{align}
-&\exists D1 D2\Big(  
-\eqref{d1:eq}\wedge\eqref{d2:eq}
+&\exists D_1 D_2\Big(  
+\sub{\eqref{compf:d1}}{d1}{D1}\wedge\sub{\eqref{compf:d2}}{d2}{D_2}
 \wedge\eqref{cd1:set}
 \wedge\eqref{cd2:set}
 \Big) \label{eq:existpart}
