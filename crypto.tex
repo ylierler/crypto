@@ -123,10 +123,9 @@ so that  $\sd(S_4)$ and $\sd(S_5)$ follow:
 \eeq{d5}
 
 
-To stress the similarity between some of the formulas stemming from the translation we introduce notation for substitutions. For a formula $F$, by $\sub{F}{t}{t'}$ we denote the formula constructed from $F$ by replacing all occurrences of function variable $t$ in $F$ with function variable $t'$. 
+To stress the similarity between some of the formulas stemming from the translation we introduce notation for substitutions. For a formula $F$, by $\sub{F}{t}{t'}$ we denote the formula constructed from $F$ by replacing all occurrences of function symbol (constant or variable) $t$ in $F$ with function symbol (constant or variable) $t'$. 
 Thus, for example, $\sub{\eqref{b4f}}{S_4}{S_5}$ stands for \eqref{b5f}.
-
-%Similarly, for a formula $F$, by $\sub{F}{p}{p'}$ we denote the formula constructed from $F$ by replacing all occurrences of predicate symbol $p$ in $F$ with predicate symbol $p'$.
+Similarly, for a formula $F$, by $\sub{F}{p}{p'}$ we denote the formula constructed from $F$ by replacing all occurrences of predicate symbol (constant or variable) $p$ in $F$ with predicate symbol (constant or variable) $p'$.
 %We allow ourself to abuse this notation and use a list composed of terms and predicate symbols.
 
 \section{Program C as a forumla}
@@ -147,491 +146,186 @@ Rules~(\ref{c6}) and~(\ref{c7})  are converted into formulas containing new func
 and~$S_7$:
 \beq
 \forall K(1\leq K\leq 2\times n-1 \land\neg\co(S_6(K))\leq 1)\to\bot,
-\eeq{b6f}
+\eeq{c6f}
 \beq
 \forall K(1\leq K\leq 2\times n-1 \land\neg\co(S_7(K))\leq 1)\to\bot,
-\eeq{b7f}
+\eeq{c7f}
 so that  $\sd(S_6)$ and $\sd(S_7)$ follow: 
 \beq
-\forall VK\Big(V\in S_7(K) \lrar \exists IJ\big(V=(I,J) \land q(I,J) \land d2(I,J,K)\big)\Big),
-\eeq{d7}
-\beq
-\forall VK\Big(V\in S_6(K) \lrar \exists IJ\big(V=(I,J) \land q(I,J) \land d1(I,J,K)\big)\Big).
+\forall VK\Big(V\in S_6(K) \lrar \exists IJ\big(V=(I,J) \land q(I,J) \land d1(I,J,K)\big)\Big),
 \eeq{d6}
-It is easy to see that  $\sub{\eqref{b4f}}{S_4}{S_6}$ stands for \eqref{b6f}
-and  $\sub{\eqref{b4f}}{S_4}{S_7}$ stands for \eqref{b7f}.
+\beq
+\forall VK\Big(V\in S_7(K) \lrar \exists IJ\big(V=(I,J) \land q(I,J) \land d2(I,J,K)\big)\Big).
+\eeq{d7}
+It is easy to see that  $\sub{\eqref{b4f}}{S_4}{S_6}$ stands for \eqref{c6f}
+and  $\sub{\eqref{b4f}}{S_4}{S_7}$ stands for \eqref{c7f}.
 
-\newpage
-
-=====================================
-
-In the sequel, we use letters $I,J,K,N$ and their variants $I_1,J_1,\ldots$ to denote integer variables. Letters $X,Y,Z,V,U$ and their variants $X_1,Y_1,\ldots$ are used to denote general variables.  
-
-
-Rules~\eqref{nr:d1} and ~\eqref{nr:d2} are captured by the following formulas:
-\begin{align}
-&\forall I J  K ((1\leq I\leq K\wedge 1\leq J\leq K \wedge K=n) 
-\rightarrow  d1(I,J,I-J+K) ).\label{f:d1}\\
-&\forall I J K ((1\leq I\leq K\wedge 1\leq J\leq K \wedge K=n)\rightarrow d2(I,J,I+J-1)).\label{f:d2}
-\end{align}
-
-The representations of rules~\eqref{nr:countd1} and~\eqref{nr:countd2} include the constants $s_6$ and $s_7$, which are defined as follows:
-\begin{align}
-&\forall K V(V\in s_6(K) \leftrightarrow \exists I J( V=(I,J)\wedge q(I,J)\wedge d1(I,J,K))).\label{f:s6}\\
-&\forall K V(V\in s_7(K) \leftrightarrow \exists I J( V=(I,J)\wedge q(I,J)\wedge d2(I,J,K))).\label{f:s7}
-\end{align}
-Now,  
-rules~\eqref{nr:countd1} and~\eqref{nr:countd2}  
-are captured by the following formulas:
-\begin{align}
-        &\forall K N\neg(   1\leq K\leq N\times 2-1\wedge \neg count(s_6(K))\leq 1\wedge N=n).\label{f:countd1}\\
-        &\forall K N\neg(   1\leq K\leq N\times 2-1\wedge \neg count(s_7(K))\leq 1\wedge N=n).\label{f:countd2}
-\end{align}
+\section{Completions of Programs}
+We now proceed toward building completions for Programs B and C.  In this process we note that formulas~\eqref{a1f},~\eqref{c4f}, and~\eqref{c5f} are not completable due to the use of integer variables in the ``head'' atom. We rewrite them as follows (respectively):
+\beq
+\forall I J X Y (\neg\neg q(I,J) \land 1\leq I \leq n \land 1 \leq J \leq n \wedge X=I\wedge Y=J
+ \to q(X,Y)).
+\eeq{a1fc}
+\beq
+\forall I J K X Y Z(1\leq I\leq n \land 1\leq J\leq n \land 
+K=I-J+n \land X=I \land Y=J \land Z=K \to d1(X,Y,Z)).
+\eeq{c4fc}
+\beq
+\forall I J K X Y Z(1\leq I\leq n \land 1\leq J\leq n \land 
+K=I+J-1 \land X=I \land Y=J \land Z=K \to d2(X,Y,Z)).
+\eeq{c5fc}
 
 
-To sum up,  rules of Program C are represented by formulas  (L11), (L18), (L20), where by letter L we annotate numbers coming from [QVL] and~\eqref{f:d1},~\eqref{f:d2},~\eqref{f:countd1},~\eqref{f:countd2}.  
+\paragraph{Completion of Program B}
+The completed definition of $q$ is constructed from~\eqref{a1fc} and has the form:
+\beq
+\forall X Y \Big(q(X,Y)\lrar\exists I J(\neg\neg q(I,J) \land 1\leq I \leq n \land 1 \leq J \leq n \wedge X=I\wedge Y=J)\Big).
+\eeq{a1fcomplete}
+The remaining formulas of Program B are already ``complete''.
+The completion of Program B is the conjunction of~\eqref{a1fcomplete},~\eqref{b2f},~\eqref{b3f},~\eqref{b4f}, and~\eqref{b5f} extended with the respective set definitions~\eqref{d2},~\eqref{d3},~\eqref{d4}, and~\eqref{d5} such that every function variable is existentially quantified:
+\beq
+\exists S_2~S_3~S_4~S_5\Big(\eqref{a1fcomplete}\wedge 
+\eqref{b2f}\wedge\eqref{b3f}\wedge\eqref{b4f}\wedge\eqref{b5f}
+\wedge\eqref{d2}\wedge\eqref{d3}\wedge\eqref{d4}\wedge\eqref{d5}\Big).
+\eeq{completionB}
 
-\section{Completion of Program C}
-We are now concerned with building completion for Program C.
-
-Sentences~\eqref{f:d1} and~\eqref{f:d2} are not completable. To make them completable we rewrite them using intuitionisticly equivalent transformations as follows  
-\begin{align}
-&\forall I J K 
-X Y Z((1\leq I\leq K\wedge 1\leq J\leq K \wedge K=n 
-\wedge X=I \wedge Y=J \wedge Z=I-J+K) 
-\rightarrow  d1(X,Y,Z) ).\label{cf:d1}\\
-&\forall I J K 
-X Y Z
-((1\leq I\leq K\wedge 1\leq J\leq K \wedge K=n
-\wedge X=I \wedge Y=J \wedge Z=I+J-1)
-\rightarrow d2(X,Y,Z)
-).\label{cf:d2}
-\end{align}
-Similarly, (L11) is not completable and was rewritten as (L25).
-The set $\Gamma_C$, consisting of sentences (L25),  (L18), (L20),
-~\eqref{cf:d1},~\eqref{cf:d2},~\eqref{f:countd1}, and~\eqref{f:countd2}, is completable.
-
-We now note that we assume our user guide to denote (i) no predicate symbols as input and 
-(ii) predicate symbol $q/2$ as the only output one.
-Thus, predicate symbols $d1$ and $d2$ are private.
-With that when we form the second-order completion for Program~C.
-To begin with we from the first-order completion for Program~C. [Appendix B, AnthemP2P]
-The first-order completion  is the conjunction of (L26), (L18), (L20), ~\eqref{f:countd1}, and~\eqref{f:countd2} and completed definitions for $d1$ and $d2$: 
+\paragraph{Completion of Program C}
+The completed definitions for $d1$ and $d2$ are constructed from ~\eqref{c4fc} and~\eqref{c5fc} and have the forms (we rename variables $I,J,K$ to $I_1,J_1,K_1$ to avoid name clashes in the sequel): 
 \begin{align}
     &\forall 
 X Y Z
-(d1(X,Y,Z)
-\leftrightarrow \exists I J K    
-(1\leq I\leq K\wedge 1\leq J\leq K \wedge K=n 
-\wedge X=I \wedge Y=J \wedge Z=I-J+K) 
-   ).\label{compf:d1}\\
+\Big(d1(X,Y,Z)
+\leftrightarrow \exists I_1 J_1 K_1    
+(1\leq I_1\leq n\wedge 1\leq J_1\leq n \wedge K_1=I_1-J_1+n
+\wedge X=I_1 \wedge Y=J_1 \wedge Z=K_1 ) 
+   \Big).\label{d1fcomplete}\\
 &\forall  
 X Y Z
-(d2(X,Y,Z) \leftrightarrow \exists I J K
-    (1\leq I\leq K\wedge 1\leq J\leq K \wedge K=n
-\wedge X=I \wedge Y=J \wedge Z=I+J-1)
-).\label{compf:d2}
-\end{align}
-We now present a definition inspired by the concept of  
-the second-order completion  defined  in [Appendix B, AnthemP2P].
-Given program $P$, COMP($P$) is defined as the first-order completion
-of formula representation of $P$, 
-where all private symbols are replaced by predicate variables.
-The extended completion $COMP^+(P)$ is defined as the conjunction of $COMP(P)$ with the conjunction of set definition formulas, where within that conjunction all function constants denoting sets ($s_i$) are replaced by function symbol variables and all predicate and function symbol variables are bound by existential quantifiers.
-
-
-We utilize the following notation for a substitution: for a formula $F$, by $\sub{F}{t}{t'}$ we denote the formula constructed from $F$ by replacing all occurrences of term $t$ in $F$ with term $t'$. Similarly, for a formula $F$, by $\sub{F}{p}{p'}$ we denote the formula constructed from $F$ by replacing all occurrences of predicate symbol $p$ in $F$ with predicate symbol $p'$.
-We allow ourself to abuse this notation and use a list composed of terms and predicate symbols.
-For example,
-recall that (L18) has the form
-\[
-\forall I \neg\bigl(
-1 \leq I \leq n
-\land
-\neg\bigl(1 \leq \operatorname{count}(s2(I)) \leq 1\bigr)
-\bigr)
-\]
-Thus, $\sub{(L18)}{s_2}{S_2}$ stands for
-\[
-\forall I \neg\bigl(
-1 \leq I \leq n
-\land
-\neg\bigl(1 \leq \operatorname{count}(S_2(I)) \leq 1\bigr)
-\bigr)
-\]
-Similarly, $\sub{\eqref{compf:d1}}{d1}{D_1}$ stands for
-\[
-\forall X Y Z
-(D_1(X,Y,Z) \leftrightarrow \exists I J K
-    (1\leq I\leq K\wedge 1\leq J\leq K \wedge K=n
-\wedge X=I \wedge Y=J \wedge Z=I+J-1)
-)
-\]
-Also, $\sub{\eqref{f:s6}}{s_6,d1}{S_6,D_1}$ stands for
-\[
-\big(\forall K V(V\in S_6(K) \leftrightarrow \exists I J( V=(I,J)\wedge q(I,J)\wedge D_1(I,J,K)))\big).
-\]
-
-The extended completion of Program C, namely $COMP^+(C)$ follows
-\begin{align}   
-\exists D_1~D_2~ 
-S_2~S_3~S_6~S_7\Big(
-~  (L26) \wedge %\nonumber\\
-%& 
- \sub{(L18)}{s_2}{S_2}
- \wedge 
-%&
- \sub{(L20)}{s_3}{S_3} \wedge %\nonumber\\
- % & 
-  \sub{\eqref{f:countd1}}{s_6}{S_6}\wedge %\nonumber\\
-  %& 
-  \sub{\eqref{f:countd2}}{s_7}{S_7}\wedge %\nonumber\\
-      %&
-            \sub{\eqref{compf:d1}}{d1}{D1}
-\wedge%\label{d1:eq}\\
-%&      
-\sub{\eqref{compf:d2}}{d2}{D_2}\nonumber\\
-%\forall  
-%X Y Z
-%(D2(X,Y,Z) \leftrightarrow \exists I J K
-%    (1\leq I\leq K\wedge 1\leq J\leq K \wedge K=n
-%\wedge X=I \wedge Y=J \wedge Z=I+J-1)
-%)
-%
-%\wedge\label{d2:eq}\\
-%&
-\sub{(L17)}{s_2}{S_2}  \wedge \sub{(L19)}{s_3}{S_3}  \wedge%\nonumber\\
-%& 
-\sub{\eqref{f:s6}}{s_6,d_1}{S_6,D_1}
-\wedge%\label{cd1:set}\\
-%&
-\sub{\eqref{f:s7}}{s_7,d2}{S_7,D_2}
- \Big)\nonumber%\label{cd2:set}
+\Big(d2(X,Y,Z) \leftrightarrow \exists I_1 J_1 K_1
+    (1\leq I_1\leq n\wedge 1\leq J_1\leq n \wedge K_1=I_1+J_1-1 
+\wedge X=I_1 \wedge Y=J_1 \wedge Z=K_1 )
+   \Big).\label{d2fcomplete}
 \end{align}
 
-Let us recall that the firt-order completion of $\Gamma_B$ is the conjunction of  (L18), (L20), (L22), (L24), and (L26).
-The extended completion of Program B, namely $COMP^+(B)$ follows
-\begin{align}
-     \exists S_2~S_3~S_4~S_5 \big((L26) \wedge  %\nonumber\\
-\sub{(L18)}{s_2}{S_2}
- \wedge 
-%&
- \sub{(L20)}{s_3}{S_3} \wedge %\nonumber\\
-\sub{(L22)}{s_4}{S_4} \wedge %\nonumber\\
-\sub{(L24)}{s_5}{S_5} \wedge \nonumber\\
-\sub{(L17)}{s_2}{S_2}
- \wedge 
-%&
- \sub{(L19)}{s_3}{S_3} \wedge %\nonumber\\
-\sub{(L21)}{s_4}{S_4} \wedge %\nonumber\\
-\sub{(L23)}{s_5}{S_5} \big) \nonumber
-\end{align}
+The completion of Program C is the conjunction of~\eqref{a1fcomplete},~\eqref{b2f},~\eqref{b3f},~\eqref{d1fcomplete},~\eqref{d2fcomplete},~\eqref{c6f}, and~\eqref{c7f}  extended with the respective set definitions~\eqref{d2},~\eqref{d3},~\eqref{d6}, and~\eqref{d7} such that every function variable is existentially quantified.
+As our ultimate goal is to analyse the ``equivalence'' of Programs B and C we 
+recall that such analysis is performed in the context of a user guide -- a specification on how these programs are meant to be used and their output to be interpreted.
+We now note that we assume our user guide for Program C to denote (i) no predicate symbols as input and 
+(ii) predicate symbol $q/2$ as the only output one.
+Thus, predicate symbols $d1$ and $d2$ are private.
+With that when we form an {\em io}-compeltion that ``hides'' predicade symbols 
+$d1$ and $d2$ by replacing them with predicate variables $D_1$ and $D_2$ and  existentially quantifying them. The {\em io}-compeltion for Program C is the following formula:
+
+\beq
+\exists D_1 D_2 S_2 S_3 S_6 S_7\Big(\eqref{a1fcomplete}\wedge
+\eqref{b2f}\wedge\eqref{b3f}\wedge
+\sub{\eqref{d1fcomplete}}{d1}{D_1}\wedge 
+\sub{\eqref{d2fcomplete}}{d2}{D_2}\wedge 
+\eqref{c6f}\wedge\eqref{c7f}
+\wedge\eqref{d2}\wedge\eqref{d3}\wedge
+\sub{\eqref{d6}}{d1}{D_1}\wedge\sub{\eqref{d7}}{d2}{D_2}\Big).
+\eeq{completionC}
+
+\section{Equivalence of io-Completions Programs B and C}
+As the user guide for Program B is identical to that of Program C, it is easy to see that io-completion of program B coincides with its completion presnted earlier.
+We now show that io-completions of Programs B and C are equivalent, i.e., that the following formula is a tautology
+$$
+\eqref{completionB}
+\lrar
+\eqref{completionC}.
+$$
 
 
+To begin with we will start by the equivalent transformation on formulas~\eqref{completionB} and~\eqref{completionC} by moving their existential quantifiers inwards and somewhat rearranging its conjunctive elements.
 
-\section{Equivalence of Extended Completions of Programs B and C}
+Formulas \eqref{completionB} and \eqref{completionC} are equivalent to the following formulas respectively:
+\beq
+\ba l
+\eqref{a1fcomplete}\wedge  
+\exists S_2\big(\eqref{b2f} \wedge\eqref{d2}\big)
+\wedge
+\exists S_3 \big(\eqref{b3f} \wedge\eqref{d3}\big)
+\wedge\\
+\exists S_4\big(\eqref{b4f}\wedge \eqref{d4}\big)
+\wedge
+\exists S_5\big(\eqref{b5f}\wedge \eqref{d5}\big)
+\ea
+\eeq{completionBin}
+\beq
+\ba l
+\eqref{a1fcomplete}\wedge  
+\exists S_2\big(\eqref{b2f} \wedge\eqref{d2}\big)
+\wedge
+\exists S_3 \big(\eqref{b3f} \wedge\eqref{d3}\big)
+\wedge\\
+\exists D_1 S_6\big(\sub{\eqref{d1fcomplete}}{d1}{D_1}\wedge\eqref{c6f} \wedge \sub{\eqref{d6}}{d1}{D_1}\big)
+\wedge
+\exists D_2 S_5\big(\sub{\eqref{d2fcomplete}}{d2}{D_2}\wedge \eqref{c7f} \wedge\sub{\eqref{d7}}{d2}{D_2}\big)
+\ea
+\eeq{completionCin}
+When io-completions are presented in this form it is easy to see that our goal is derivable from proving that the following two formulas are tautulagies:
+\beq
+\eqref{a1fcomplete}\rar\Big(
+\exists S_4\big(\eqref{b4f}\wedge \eqref{d4}\big)
+\lrar
+\exists D_1 S_6\big(\sub{\eqref{d1fcomplete}}{d1}{D_1}\wedge \eqref{c6f} \wedge\sub{\eqref{d6}}{d1}{D_1}\big)
+\Big)
+\eeq{claim1}
+and
+\beq
+\eqref{a1fcomplete}\rar\Big(
+\exists S_5\big(\eqref{b5f}\wedge \eqref{d5}\big)
+\lrar
+\exists D_2 S_5\big(\sub{\eqref{d2fcomplete}}{d2}{D_2}\wedge \eqref{c7f} \wedge \sub{\eqref{d7}}{d2}{D_2}\big)
+\Big).
+\eeq{claim2}
 
-We now show how to derive the equivalence between the extended completion of program $B$ and the extended completion of program $C$, namely between $COMP^+(B)$ and $COMP^+(C)$ (listed in previous section), in classical logic from
-\begin{itemize}
-\item KB, a knowledge base describing integers, precomputed terms, sets and cardinalities
-(see Section 6 [QVL]),
-\item  UG, the pair of user guide asuumption formulas $\exists N(n = N)$ and $n \geq 1$, expressing that $n$ is a
-placehodler for a positive integer.
-\end{itemize}
-
-We start by noting that  $COMP^+(B)$ is equivalent to the following formula:
-\begin{align}
-     (L26) \wedge 
-  \exists  
-S_2~S_3\big( \sub{(L18)}{s_2}{S_2}
- \wedge 
-%&
- \sub{(L20)}{s_3}{S_3} \wedge
- \sub{(L17)}{s_2}{S_2}  \wedge \sub{(L19)}{s_3}{S_3}\big)  \wedge\nonumber\\
-  \exists S_4\big(
-  \sub{(L22)}{s_4}{S_4} \wedge
-  \sub{(L21)}{s_4}{S_4} \big)\wedge \nonumber\\
-\exists S_5\big(
-  \sub{(L24)}{s_5}{S_5} \wedge
-  \sub{(L23)}{s_5}{S_5} \big) 
-  \nonumber
-\end{align}
-
-Similarly,  $COMP^+(C)$ is equivalent to the following formula:
-\begin{align}
-    %&
-     (L26) \wedge 
-  \exists  
-S_2~S_3\big( \sub{(L18)}{s_2}{S_2}
- \wedge 
-%&
- \sub{(L20)}{s_3}{S_3} \wedge
- \sub{(L17)}{s_2}{S_2}  \wedge \sub{(L19)}{s_3}{S_3}\big)  \wedge\nonumber\\
-%&   
-\exists D_1~~S_6\big(
-  \sub{\eqref{f:countd1}}{s_6}{S_6}
-\wedge%\label{cd1:set}\\
-      %&
-            \sub{\eqref{compf:d1}}{d1}{D_1}\wedge
-\sub{\eqref{f:s6}}{s_6,d_1}{S_6,D_1}
-%      \forall 
-%X Y Z
-%(D1(X,Y,Z)
-%\leftrightarrow \exists I J K    
-%(1\leq I\leq K\wedge 1\leq J\leq K \wedge K=n 
-%\wedge X=I \wedge Y=J \wedge Z=I-J+K) 
-%)
-\big)\wedge\nonumber\\
-%\wedge\label{d1:eq}\\
-%& 
- \exists
-D_2~S_7\big(
-%& 
- %\nonumber\\
- % & 
-  %& 
-  \sub{\eqref{f:countd2}}{s_7}{S_7}
-\wedge%\label{d2:eq}\\
-%&
- \sub{\eqref{compf:d2}}{d2}{D_2}\wedge 
-\sub{\eqref{f:s7}}{s_7,d2}{S_7,D_2}
- \big)\nonumber %\label{cd2:set}
-\end{align}
-
-It is obvious that the first conjunctive terms of the last two formulas are identical.
-We now focus on establishing the relationship between the second conjunctive terms of the last two formulas, namely, we show that the following formulas are equivalent {\color{blue} in light of KB and UG?}:
-\begin{align}
-  \exists   S_4\big(
-  \sub{(L22)}{s_4}{S_4} \wedge
-  \sub{(L21)}{s_4}{S_4} \big) \leftrightarrow
-  \exists D_1~~S_6\big(
-  \sub{\eqref{f:countd1}}{s_6}{S_6}\wedge %\nonumber\\ 
-            \sub{\eqref{compf:d1}}{d1}{D_1}
-\wedge%\label{cd1:set}\\
-\sub{\eqref{f:s6}}{s_6,d_1}{S_6,D_1}
-\big)\label{eq:1}              
-\end{align}
-We also show that the third conjunctive terms of these two formulas are equivalent, namely,
-{\color{blue} in light of KB and UG?}:
-\begin{align}
-    \exists S_5\big(
-    \sub{(L24)}{s_5}{S_5} \wedge
-    \sub{(L23)}{s_5}{S_5} \big) 
-    \leftrightarrow
-     \exists
-D_2~S_7\big(
-  \sub{\eqref{f:countd2}}{s_7}{S_7}\wedge %\nonumber\\
- \sub{\eqref{compf:d2}}{d2}{D_2}\wedge
-\sub{\eqref{f:s7}}{s_7,d2}{S_7,D_2}
- \big)
-\label{eq:2}
-\end{align} 
+We start by focusing on the claim that~\eqref{claim1} is a tautology. To this end we focus on the queivalent transformations for its subformula at the righthandside of the equivalence  symbol $\lrar$. This subformula is equivalent to 
+$$
+\ba l
+\exists  S_6\Big(\eqref{c6f} \wedge \\
+\forall VK\Big(V\in S_6(K) \lrar \\
+\exists IJ\big(V=(I,J) \land q(I,J) \land 
+ \exists I_1 J_1 K_1
+    (1\leq I_1\leq n\wedge 1\leq J_1\leq n \wedge K_1=I_1-J_1+1 
+\wedge I=I_1 \wedge J=J_1 \wedge K=K_1 )
+\big)
+\Big)
+\Big)
+\ea
+$$
+which in turn is equivalent to
+$$
+\ba l
+\exists  S_6\Big(\eqref{c6f} \wedge \\
+\forall VK\Big(V\in S_6(K) \lrar \\
+\exists IJ\big(V=(I,J) \land q(I,J) \land 
+    1\leq I\leq n\wedge 1\leq J\leq n \wedge K=I-J+n 
+\big)
+\Big)
+\Big)
+\ea
+$$
+which under assumption~\eqref{a1fcomplete} is equivalent to
+$$
+\ba l
+\exists  S_6\Big(\eqref{c6f} \wedge \\
+\forall VK\Big(V\in S_6(K) \lrar \\
+\exists IJ\big(V=(I,J) \land q(I,J) \land 
+     \wedge K=I-J+n 
+\big)
+\Big)
+\Big).
+\ea
+$$
+It is easy to see that if we substitute $S_6$ with $S_4$ in the last formula we obtain a formula 
+that is at the right hand side of the equivalence symbol $\lrar$ in~\eqref{claim1}.
+Thus, we have shown that~\eqref{claim1} is a tautology. The proof for the fact that~\eqref{claim2} is a tautology is similar.
 
 
+\newpage
 
 
-
-We start by observing that 
-conjunctive term~$\sub{\eqref{f:countd1}}{s_6}{S_6}$ in \eqref{eq:1}  is equivalent to
-\begin{align}       
-&\forall K \neg(   1\leq K\leq n\times 2-1\wedge \neg count(S_6(K))\leq 1).\label{simpcd1:eq}
-\end{align}
-
-Also, 
-conjunctive term~$\sub{\eqref{compf:d1}}{d1}{D1}$ in \eqref{eq:1} is equivalent to
-\begin{align}
-&\forall   
-X Y Z
-(D_1(X,Y,Z)
-\leftrightarrow \exists I_1 J_1     
-(1\leq I_1\leq n\wedge 1\leq J_1\leq n
-\wedge X=I_1 \wedge Y=J_1 \wedge Z=I_1-J_1+n) 
-)\label{sd1:eq}
-\end{align}
-
-
-In presence of~$\sub{\eqref{compf:d1}}{d1}{D1}$ (consider its simplified form~\eqref{sd1:eq}), conjunctive term~$\sub{\eqref{f:s6}}{s_6,d_1}{S_6,D_1}$ in \eqref{eq:1} 
-is equivalent to
-\begin{align}
-    & \forall K V(V\in S_6(K) \leftrightarrow \exists I J( V=(I,J)\wedge q(I,J)\wedge 
-     \exists I_1 J_1     
-(1\leq I_1\leq n\wedge 1\leq J_1\leq n
-\wedge I=I_1 \wedge J=J_1 \wedge K=I_1-J_1+n) 
-    ))\label{cd1:set}       
-\end{align}
-
-============================
-In presence of~$\sub{\eqref{compf:d1}}{d1}{D1}$ (consider its simplified form~\eqref{sd1:eq}), formula~\eqref{simpcd1:eq} 
-is equivalent to
-\begin{align*}
-    & \big(\forall K V(V\in s_6(K) \leftrightarrow \exists I J( V=(I,J)\wedge q(I,J)\wedge 
-     \exists I_1 J_1     
-(1\leq I_1\leq n\wedge 1\leq J_1\leq n
-\wedge I=I_1 \wedge J=J_1 \wedge K=I_1-J_1+n)
-\end{align*}    
-which in turn can be simplified as
-\begin{align*}
-    & \forall K V(V\in s_6(K) \leftrightarrow \exists I J( V=(I,J)\wedge q(I,J)\wedge 
-1\leq I\leq n\wedge 1\leq J\leq n
- \wedge K=I-J+n)) %\label{scd1:set}
-\end{align*}    
-In prsense of (L26), the last formula is equivalent
-to
-\begin{align}
-    & \forall K V(V\in s_6(K) \leftrightarrow \exists I J( V=(I,J)\wedge q(I,J)
- \wedge K=I-J+n)) \label{simpscd1:set}
-\end{align}    
-
-
-======
-Similarly, conjunctive term~$\sub{\eqref{compf:d2}}{d2}{D_2}$ in \eqref{eq:2} is equivalent to
-\begin{align}   
-&\forall   
-X Y Z
-(D_2(X,Y,Z)
-\leftrightarrow \exists I J     
-(1\leq I\leq n\wedge 1\leq J\leq n
-\wedge X=I \wedge Y=J \wedge Z=I+J-1) 
-)\label{sd2:eq}
-\end{align}
-
-In presence of~$\sub{\eqref{compf:d1}}{d1}{D1}$ (consider its simplified form~\eqref{sd1:eq}), conjunctive term~\eqref{cd1:set}
-is equivalent to
-\begin{align*}
-    & \big(\forall K V(V\in s_6(K) \leftrightarrow \exists I J( V=(I,J)\wedge q(I,J)\wedge 
-     \exists I_1 J_1     
-(1\leq I_1\leq n\wedge 1\leq J_1\leq n
-\wedge I=I_1 \wedge J=J_1 \wedge K=I_1-J_1+n)
-\end{align*}    
-which in turn can be simplified as
-\begin{align*}
-    & \forall K V(V\in s_6(K) \leftrightarrow \exists I J( V=(I,J)\wedge q(I,J)\wedge 
-1\leq I\leq n\wedge 1\leq J\leq n
- \wedge K=I-J+n)) %\label{scd1:set}
-\end{align*}    
-In prsense of (L26), the last formula is equivalent
-to
-\begin{align}
-    & \forall K V(V\in s_6(K) \leftrightarrow \exists I J( V=(I,J)\wedge q(I,J)
- \wedge K=I-J+n)) \label{simpscd1:set}
-\end{align}    
-
-In presence of~$\sub{\eqref{compf:d2}}{d2}{D_2}$ (consider its simplified form~\eqref{sd2:eq}), conjunctive term~\eqref{cd1:set}
-is equivalent to
-\begin{align*}
-    & \forall K V(V\in s_7(K) \leftrightarrow \exists I J( V=(I,J)\wedge q(I,J)\wedge 
-1\leq I\leq n\wedge 1\leq J\leq n
- \wedge K=I+J-1)) %\label{scd2:set}
-\end{align*}    
-In prsense of (L26),the last formula is equivalent
-to
-\begin{align}
-    & \forall K V(V\in s_7(K) \leftrightarrow \exists I J( V=(I,J)\wedge q(I,J)\wedge 
- K=I+J-1) \label{simpscd2:set}
-\end{align}    
-
-
-
-
-It is now easy to see that
-the following conjunctive term of~\eqref{eq:complP2}
-\begin{align}
-&\exists D_1 D_2\Big(  
-\sub{\eqref{compf:d1}}{d1}{D1}\wedge\sub{\eqref{compf:d2}}{d2}{D_2}
-\wedge\eqref{cd1:set}
-\wedge\eqref{cd2:set}
-\Big) \label{eq:existpart}
-\end{align}
-is equivalent to
- the conjunction of~\eqref{simpscd1:set} and~\eqref{simpscd2:set}.
-
-We are now left to show that the conjunction of 
-   \eqref{f:countd1}, \eqref{f:countd2},  \eqref{simpscd1:set}, and ~\eqref{simpscd2:set} 
-is equivalent to the conjunction of
- (L21), (L22), (L23), and (L24) in our context.
-
-
-
- Observe how \eqref{f:countd1}, \eqref{f:countd2} can be simplified as follows:
- \begin{align}
-        &\forall K \neg(   1\leq K\leq n\times 2-1\wedge \neg count(s_6(K))\leq 1).\label{sf:countd1}\\
-        &\forall K \neg(   1\leq K\leq n\times 2-1\wedge \neg count(s_7(K))\leq 1).\label{sf:countd2}
-\end{align}
-
-Now, let us remind ourselves that formulas (L21), (L22), (L23), and (L24) are as follows:
-\[
-\forall K N V \,
-\bigl(
-V \in s_4(K,N)
-\leftrightarrow
-\exists I J \,
-(V = (I,J) \land q(I,J) \land K = I - J + N)
-\bigr),
-\tag{L21}
-\]
-\[
-\forall K N \,
-\neg
-\bigl(
-1 \leq K \leq 2 \times N - 1
-\land
-\neg \operatorname{count}(s_4(K,N)) \leq 1
-\land
-N = n
-\bigr),
-\tag{L22}
-\]
-\[
-\forall K V \,
-\bigl(
-V \in s_5(K)
-\leftrightarrow
-\exists I J \,
-(V = (I,J) \land q(I,J) \land K = I + J - 1)
-\bigr),
-\tag{L23}
-\]
-\[
-\forall K N \,
-\neg
-\bigl(
-1 \leq K \leq 2 \times N - 1
-\land
-\neg \operatorname{count}(s_5(K)) \leq 1
-\land
-N = n
-\bigr).
-\tag{L24}
-\]
-
-We simplify  (L22) and (L24) as follows
- \begin{align}
-        &\forall K \neg(   1\leq K\leq n\times 2-1\wedge \neg count(s_4(K,n))\leq 1).\label{f:sl22}\\
-        &\forall K \neg(   1\leq K\leq n\times 2-1\wedge \neg count(s_5(K))\leq 1).\label{f:sl24}            
- \end{align}
-
- We now note that~\eqref{simpscd2:set} is identical to (L23) modulo name $s_7$ and $s_5$;
- similarly,~\eqref{sf:countd2} is identical to~\eqref{f:sl24}  modulo name $s_7$ and $s_5$.
-
-We are now left to establish the exact relationship between~\eqref{sf:countd1}
-and~\eqref{f:sl22}
- in light of relationship between~\eqref{simpscd1:set} and (L21). 
- Let us consider an instance of (L21) for a particular value of $N$, i.e, $N=n$:
- \begin{align*}
-& \forall K V \,
-\bigl(
-V \in s_4(K,n)
-\leftrightarrow
-\exists I J \,
-(V = (I,J) \land q(I,J) \land K = I - J + n)
-\bigr)
- \end{align*}
-This instance of (L21) is identical to~\eqref{simpscd1:set} modulo name $s_4(K,n)$ and $s_6(K)$.
-Formulas~\eqref{sf:countd1}
-and~\eqref{f:sl22} 
-are also identical modulo names $s_6(K)$ and $s_4(K,n)$.
-
-    \newpage
 \section{Cryptarithmetic Problem Statement}
 A common sample problem to illustrate the key concepts of constrain satisfaction paradigm is the cryptarithmetic problem. The problem is to find a mapping from letters to digits such that a given arithmetic equation holds true. For example, consider the following equation:
 \begin{equation}
