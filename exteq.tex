@@ -1,0 +1,264 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amsthm}
+\usepackage{named}
+\usepackage{changepage}
+
+\newtheorem{proposition}{Proposition}
+\newtheorem{lemma}{Lemma}
+
+\def\o{\overline}
+\def\bs{\backslash}
+\def\std{\mathit{Std}}
+\def\head{\mathit{Head}}
+\def\body{\mathit{Body}}
+% \def\p2f{\mathit{p2f}}
+\def\ph{\mathit{PH}}
+\def\asm{\mathit{Asm}}
+\def\ug{\mathit{UG}}
+\def\HT{\mathit{HT}}
+\def\fnt{\mathit{finite}}
+\def\gringo{{\sc gringo}}
+\def\clingo{{\sc clingo}}
+\def\mg{mini-\gringo}
+\def\ar{\leftarrow}
+\def\rar{\rightarrow}
+\def\uc{\widehat\forall}
+\def\lrar{\leftrightarrow}
+\def\beq{\begin{equation}}
+\def\eeq#1{\label{#1}\end{equation}}
+\def\ba{\begin{array}}
+\def\ea{\end{array}}
+\def\kbugsd{\emph{KB, UG, SD}}
+\def\bfx{{\bf X}}
+\def\sd{\mathit{SD}}
+\newcommand{\co}{\ensuremath{\mathit{count}}}
+\newcommand{\no}{\ensuremath{\mathit{not}}}
+
+\hyphenation{lif-schitz}
+
+\title{Representing Rules with Counting by Formulas\\
+  (Incomplete Draft)}
+% \author{Vladimir Lifschitz\\ University of Texas}
+
+\begin{document}
+% \date{}
+\maketitle
+
+\begin{adjustwidth}{-1cm}{-1cm}
+
+   This note is an attempt to extend the definition of
+   the ``natural translation''~$\nu$ \cite{lif21,lif23,fan26b,fan26}
+ to programs with counting.
+  
+  \section{Syntax of rules}
+  
+  In this section,
+  the syntax of rules over a \mg\ signature %\cite[Section~2.1]{fan26b}
+  is   generalized to programs with counting.
+    Mini-\gringo\ signatures, terms, atoms,
+  literals, comparisons, \mg\ dialects and definite/indefinite function
+  symbols as in the Dialects draft \cite[Sections~2 and~3]{fan26b}.  By~$D$ we
+  denote a dialect of \mg\ that includes
+  \begin{itemize}
+  \item no basic symbols other that numerals and symbolic constants, and
+    \item no indefinite function symbols
+  other than the interval symbol $..$ characterized by the condition
+  $$\widehat{..}(m,n)=\{k: m\leq k\leq n\}.$$
+\end{itemize}
+(These simplifying assumptions are satisfied for the N-Queens programs
+\cite[(1)--(5) and (6)--(10)]{lif26}).
+A term is \emph{interval-free} if it does not
+contain the interval symbol.
+
+A term of the form $\mathit{blank}(t_1,\dots,t_k)$, where $k\geq 2$,
+can be abbreviated as $(t_1,\dots,t_k)$.
+
+  An \emph{aggregate element} is a pair
+$\bfx:{\bf L}$,
+where $\bfx$ is a non-empty tuple of distinct variables,
+and $\bf L$ is a conjunction of
+literals and comparisons such that every member of~$\bfx$ occurs in~$\bf L$
+\cite[Section~4]{lif22a}.  An \emph{aggregate atom} is an expression of
+one of the forms
+$$t_1\leq \co \{E\},\ \co \{E\}\leq t_2,\ t_1\leq \co \{E\}\leq t_2,$$
+where~$E$ is an aggregate element, and~$t_1$, $t_2$ are interval-free terms.
+
+A \emph{rule} is an expression of the form
+\beq
+H \ar B_1\land\cdots\land B_n
+\eeq{rule}
+($n\geq 0$), where the head~$H$ is either an atom or empty, and
+each member~$B_i$ of the body is either a literal, or a comparison,
+or an aggregate atom possibly preceded by \no.  (Since negations in front of
+aggregate atoms are allowed, this is more general than in some of the
+earlier work \cite{lif22a,fan24}.)
+
+A variable that occurs in a rule~$R$ is \emph{local} in~$R$ if each of
+its occurrences is within an aggregate element, and \emph{global} otherwise.
+A rule is \emph{pure} if, for every aggregate element $\bfx:{\bf L}$ in its
+body, all variables in the tuple~$\bfx$ are local \cite[Section~4]{lif22a}.
+
+A \emph{program} is a finite set of pure rules.
+
+An \emph{equation} is a comparison of the form $t_1=t_2$.  An equation is
+\emph{numeric} if it does not contain symbolic constants.
+ A rule is \emph{in numeric normal form
+  (NNF)} if
+\begin{itemize}
+\item[(a)]
+  symbolic constants do not occur in it in the scope
+  of arithmetic function symbols other than the interval symbol, and
+\item[(b)]
+  every occurrence of a term of the form $t_1\,..\,t_2$ in it
+is the right-hand side of a numeric equation.
+\end{itemize}
+(So symbolic constants are allowed as endponts of an interval; this is
+different from what the Dialects draft requires \cite[Section~3]{fan26b}.)
+All rules (1)--(10) in the N-Queens programs are in numeric normal form
+in the sense of this definition.
+
+\section{The target language}
+
+By~$\sigma^\#$ we denote the many-sorted signature that consists of
+\begin{itemize}
+\item [(i)] the sort \emph{general}, the sort \emph{set}, and the
+  subsort \emph{integer} of \emph{general},
+\item [(ii)] all numerals of~$D$ as object constants of the
+  sort \emph{integer};
+\item [(iii)] all symbolic constants of~$D$ as object
+   constants of the sort \emph{general};
+ \item [(iv)] expressions $c\bs k$, where~$c$ is a symbolic constant of~$D$
+   and~$k$ is a positive integer, as $k$-ary function constants, with
+   both arguments and value of the sort \emph{general};
+\item [(v)] all definite arithmetic
+  function symbols of~$D$ as function constants with both
+  arguments and value of the sort \emph{integer};
+\item[(vi)] the symbol $\co$ as the unary function symbol with the argument
+  of the sort \emph{set} and the value of the sort \emph{general};
+\item [(vii)] expressions $c/k$, where~$c$ is a symbolic constant of~$D$
+  and~$k$ is a nonnegative integer, as $k$-ary predicate constants
+  with arguments of the sort \emph{general};
+\item [(viii)] the symbol $\leq$ as a binary predicate constant with both
+  arguments of the sort \emph{general};
+\item [(ix)] the symbol $\in$ as a binary predicate constant with the
+  arguments of the sorts \emph{general} and \emph{set}.
+\end{itemize}
+(In comparison with $\sigma(D)$ defined in the Dialects draft
+\cite[Section~4.1]{fan26b}, three things here
+are new: the sort \emph{set}, the function symbol $\co$, and the
+predicate symbol~$\in$.  On the other hand, the
+symbol~$\mathit{graph}_{..}$ is not included.)
+
+A term of the form $(\mathit{blank}\bs k)(t_1,\dots,t_k)$, where $k\geq 2$,
+can be abbreviated as $(t_1,\dots,t_k)$.
+
+
+Inequalities involving order relations other that~$\leq$, as well as chains
+of inequalities, are treated as abbreviations. We identify general variables
+with variables occurring in rules.
+
+\section{Natural translation}
+
+The translation~$\nu$, defined below, transforms an NNF rule~(\ref{rule})
+into a formula over the signature~$\sigma^\#$ that may include second-order
+variables.  We define first how~$\nu$ applies to subexpressions of the rule.
+
+\medskip\noindent 1. \emph{Applying~$\nu$ to terms.}
+Let~$V_1,\dots,V_m$ be all variables that occur in~(\ref{rule}) at least once
+\begin{itemize}
+\item
+  in the scope of an arithmetic function symbol, or
+\item
+  in the left-hand side of an equation containing the interval symbol.
+\end{itemize}
+Designate~$m$ distinct integer variables as $\nu(V_1),\dots,\nu(V_m)$.
+If~$t$ is a term that does not contain~$..$ then $\nu(t)$ is the term over
+the signature~$\sigma^\#$ obtained from~$t$ by
+\begin{itemize}
+\item substituting $\nu(V_i)$ for each variable~$V_i$, and
+\item replacing each symbolic constant~$c$ in a subexpression of the
+  form $c(t_1,\dots,t_k)$ by~$c\bs k$.
+\end{itemize}
+
+\medskip\noindent 2. \emph{Applying~$\nu$ to literals:}
+\begin{itemize}
+\item
+$\nu(p({\bf t}))$ is $(p/k)(\nu({\bf t}))$,
+\item $\nu(\no\ p({\bf t}))$ is $\neg (p/k)(\nu({\bf t}))$,
+\item $\nu(\no\ \no\ p({\bf t}))$ is $\neg\neg (p/k)(\nu({\bf t}))$,
+\end{itemize}
+where~$k$ is the length of the tuple~$\bf t$.
+
+\medskip
+The transformation~$\nu$ applies to tuples of terms componentwise.
+
+\medskip\noindent \emph{3. Applying~$\nu$ to comparisons: }
+$\nu(t_1\prec t_2)$ is $\nu(t_1)\prec\nu(t_2)$, if~$t_2$ does not
+contain the interval symbol;
+$\nu(t = t_1\,..\,t_2)$ is $\nu(t_1)\leq\nu(t)\leq \nu(t_2)$.
+
+\medskip
+The transformation~$\nu$ applies to tuples of literals and comparisons
+componentwise.
+
+\medskip\noindent \emph{4. Applying~$\nu$ to aggregate atoms and to negated
+aggregate atoms.}  Make the list of all occurrences of
+aggregate elements in the body of~(\ref{rule}) and choose, for each
+aggregate element $X_1,\dots,X_k:{\bf L}$ on the list, a
+variable~$C$ \emph{associated} with it, so that
+\begin{itemize}
+\item if {\bf L} contains no global variables
+  then~$C$ is an object variable of the sort \emph{set};
+\item if the global variables occurring in {\bf L} are $Y_1,\dots,Y_l$
+  ($l>0$) then~$C$ is a function variable of arity~$n$; the sort of its value
+  is \emph{set}; the sort of its $i$-th argument is \emph{integer}
+  if~$Y_i$ is one of the variables $V_1,\dots,V_m$, and \emph{general}
+  otherwise.
+\end{itemize}
+The formula $\sd(C)$  (``the set definition for~$C$'') is defined as follows.
+If $C$ is an object variable then $\sd(C)$ is
+$$\forall V(V\in C\lrar\exists\, \nu(X_1)\cdots\nu(X_k)\,
+(V=(\nu(X_1),\dots,\nu(X_k))
+\land \nu({\bf L}))),$$
+where~$V$ is a general variable.
+(If $k=1$ then $(\nu(X_1),\dots\nu(,X_k))$ is understood as~$\nu(X_1)$.)
+If~$C$ is a function variable then $\sd(C)$ is
+$$\ba l
+\forall V \nu(Y_1) \cdots \nu(Y_l)(V\in C(\nu(Y_1),\dots,\nu(Y_l))\\
+\qquad\lrar
+\exists\, \nu(X_1)\cdots\nu(X_k)\,(V=(\nu(X_1),\dots,\nu(X_k))
+\land \nu({\bf L}))).
+\ea$$
+
+(Set definitions $\sd(C)$ are not used in the process of applying~$\nu$ to a
+rule, but they will be referred to in the definition of completion.)
+
+The result of applying~$\nu$ to an aggregate atom
+containing an aggregate element $X_1,\dots,X_k:{\bf L}$ is the formula
+obtained by replacing $\co\{X_1,\dots,X_k:{\bf L}\}$ with
+$$\co(C(\nu(X_1),\dots,\nu(X_k))).$$
+Applying~$\nu$ to a negated aggregate atom is performed in the same way,
+with $\no$ replaced by~$\neg$.
+
+\medskip\noindent
+\emph{5.} The result of applying~$\nu$ to the empty string is~$\bot$.
+
+\medskip\noindent
+\emph{6.} The result of applying~$\nu$ to rule~(\ref{rule}) is the formula
+$$
+\forall {\bf Z}(\nu(B_1)\land\cdots\land\nu(B_n) \rar \nu(H)),
+$$
+where $\bf Z$ is obtained from the list of variables occurring in the rule
+by replacing $V_1,\dots,V_m$ with $\nu(V_1),\dots,\nu(V_m)$.  The free
+variables of this formula are the variables associated with aggregate
+expressions.
+
+% \section{Examples}
+
+  
+
+\bibliographystyle{named}
+\bibliography{bib}
+\end{adjustwidth}
+\end{document}
+

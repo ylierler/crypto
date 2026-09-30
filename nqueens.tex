@@ -1,0 +1,897 @@
+ \documentclass[11pt]{article}
+\usepackage{amsmath,amsthm}
+\usepackage{named}
+\usepackage{changepage}
+
+\newtheorem{proposition}{Proposition}
+\newtheorem{lemma}{Lemma}
+
+\def\o{\overline}
+\def\bs{\backslash}
+\def\std{\mathit{Std}}
+\def\head{\mathit{Head}}
+\def\body{\mathit{Body}}
+\def\p2f{\mathit{p2f}}
+\def\ph{\mathit{PH}}
+\def\asm{\mathit{Asm}}
+\def\ug{\mathit{UG}}
+\def\HT{\mathit{HT}}
+\def\fnt{\mathit{finite}}
+\def\gringo{{\sc gringo}}
+\def\clingo{{\sc clingo}}
+\def\mg{mini-\gringo}
+\def\ar{\leftarrow}
+\def\rar{\rightarrow}
+\def\uc{\widehat\forall}
+\def\lrar{\leftrightarrow}
+\def\beq{\begin{equation}}
+\def\eeq#1{\label{#1}\end{equation}}
+\def\ba{\begin{array}}
+\def\ea{\end{array}}
+\def\kbugsd{\emph{KB, UG, SD}}
+\newcommand{\co}{\ensuremath{\mathit{count}}}
+\newcommand{\no}{\ensuremath{\mathit{not}}}
+
+\title{Reasoning about Logic Programming Solutions\\
+  to the N-Queens Puzzle\\
+  (Draft)}
+\author{Vladimir Lifschitz\\ University of Texas}
+
+\begin{document}
+% \date{}
+\maketitle
+
+\begin{adjustwidth}{-1cm}{-1cm}
+
+\section{Introduction}
+  
+We would like to show how reasoning in classical first-order logic can
+be used to verify equivalence of two encodings of the $n$-Queens
+puzzle \cite[Tables~2 and~3]{geb11b}:
+\medskip
+
+\begin{center}Program $A$\end{center}
+$$
+\ba l
+n\,\{ q(1\,..\,n,1\,..\,n) \}\, n\\
+\ar q(X,Y_1) \land q(X,Y_2) \land Y_1 < Y_2\\
+\ar q(X_1,Y) \land q(X_2,Y) \land X_1 < X_2\\
+\ar q(X_1,Y_1) \land q(X_2,Y_2) \land X_1 < X_2 \land |X_1-X_2| = |Y_1-Y_2|
+\ea
+$$
+
+\medskip
+\begin{center}Program $B$\end{center}
+$$\ba l
+\{ q(1\,..\,n,1\,..\,n) \}\\
+\ar X = 1\,..\,n \land \no\ 1\, \{ q(X,Y) \}\, 1\\
+\ar Y = 1\,..\,n \land \no\ 1\, \{ q(X,Y) \}\, 1\\
+\ar Z = 1\,..\,2\times n-1 \land \no\   \{ q(X,Y) : Z = X-Y+n \}\, 1\\
+\ar Z = 1\,..\,2\times n-1 \land \no\   \{ q(X,Y) : Z = X+Y-1 \}\, 1\\
+\ea
+$$
+
+\medskip
+Some rules in these programs implicitly refer to the \co\ aggregate, and
+we view choice rules as abbreviations for rules with an atom in
+the head.  Written out in full, the programs become
+\begin{align}
+& q(X,Y) \ar \no\   \no\   q(X,Y) \land X = 1\,..\,n \land Y = 1\,..\,n	\label{a1}\\
+& \ar \no\ n\leq  \co\{ X,Y : q(X,Y) \land X = 1\,..\,n \land Y = 1\,..\,n \}
+  \leq n
+  \label{a2}\\
+& \ar q(X,Y_1) \land q(X,Y_2) \land Y_1 < Y_2\label{a3}\\
+& \ar q(X_1,Y) \land q(X_2,Y) \land X_1 < X_2\label{a4}\\
+& \ar q(X_1,Y_1) \land q(X_2,Y_2) \land X_1 < X_2 \land |X_1-X_2| = |Y_1-Y_2|
+  \label{a5}
+\end{align}
+
+\noindent and
+
+\begin{align}
+& q(X,Y) \ar \no\   \no\   q(X,Y) \land X = 1\,..\,n \land Y = 1\,..\,n\label{b1}\\
+& \ar X = 1\,..\,n \land \no\ 1\leq \co\{ Y : q(X,Y) \} \leq 1\label{b2}\\
+& \ar Y = 1\,..\,n \land \no\ 1\leq \co\{ X : q(X,Y) \} \leq 1\label{b3}\\
+& \ar Z = 1\,..\,2\times n-1
+  \land \no\   \co\{ X,Y : q(X,Y) \land Z = X-Y+n \} \leq  1
+  \label{b4}\\
+& \ar Z = 1\,..\,2\times n-1
+  \land \no\   \co\{ X,Y : q(X,Y) \land Z = X+Y-1 \} \leq  1
+  \label{b5}
+\end{align}
+
+\section{The target Language}\label{sec:target}
+
+For any dialect~$D$ of \mg, $\sigma^\#(D)$ stands for the signature
+obtained from the signature~$\sigma(D)$ \cite[Section~3.1]{fan26} by adding
+\begin{itemize}
+\item the sort \emph{set},
+\item the binary predicate symbol~$\in$, with the first argument of the sort
+  \emph{general} and the second argument of the sort \emph{set}, and
+\item the unary function symbol~\co, with the argument of the
+  sort~\emph{set} and the value of the sort \emph{general}.
+\end{itemize}
+The symbols $\not\in$ and $\subseteq$ are understood as abbreviations.
+
+The use of set variables for representing aggregates by first-order formulas
+was proposed by \citeauthor{fan22a} [\citeyear{fan22a}].  In this paper, set
+variables are meant to range over arbitrary sets of precomputed terms.
+The expression $\co(S)$ is assumed to denote the numeral corresponding to the
+cardinality of~$S$ if~$S$ is finite, and some non-numeral otherwise.  Thus
+the formula $\exists I(I=\co(S))$, where~$I$ is an integer variable, expresses
+that~$S$ is finite.  This formula will be denoted by $\fnt(S)$.  When we
+reason about a user guide \cite[Section~3]{fan23a}, we may wish to assume
+that the extents of the input predicates are finite.
+
+We will need to extend the signature $\sigma^\#(D)$ by object constants of
+the sort \emph{set} and by function constants with values of the sort
+\emph{set}.  The intended use of these additional constants will be
+described by explicit definitions, such as
+$$\forall V(V\in s \lrar F(V))$$
+and
+$$\forall IV(V\in s(I) \lrar F(I,V)).$$
+
+\section{Representing rules by formulas}
+\label{sec:repr}
+
+To represent rules of Programs $A$ and $B$ by first-order formulas, we take~$D$
+to be the dialect obtained from the
+dialect~$D_0$ \cite[Section~2]{fan26} by adding the absolute value symbol
+(it is used in rule~(\ref{a5})).
+
+To transform rule~(\ref{a1}) into a formula, we rewrite it in numeric normal
+form
+$$q(X,Y) \ar \no\   \no\   q(X,Y) \land X = 1\,..\,U \land Y = 1\,..\,U
+\land U=n$$
+\cite[Section~4]{fan26} and then apply the
+transformation~$\nu$ \cite[Section~5]{fan26}:
+\beq
+\forall I J N(\neg\neg q(I,J) \land 1\leq I \leq N \land 1 \leq J \leq N
+\land N=n \to q(I,J)).
+\eeq{a1f}
+
+The representation of rule~(\ref{a2}) includes the constant~$s_1$, which
+is meant to be used in accordance with the definition
+\beq
+\forall V(V\in s_1 \lrar \exists IJ(V=(I,J)\land q(I,J) \land 1\leq I\leq n
+\land 1\leq J\leq n)).
+\eeq{d1}
+The formula corresponding to rule~(\ref{a2}) is
+\beq
+\neg\neg(n\leq \co(s_1)\leq n).
+\eeq{a2f}
+
+Rules~(\ref{a3})--(\ref{a5}) become
+\beq
+\forall XY_1Y_2\neg(q(X,Y_1) \land q(X,Y_2) \land Y_1 < Y_2),
+\eeq{a3f}
+\beq
+\forall X_1X_2Y\neg(q(X_1,Y) \land q(X_2,Y) \land X_1 < X_2)
+\eeq{a4f}
+and
+\beq
+\forall I_1I_2J_1J_2
+\neg(q(I_1,J_1) \land q(I_2,J_2) \land I_1<I_2 \land |I_1-I_2|=|J_1-J_2|).
+\eeq{a5f}
+
+Rule~(\ref{b1}) is the same as~(\ref{a1}).  The representation
+of rule~(\ref{b2}) includes the function constant~$s_2$, which
+is meant to be used in accordance with the definition
+\beq
+\forall IV(V\in s_2(I) \lrar q(I,V)).
+\eeq{d2}
+The formula corresponding to rule~(\ref{b2}) is
+\beq
+\forall I\neg(1\leq I\leq n \land \neg (1\leq \co(s_2(I))\leq 1)).
+\eeq{b2f}
+Translating rule~(\ref{b3}) is similar; it involves the formulas
+\beq
+\forall IV(V\in s_3(I) \lrar q(V,I))
+\eeq{d3}
+and 
+\beq
+\forall I\neg(1\leq I\leq n \land \neg (1\leq \co(s_3(I))\leq 1)).
+\eeq{b3f}
+
+To transform rules~(\ref{b4}) and~(\ref{b5}) into formulas, we rewrite them
+first in numeric normal form:
+% \begin{adjustwidth}{-8mm}{-8mm}
+$$%  \beq
+\ba l
+\ar Z = 1\,..\,2\times U-1
+\land \no\   \co\{ X,Y : q(X,Y) \land Z = X-Y+U \} \leq 1 \land U=n,
+\\
+% \eeq{b4nnf}
+%%\beq
+\ar Z = 1\,..\,2\times U-1
+  \land \no\   \co\{ X,Y : q(X,Y) \land Z = X+Y-1 \} \leq  1 \land U=n.
+  \ea
+  $$%\eeq{b5nnf}
+% \end{adjustwidth}
+These rules are converted into formulas containing new constants~$s_4$
+and~$s_5$:
+\beq
+\forall KNV(V\in s_4(K,N) \lrar \exists IJ(V=(I,J) \land q(I,J)
+   \land K=I-J+N)),
+\eeq{d4}
+\beq
+\forall KN\neg(1\leq K\leq 2\times N-1 \land\neg\co(s_4(K,N))\leq 1 \land N=n),
+\eeq{b4f}
+\beq
+\forall KV(V\in s_5(K) \lrar \exists IJ(V=(I,J) \land q(I,J)
+   \land K=I+J-1)),
+\eeq{d5}
+\beq
+\forall KN\neg(1\leq K\leq 2\times N-1 \land\neg\co(s_5(K))\leq 1 \land N=n).
+\eeq{b5f}
+
+To sum up,
+\begin{itemize}
+\item rules of Program~$A$ are represented by formulas~(\ref{a1f}),
+  (\ref{a2f}), (\ref{a3f}), (\ref{a4f}), (\ref{a5f});
+\item rules of Program~$B$ are represented by formulas~(\ref{a1f}),
+ (\ref{b2f}), (\ref{b3f}), (\ref{b4f}), (\ref{b5f});
+\item intended use of the constants~$s_1,\dots,s_5$ is described by
+  formulas~(\ref{d1}), (\ref{d2}), (\ref{d3}), (\ref{d4}), (\ref{d5}).
+\end{itemize}
+
+\section{Completions of programs A and B}\label{sec:comp}
+
+Sentence~(\ref{a1f}) is not completable, because~$I$ and~$J$ are not
+general variables~\cite[Section~3.1]{fan22}.  We rewrite it as
+\beq
+\ba r
+\forall I J N X Y (\neg\neg q(I,J) \land 1\leq I \leq N \land 1 \leq J \leq N
+\land N=n \land X=I \land Y=J \qquad\\
+\to q(X,Y)).
+\ea
+\eeq{a1fcomp}
+The set~$\Gamma_A$, consisting of sentences~(\ref{a2f}), (\ref{a3f}), (\ref{a4f}), (\ref{a5f}), and~(\ref{a1fcomp}), is completable, and its
+completion is the conjunction of constraints~(\ref{a2f}), (\ref{a3f}),
+(\ref{a4f}), (\ref{a5f}) and the completed definition of~$q$:
+\beq
+\ba l
+\forall X Y (q(X,Y) \lrar\\ \hskip 1cm
+\exists IJN
+(\neg\neg q(I,J) \land 1\leq I \leq N \land 1 \leq J \leq N\land N=n
+\land X=I \land Y=J)).
+\ea
+\eeq{acomp}
+  Similarly,
+the set~$\Gamma_B$, consisting of sentences~(\ref{b2f}), (\ref{b3f}),
+(\ref{b4f}), (\ref{b5f}), and~(\ref{a1fcomp}), is completable, and its
+completion is the conjunction of sentences~(\ref{b2f}), (\ref{b3f}),
+(\ref{b4f}), (\ref{b5f}) and~(\ref{acomp}).
+
+We will show how to derive the equivalence between the completion
+of~$\Gamma_A$ and the completion of~$\Gamma_B$ in classical logic from
+\begin{itemize}
+\item \emph{KB}, a \emph{knowledge base} describing integers, precomputed
+  terms, sets and cardinalities (see Section~\ref{sec:sets}),
+\item \emph{UG}, the pair of \emph{user guide} formulas $\exists N(n=N)$
+  and $n\geq 1$, expressing that~$n$ is a placehodler for a positive
+  integer, and
+\item \emph{SD}, the \emph{set definition} formulas~(\ref{d1}), (\ref{d2}),
+  (\ref{d3}), (\ref{d4}), (\ref{d5}), which characterize the constants
+  $s_1,\dots,s_5$.
+\end{itemize}
+
+\section{Plan of the proof}
+ 
+As the first step, we will simplify the
+completions of~$\Gamma_A$ and~$\Gamma_B$.  Formula~(\ref{acomp})
+is equivalent to the implication
+\beq
+\ba l
+\forall X Y (q(X,Y) \to \\\hskip 15mm
+1 \leq X \leq n \land 1 \leq Y \leq n \land \exists I(X=I)
+\land \exists J(Y=J) \land \exists N(N=n)).
+\ea
+ \eeq{iv}
+Constraint (\ref{a2f}) can be rewritten as
+\beq
+\co(s_1)\geq n,
+\eeq{a2fgeq}
+\beq
+\co(s_1)\leq n.
+\eeq{a2fleq}
+Constraint~(\ref{a3f}) can be rewritten as
+$$\forall XY_1Y_2(q(X,Y_1) \land q(X,Y_2) \to Y_1 \geq Y_2),$$
+and it implies
+$$\forall XY_1Y_2(q(X,Y_1) \land q(X,Y_2) \to Y_2 \geq Y_1)$$
+(substitute~$Y_2$,~$Y_1$ for~$Y_1$,~$Y_2$). It follows that~(\ref{a3f}) is
+equivalent to
+\beq
+\forall XY_1Y_2(q(X,Y_1) \land q(X,Y_2) \to Y_1 = Y_2).
+\eeq{a3fs}
+Similarly,~(\ref{a4f}) is equivalent to
+\beq
+\forall X_1X_2Y(q(X_1,Y) \land q(X_2,Y) \to X_1 = X_2).
+\eeq{a4fs}
+
+Formula~(\ref{a5f})
+is equivalent to
+$$\forall I_1I_2J_1J_2
+(q(I_1,J_1) \land q(I_2,J_2) \land |I_1-I_2|=|J_1-J_2| \to I_1 \geq I_2).$$
+It implies
+$$\forall I_1I_2J_1J_2
+(q(I_1,J_1) \land q(I_2,J_2) \land |I_1-I_2|=|J_1-J_2| \to I_2 \geq I_1)
+$$
+(substitute~$I_2,\,I_1,\,J_2,\,J_1$ for $I_1,\,I_2,\,J_1,\,J_2$).
+Hence it can be rewritten as
+$$
+\forall I_1I_2J_1J_2
+(q(I_1,J_1) \land q(I_2,J_2) \land |I_1-I_2|=|J_1-J_2|\to I_1= I_2)
+$$
+and as
+\beq
+\forall I_1I_2J_1J_2
+(q(I_1,J_1)\land q(I_2,J_2) \land |I_1-I_2|=|J_1-J_2|
+\to (I_1,J_1) = (I_2,J_2)).
+\eeq{a5fs}
+
+Constraints~(\ref{b2f})~(\ref{b3f}),~(\ref{b4f}) and~(\ref{b5f})
+can be rewritten as
+\beq
+\forall I(1\leq I\leq n \to \co(s_2(I)) \geq 1),
+\eeq{b2fgeq}
+\beq
+\forall I(1\leq I\leq n \to \co(s_2(I))\leq 1),
+\eeq{b2fleq}
+\beq
+\forall I(1\leq I\leq n \to \co(s_3(I))\geq 1),
+\eeq{b3fgeq}
+\beq
+\forall I(1\leq I\leq n \to \co(s_3(I))\leq 1),
+\eeq{b3fleq}
+\beq
+\forall KN(1\leq K\leq 2\times N-1  \land N=n \to \co(s_4(K,N))\leq 1),
+\eeq{b4fs}
+\beq
+\forall KN(1\leq K\leq 2\times N-1 \land N=n \to \co(s_5(K))\leq 1).
+\eeq{b5fs}
+
+What we want to accomplish can be now described as follows:
+
+\medskip\begin{center}
+prove the equivalence\\
+between the conjunction of formulas~(\ref{a2fgeq})--(\ref{a5fs})\\
+and the conjunction of formulas~(\ref{b2fgeq})--(\ref{b5fs})\\
+assuming \kbugsd\ and (\ref{iv}).
+\end{center}\medskip
+
+To this end, we will prove, under assumptions \kbugsd\ and (\ref{iv}),
+a number of claims.
+
+\medskip\emph{Claim 1:}
+(\ref{a2fgeq}) follows from (\ref{b2fgeq}).
+
+\medskip\emph{Claim 2:}
+(\ref{a2fleq}) follows from~(\ref{b2fleq}).
+
+\medskip\emph{Claim 3:}
+(\ref{a3fs}) is equivalent to (\ref{b2fleq}).
+
+\medskip\emph{Claim 4:}
+(\ref{a4fs}) is equivalent to (\ref{b3fleq}).
+
+\medskip\emph{Claim 5:}
+(\ref{a5fs}) is equivalent to the conjunction of (\ref{b4fs}) and
+(\ref{b5fs}).
+
+\medskip\emph{Claim 6:}
+(\ref{b2fgeq}) follows from  the conjunction of
+(\ref{a2fgeq}) and (\ref{a3fs}).
+
+\medskip\emph{Claim 7:}
+(\ref{b3fgeq}) follows from  the conjunction of
+(\ref{a2fgeq}) and (\ref{a4fs}).
+
+\section{The knowledge base}\label{sec:sets}
+
+The knowedge base \emph{KB} includes basic properties of integers and
+arithmetic operations.  It includes also the formula
+\beq
+\forall X_1Y_1X_2Y_2((X_1,Y_1)=(X_2,Y_2) \to X_1=X_2 \land Y_1=Y_2),
+\eeq{op}
+the formula
+\beq
+\forall IJX(I\leq X\leq J \to \exists K(X=K)),
+\eeq{contig}
+which expresses that numerals are contiguous within precomputed terms,
+and the universal closures of
+formulas (\ref{exten})--(\ref{pigeon}) below, which express properties of
+sets and cardinalities.
+
+The axiom of extensionality
+expresses that a set is determined by its extension:
+\beq
+\forall X(X\in S_1 \lrar X\in S_2) \to S_1=S_2.
+\eeq{exten}
+
+The axiom schema of comprehension expresses that
+every property defines a set:
+\beq
+\exists S\forall X(X\in S \lrar F(X)),
+\eeq{comprehension}
+where~$F(X)$ is a formula without free occurrences of~$S$.
+
+Cardinalities are nonnegative:
+\beq
+\co(S)=I \to I\geq 0.
+\eeq{cardnn}
+
+Comparing cardinalities with 1:
+\begin{align}
+&\fnt(S) \to (\co(S)\geq 1 \lrar \exists X(X\in S)),\label{geq1}\\
+&\fnt(S) \to (\co(S)\leq 1 \lrar
+\forall XY(X\in S \land Y\in S \to X=Y)).\label{leq1}
+\end{align}
+
+Cardinality of an interval:
+\beq
+I\leq J\land \forall X(X\in S \lrar I\leq X\leq J) \to \co(S) = J-I+1.
+\eeq{cardint}
+
+Cardinality of the union of disjoint sets:
+\beq
+\ba l
+\co(S_1)=I \land \co(S_2)=J\\
+\hskip 1cm
+\land\; \neg\exists X(X\in S_1\land X\in S_2)\\
+\hskip 1cm
+\land\;\forall X(X\in S \lrar X\in S_1 \lor X\in S_2)\\
+\hskip 5cm
+\to \co(S)=I+J.
+\ea\eeq{cardunion}
+
+Cardinality of the Cartesian product:
+\beq\ba l
+\co(S_1)=I \land \co(S_2)=J\\
+\hskip .5cm
+\land\;\forall X(X\in S \lrar \exists Y_1Y_2(Y_1\in S_1 \land Y_2\in S_2
+\land X=(Y_1,Y_2)))\\
+\hskip 7.5cm
+\to \co(S)=I\times J.
+\ea\eeq{cardprod}
+
+Finally, the pigeonhole principle:
+\beq
+\ba l
+\forall X(X\in S_1 \to \exists Y (Y\in S_2 \land (X,Y)\in S))\\
+\hskip .5cm
+\land\;\forall X_1X_2Y((X_1,Y)\in S \land (X_2,Y)\in S \to X_1=X_2)
+\land \fnt(S_2)\\
+\hskip 6cm \to \fnt(S_1) \land \co(S_1)\leq \co(S_2).
+\ea
+\eeq{pigeon}
+
+\begin{proposition}
+The following properties of cardinalities are entailed by KB:
+\beq
+\ba l
+\forall S_1S_2(S_1\subseteq S_2 \land \fnt(S_2)\\
+\hskip 3cm
+\to \fnt(S_1) \land \co(S_1)\leq \co(S_2)).
+\ea
+\eeq{subset}
+\beq
+\forall IJS(\forall X(X\in S \to I\leq X\leq J) \to \fnt(S)).
+\eeq{intfinite}
+\beq
+\ba l
+\forall S_1S_2S(\fnt(S_1) \land \fnt(S_2)
+\land\forall X(X\in S \lrar X\in S_1 \lor X\in S_2)\\
+\hskip 9.5cm
+\to \fnt(S)).
+\ea\eeq{unionfinite}
+\beq
+\forall S_1S_2(
+S_1\subseteq S_2 \land \fnt(S_2) \land \co(S_1) \geq \co(S_2)\to S_1=S_2).
+\eeq{propersubset}
+\end{proposition}
+
+\begin{proof}
+% Formula~(\ref{intfinite}) is immediate from~(\ref{cardint}).
+Formula~(\ref{subset}) is a special case of the pigeonhole
+principle~(\ref{pigeon}): define~$S$ by the condition
+$$\forall V(V\in S \lrar \exists X(V=(X,X))).$$
+(Such~$S$ exists by comprehension~(\ref{comprehension}).)
+
+To prove~(\ref{intfinite}), assume $\forall X(X\in S \to I\leq X\leq J)$
+and consider the set~$S_1$ defined by the condition
+$$\forall V(V\in S_1\lrar I\leq V\leq K),$$
+where~$K$ is the greater of the numbers $I$, $J$.  Then $I\leq K$, and
+by~(\ref{cardint}), $\fnt(S_1)$.  On the other hand, $S\subseteq S_1$.
+Hence $\fnt(S)$ follows by~(\ref{subset}).
+
+To prove~(\ref{unionfinite}), assume
+  $$
+  \fnt(S_1) \land \fnt(S_2)
+  \land\forall V(V\in S \lrar V\in S_1 \lor V\in S_2),$$
+  and consider the set~$S_3$ defined by the condition
+  $$\forall V(V\in S_3 \lrar V\in S_1 \land V\not\in S_2).$$
+Then
+$$\neg\exists X(X\in S_2\land X\in S_3)$$
+and
+$$\forall X(X\in S \lrar X\in S_2 \lor X\in S_3).$$
+On the other hand, from $\fnt(S_1)$ and~(\ref{subset}) we can derive
+$\fnt(S_3)$,
+Now $\fnt(S)$ follows by~(\ref{cardunion}) applied to~$S_2$,~$S_3$
+as~$S_1$,~$S_2$.
+
+% Formula~(\ref{prodfinite}) is immediate from~(\ref{cardprod}).
+
+To prove~(\ref{propersubset}), assume
+$$
+S_1\subseteq S_2 \land \fnt(S_2) \land \co(S_1) \geq \co(S_2).
+$$
+From $S_1\subseteq S_2$ and $\fnt(S_2)$ we conclude by~(\ref{subset}) that
+$\co(S_1) \leq \co(S_2)$; hence
+%In view of the first conjunctive term, it is sufficient to show that
+%$S_2 \subseteq S_1$;
+%then \hbox{$S_1=S_2$} will follow by extensionality.
+%From the last two conjunctive terms,
+$$\co(S_1)=\co(S_2)=I$$
+for some integer~$I$.  Consider the set~$S_3$ defined by the condition
+$$\forall V(V\in S_3 \lrar V\in S_2 \land V\not\in S_1).$$
+From $S_3\subseteq S_2$ we conclude by~(\ref{subset}) that
+$\fnt(S_3)$, so that $\co(S_3)=J$ for some integer~$J$.  Hence,
+by~(\ref{cardunion}), $I+J=I$,
+so that~$J=0$. By~(\ref{leq1}), we conclude that $\neg\exists X(X\in S_3)$,
+which implies $S_2\subseteq S_1$.  On the other hand, $S_1\subseteq S_2$;
+by extensionality, it follows that $S_1=S_2$.
+\end{proof}
+
+\section{Proofs of Claims 1--7}
+
+In this section, whenever a formula is asserted,
+this is understood as the claim
+that it is derivable in classical logic from assumptions \kbugsd\
+and~(\ref{iv}).  Claims that one formula
+implies another, or that two formulas are equivalent, are understood here in a
+similar way.
+
+\subsection{Two lemmas}
+
+\begin{lemma}\label{lem:S0}
+$\exists S_0(\forall V(V\in S_0\lrar 1\leq V\leq n)
+  \land \fnt(S_0) \land \co(S_0)=n)$.
+\end{lemma}
+\begin{proof}
+  The existence of~$S_0$ such that
+  $\forall V(V\in S_0\lrar 1\leq V\leq n)$
+  follows from comprehension~(\ref{comprehension}).  By \emph{UG}, $n=N\geq 1$
+  for some integer~$N$.  By~(\ref{cardint}), it follows that
+$\co(S_0) = N-1+1=N$, which implies both $\fnt(S_0)$ and $\co(S_0)=n)$.
+\end{proof}
+  
+\begin{lemma}\label{lem:finite}
+\strut
+\begin{itemize}
+\item[(i)]
+  $\fnt(s_1)$.
+\item[(ii)]
+  $\forall I\, \fnt(s_2(I))$.
+\item[(iii)]
+  $\forall I\, \fnt(s_3(I))$.
+\item[(iv)]
+  $\forall KN\, \fnt(s_4(K,N))$.
+\item[(v)]
+$\forall N \fnt(s_5(N))$.
+\end{itemize}
+\end{lemma}
+\begin{proof}
+(i) Define~$S_1$ by the condition
+$$
+\forall V(V\in S_1 \lrar \exists XY(X\in S_0 \land Y\in S_0\land V=(X,Y))),
+$$
+where~$S_0$ is the set from Lemma~\ref{lem:S0},
+By~(\ref{cardprod}), $\fnt(S_1)$.  On the other hand, by~(\ref{d1}),
+$s_1\subseteq S_1$,
+and $\fnt(s_1)$ follows by~(\ref{subset}).
+
+(ii) Formulas~(\ref{d2}) and~(\ref{iv}) imply
+$$\forall IY(Y\in s_2(I) \to 1\leq Y\leq n),$$
+which is equivalent to
+$\forall I(s_2(I)\subseteq S_0)$
+for the set~$S_0$ from Lemma~\ref{lem:S0}.
+Then $\forall I\,\fnt(s_2(I))$ follows by~(\ref{subset}).
+
+For parts~(iii)--(v), the  reasoning is similar.
+\end{proof}
+
+\subsection{Proof of Claim~1}
+
+By~(\ref{iv}), the last two conjunctive terms in the right-hand side
+of~(\ref{d1}) can be dropped, so that
+\beq
+\forall V(V\in s_1 \lrar \exists IJ(V=(I,J)\land q(I,J))).
+\eeq{d1s}
+
+Assume~(\ref{b2fgeq}).  By~(\ref{geq1}) and Lemma~\ref{lem:finite}(ii),
+$$
+\forall I(1\leq I\leq n \to \exists X(X\in s_2(I))).
+$$
+Then, by~(\ref{d2}),
+$$\forall I(1\leq I\leq n \to \exists X\, q(I,X)).$$
+By~(\ref{iv}), it follows that
+\beq
+\forall I(1\leq I\leq n \to \exists J\, q(I,J)).
+\eeq{p1a}
+
+We want to apply pigeonhole principle~(\ref{pigeon}) to the set~$S_0$
+from Lemma~\ref{lem:S0}, the set~$s_1$, and the set~$S$ defined
+by the condition
+$$\forall V(V\in S \lrar \exists XY(V=(X,(X,Y)))).$$
+The three conjunctive terms in the antecedent of~(\ref{pigeon}) are verified
+as follows.
+
+To prove
+\beq
+\forall X(X\in S_0 \to \exists Y (Y\in s_1 \land (X,Y)\in S)),
+\eeq{term1}
+assume $X\in S_0$. Then $1\leq X\leq n$ and $X=I$ for some integer~$I$.
+By~(\ref{p1a}), $q(I,J)$ for some~$J$.  By~(\ref{d1s}), it follows
+that $(I,J)\in s_1$.  On
+the other hand, $(I,(I,J))\in S$.  It follows that $(I,J)$ can be taken
+as~$Y$ in the consequent of~(\ref{term1}).
+
+To prove the conjunctive term
+$$\forall X_1X_2Y((X_1,Y)\in S \land (X_2,Y)\in S \to X_1=X_2)$$
+note that
+$$\forall V_1V_2((V_1,V_2)\in S \lrar \exists Z(V_2=(V_1,Z))).$$
+Assume $(X_1,Y)\in S \land (X_2,Y)\in S$.  Then there
+exist~$Z_1$,~$Z_2$ such that $Y=(X_1,Z_1)$ and $Y=(X_2,Z_2)$.
+Hence $X_1=X_2$.
+
+The last conjunctive term $\fnt(s_1)$ is given by Lemma~\ref{lem:finite}.
+
+By~(\ref{pigeon}), $\co(s_1)\geq \co(S_0)=n$.
+\qed
+
+\subsection{Proof of Claim~2}
+
+Assume~(\ref{b2fleq}).  By~(\ref{leq1}) and Lemma~\ref{lem:finite}(ii),
+$$\forall IXY(1\leq I\leq n \land X\in s_2(I) \land Y\in s_2(I) \to X=Y).$$
+Hence, by~(\ref{d2}),
+\beq
+\forall IXY(1\leq I\leq n \land q(I,X) \land q(I,Y) \to X=Y).
+\eeq{p2a}
+
+We want to apply pigeonhole principle~(\ref{pigeon}) to the set~$s_1$, the
+set~$S_0$ from Lemma~\ref{lem:S0}, and the set~$S$ defined by the condition
+$$
+\forall V(V\in S \lrar \exists IJ(V=((I,J),I)\land q(I,J))).
+$$
+The three conjunctive terms in the antecedent of~(\ref{pigeon}) are verified
+as follows.
+
+To prove
+\beq
+\forall X(X\in s_1 \to \exists Y (Y\in S_0 \land (X,Y)\in S)),
+\eeq{term1a}
+assume $X\in s_1$. Then, by~(\ref{d1}), there exist~$I$ and~$J$ such that
+$$X=(I,J),\ q(I,J),\hbox{  and }1\leq I\leq n.$$
+From~$q(I,J)$ we conclude that
+$((I,J),I)\in S$.  Hence $I$ can be taken as~$Y$ in the consequent
+of~(\ref{term1a}).
+
+To prove the conjunctive term
+$$\forall X_1X_2Y((X_1,Y)\in S \land (X_2,Y)\in S \to X_1=X_2)$$
+note that
+$$\forall V_1V_2((V_1,V_2)\in S \lrar
+\exists IJ(V_1=(I,J) \land V_2=I \land q(I,J))).$$
+Assume $(X_1,Y)\in S \land (X_2,Y)\in S$.  Then there
+exist~$I_1$, $J_1$, $I_2$, $J_2$ such that
+$$X_1=(I_1,J_1),\ X_2=(I_2,J_2),\ Y=I_1=I_2,\ q(I_1,J_1),\ q(I_2,J_2).$$
+By~(\ref{iv}), $1\leq I_1=I_2\leq n$.
+Hence, by~(\ref{p2a}), $J_1=J_2$, and consequently $X_1=X_2$.
+
+The last conjunctive term $\fnt(S_0)$ holds by the choice of~$S_0$.
+
+By~(\ref{pigeon}), $\co(s_1)\leq \co(S_0)=n$.
+\qed
+
+\subsection{Proofs of Claims~3 and~4}
+
+The proof of Claim 3 uses the fact that, by~(\ref{leq1}) and
+Lemma~\ref{lem:finite}(ii),
+\beq
+\forall I(\co(s_2(I))\leq 1 \lrar
+\forall XY(X\in s_2(I) \land Y\in s_2(I)\to X=Y)).
+\eeq{l}
+By~(\ref{iv}), formula~(\ref{a3fs})
+is equivalent to
+$$
+\forall I(1\leq I\leq n \to
+\forall Y_1Y_2(q(I,Y_1) \land q(I,Y_2) \to Y_1 = Y_2)).
+$$
+By~(\ref{d2}), it can be further rewritten as
+$$
+\forall I(1\leq I\leq n \to
+\forall Y_1Y_2(Y_1\in s_2(I) \land Y_2\in s_2(I) \to Y_1 = Y_2)).$$
+By~(\ref{l}), this formula is equivalent to~(\ref{b2fleq}).
+\qed
+
+The proof of Claim~4 is similar.
+
+\subsection{Proof of Claim~5}
+
+\begin{lemma}\label{s4leq1}  For $i=4,5$,
+  $$\ba l
+  \forall KN(\co(s_i(K,N))\leq 1\\
+\hskip 2cm
+  \lrar \forall I_1I_2J_1J_2((I_1,J_1)\in s_i(K,N)
+  \land (I_2,J_2)\in s_i(K,N)\\
+  \hskip 8cm
+  \to (I_1,J_1)=(I_2,J_2))).
+  \ea$$
+\end{lemma}
+
+\begin{proof}
+By~(\ref{leq1}) and Lemma~\ref{lem:finite}(iv),
+\beq\ba l
+\co(s_4(K,N))\leq 1\\
+\hskip 2cm
+\lrar \forall XY(X\in s_4(K,N) \land Y\in s_4(K,N) \to X=Y).
+\ea\eeq{l2.1}
+On the other hand, by~(\ref{d4}),
+$$\forall X(X\in s_4(K,N) \to \exists IJ(X=(I,J))),$$
+so that~(\ref{l2.1}) implies the assertion of the lemma for $i=4$.
+For $i=5$ the proof is similar.
+\end{proof}
+
+\begin{lemma}\label{d4ij}
+\strut\vskip 4mm
+  
+\begin{itemize}
+\item[(i)]
+$\forall IJKN((I,J)\in s_4(K,N) \lrar q(I,J) \land K=I-J+N)$,
+\item[(ii)]
+$\forall IJKN((I,J)\in s_5(K,N) \lrar q(I,J) \land K=I+J-1)$.
+\end{itemize}
+\end{lemma}
+\begin{proof}
+(i) By~(\ref{d4}), $(I,J)\in s_4(K,N)$ is equivalent to
+$$\exists I_1J_1((I,J)=(I_1,J_1) \land q(I_1,J_1) \land K=I_1-J_1+N).$$
+This formula is equivalent to the right-hand side of~(i) by~(\ref{op}).
+
+The proof of~(ii) is similar, using~(\ref{d5}).
+\end{proof}
+\begin{lemma}\label{lem:at}
+\strut\vskip 4mm
+  
+\begin{itemize}
+\item[(i)]
+Formula~(\ref{b4fs}) is equivalent to
+\beq\forall I_1I_2J_1J_2
+(q(I_1,J_1)\land q(I_2,J_2) \land I_1-J_1=I_2-J_2
+\to (I_1,J_1) = (I_2,J_2)).
+\eeq{a4up}
+\item[(ii)]
+Formula~(\ref{b5fs}) is equivalent to
+\beq\forall I_1I_2J_1J_2
+(q(I_1,J_1)\land q(I_2,J_2) \land I_1+J_1=I_2+J_2
+\to (I_1,J_1) = (I_2,J_2)).
+\eeq{a4down}
+\end{itemize}
+\end{lemma}
+\begin{proof}
+(i)~By Lemma~\ref{s4leq1},~(\ref{b4fs}) is equivalent to
+$$
+\ba l
+\forall I_1I_2J_1J_2KN(1\leq K\leq 2\times N-1 \land N=n\\
+\hskip 2.6cm
+\land\; (I_1,J_1)\in s_4(K,N) \land (I_2,J_2)\in s_4(K,N)\\
+\hskip 7cm
+\to (I_1,J_1)=(I_2,J_2)).
+\ea
+$$
+By Lemma~\ref{d4ij}, it can be further rewritten as
+$$
+\ba l
+\forall I_1I_2J_1J_2KN(1\leq K\leq 2\times N-1 \land N=n\\
+\hskip 2.6cm
+\land\; q(I_1,J_1) \land K=I_1-J_1+N\\
+\hskip 2.6cm
+\land\; q(I_2,J_2) \land K=I_2-J_2+N\\
+\hskip 5cm
+\to (I_1,J_1)=(I_2,J_2)).
+\ea
+$$
+By~(\ref{iv}), the conjunctive terms $N=n$ and $q(I_1,J_1)$ imply
+$1\leq I_1 \leq N$ and  $1\leq J_1 \leq N$.  In combination
+with the conjunctive term $K=I_1-J_1+N$, these inequalities imply
+the conjunctive term $1\leq K\leq 2\times N-1$.  Hence that term can be
+dropped, and the entire formula becomes
+$$\ba l
+\forall I_1I_2J_1J_2KN(N=n\land q(I_1,J_1) \land K=I_1-J_1+N\\
+\hskip 3.7cm
+\land\; q(I_2,J_2) \land K=I_2-J_2+N\\
+\hskip 7cm
+\to (I_1,J_1)=(I_2,J_2)).
+\ea
+$$
+The conjunctive term $K=I_2-J_2+N$ here can be replaced by
+$$I_1-J_1=I_2-J_2,$$
+so that the formula can be further rewritten as
+$$\ba l
+\forall I_1I_2J_1J_2N(N=n\land q(I_1,J_1) \land \exists K(K=I_1-J_1+N)\\
+\hskip 3.3cm
+\land\; q(I_2,J_2) \land I_1-J_1=I_2-J_2\\
+\hskip 7cm
+\to (I_1,J_1)=(I_2,J_2)).
+\ea
+$$
+After dropping the trivial conjunctive term $\exists K(K=I_1-J_1+N)$, the
+formula becomes
+$$\ba l
+\forall I_1I_2J_1J_2(\exists N(N=n) \land q(I_1,J_1) \land
+q(I_2,J_2) \land I_1-J_1=I_2-J_2\\
+\hskip 8cm
+\to (I_1,J_1)=(I_2,J_2)).
+\ea
+$$
+By \emph{UG}, it is equivalent to~(\ref{a4up}).
+
+The proof of part~(ii) is similar.
+\end{proof}
+
+\medskip\noindent\emph{Proof of Claim~5.}
+Formula~(\ref{a5fs}) is clearly equivalent to the conjunction of~(\ref{a4up})
+and~(\ref{a4down}), and, by Lemma~\ref{lem:at}, to the conjunction
+of~(\ref{b4fs}) and~(\ref{b5fs}).
+\qed
+
+\subsection{Proofs of Claims~6 and~7}
+
+To prove Claim~6, assume~(\ref{a2fgeq}) and (\ref{a3fs}).
+We want to apply pigeonhole principle~(\ref{pigeon}) to~$s_1$
+as~$S_1$ and to the sets~$S_2$ and~$S$ defined by the conditions
+$$\ba l
+\forall V(V\in S_2 \lrar \exists J\, q(V,J)),\\
+\forall V(V\in S \lrar \exists IJ(V=((I,J),I)\land q(I,J))).
+\ea$$
+The three conjunctive terms in the antecedent of~(\ref{pigeon}) are verified
+as follows.  To prove
+$$\forall X(X\in s_1 \to \exists Y (Y\in S_2 \land (X,Y)\in S)),$$
+assume $X\in s_1$.  By~(\ref{d1}), there exist~$I$,~$J$ such that
+$X=(I,J)$ and $q(I,J)$; we can take~$I$ as~$Y$.
+
+To prove
+$$\forall X_1X_2Y((X_1,Y)\in S \land (X_2,Y)\in S \to X_1=X_2)$$
+assume $(X_1,Y)\in S \land (X_2,Y)\in S$.  As in the proof of Claim~2,
+there exist~$I_1$, $J_1$, $I_2$, $J_2$ such that
+$$X_1=(I_1,J_1),\ X_2=(I_2,J_2),\ Y=I_1=I_2,\ q(I_1,J_1),\ q(I_2,J_2).$$
+By~(\ref{a3fs}), it follows that $J_1=J_2$.  Hence $X_1=X_2$.
+
+To prove the third conjunctive term $\fnt(S_2)$, note that $S_2\subseteq S_0$
+for the set~$S_0$ from Lemma~\ref{lem:S0}; $\fnt(S_2)$ follows
+by~(\ref{subset}).
+
+By~(\ref{pigeon}), $\co(s_1)\leq \co(S_2)$.  By~(\ref{a2fgeq}), it
+follows that $\co(S_2)\geq n=\co(S_0)$.  Hence, by~(\ref{propersubset}),
+$S_2=S_0$, so that, for every $I$ such that $1\leq I\leq n$, $I\in S_2$.
+This condition can be rewritten as $\exists J\,q(I,J)$.  By~(\ref{d2}),
+this formula is equivalent to $\exists J\,(J\in s_2(I))$.  By~(\ref{geq1}),
+it can be further rewritten as $\co(s_2(I))\geq 1$.
+
+\section{Conclusion}
+
+We proved that the equivalence between the completions of the
+programs $A$ and $B$ can be derived from the assumptions \kbugsd.
+Future work will include establishing a general theorem showing that
+the existence of such a derivation implies the external equivalence of
+the programs.  That theorem will be somewhat similar to the theorem on
+completion and tightness of
+programs with non-recursive aggregates \cite[Section~7.1]{fan24b}.
+
+It would be interesting also to implement a version of {\sc anthem}
+\cite{fan25} capable of verifying the derivation outlined in this note.
+
+\bibliographystyle{named}
+\bibliography{bib}
+\end{adjustwidth}
+\end{document}
+
