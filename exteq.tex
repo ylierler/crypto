@@ -100,9 +100,8 @@ body, all variables in the tuple~$\bfx$ are local \cite[Section~4]{lif22a}.
 
 A \emph{program} is a finite set of pure rules.
 
-An \emph{equation} is a comparison of the form $t_1=t_2$.  An equation is
-\emph{numeric} if it does not contain symbolic constants.
- A rule is \emph{in numeric normal form
+An \emph{equation} is a comparison of the form $t_1=t_2$.
+A rule is \emph{in numeric normal form
   (NNF)} if
 \begin{itemize}
 \item[(a)]
@@ -110,12 +109,25 @@ An \emph{equation} is a comparison of the form $t_1=t_2$.  An equation is
   of arithmetic function symbols other than the interval symbol, and
 \item[(b)]
   every occurrence of a term of the form $t_1\,..\,t_2$ in it
-is the right-hand side of a numeric equation.
+is the right-hand side of an equation.
 \end{itemize}
 (So symbolic constants are allowed as endponts of an interval; this is
 different from what the Dialects draft requires \cite[Section~3]{fan26b}.)
-All rules (1)--(10) in the N-Queens programs are in numeric normal form
-in the sense of this definition.
+% All rules (1)--(10) in the N-Queens programs are in numeric normal form
+% in the sense of this definition.
+
+\paragraph{Semi-normal rules}
+Let us note that symbolic constants in the scope of definite arithmetic function symbols are easy to eliminate.
+It can be done in one step.  
+Any rule that satisfies condition (b) of the NNF definition can be transformed into an NNF rule as follows: 
+\begin{itemize}
+\item make the list $c_1,\dots,c_k$ of 
+the symbolic constants that have at least one occurrence in the scope of an arithmetic operation other than interval $..$;
+\item  substitute for them fresh variables $X_1,\dots,X_k$, and append $X_1=c_1 \wedge\dots\wedge X_k=c_k$ to the body.  
+\end{itemize}
+In the sequel, we understand any semi-normal rule as a shorthand for the rule obtained from it using  this procedure.
+
+%Then the result of applying nu to a rule satisfying condition (b) is defined as the result of applying nu to the corresponding NNF rule.
 
 \section{The target language}
 
@@ -221,7 +233,7 @@ $$\forall V(V\in C\lrar\exists\, \nu(X_1)\cdots\nu(X_k)\,
 (V=(\nu(X_1),\dots,\nu(X_k))
 \land \nu({\bf L}))),$$
 where~$V$ is a general variable.
-(If $k=1$ then $(\nu(X_1),\dots\nu(,X_k))$ is understood as~$\nu(X_1)$.)
+(If $k=1$ then $(\nu(X_1),\dots,\nu(X_k))$ is understood as~$\nu(X_1)$.)
 If~$C$ is a function variable then $\sd(C)$ is
 $$\ba l
 \forall V \nu(Y_1) \cdots \nu(Y_l)(V\in C(\nu(Y_1),\dots,\nu(Y_l))\\
@@ -248,7 +260,8 @@ with $\no$ replaced by~$\neg$.
 $$
 \forall {\bf Z}(\nu(B_1)\land\cdots\land\nu(B_n) \rar \nu(H)),
 $$
-where $\bf Z$ is obtained from the list of variables occurring in the rule
+where $\bf Z$ is obtained from the list of global
+variables occurring in the rule
 by replacing $V_1,\dots,V_m$ with $\nu(V_1),\dots,\nu(V_m)$.  The free
 variables of this formula are the variables associated with aggregate
 expressions.
