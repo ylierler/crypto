@@ -50,7 +50,7 @@
    the ``natural translation''~$\nu$ \cite{lif21,lif23,fan26b,fan26}
  to programs with counting.
   
-  \section{Syntax of rules}
+  \section{Syntax of rules}\label{sec:nnf}
   
   In this section,
   the syntax of rules over a \mg\ signature %\cite[Section~2.1]{fan26b}
@@ -116,18 +116,15 @@ different from what the Dialects draft requires \cite[Section~3]{fan26b}.)
 % All rules (1)--(10) in the N-Queens programs are in numeric normal form
 % in the sense of this definition.
 
-\paragraph{Semi-normal rules}
-Let us note that symbolic constants in the scope of definite arithmetic function symbols are easy to eliminate.
-It can be done in one step.  
-Any rule that satisfies condition (b) of the NNF definition can be transformed into an NNF rule as follows: 
+%\paragraph{Semi-normal rules}
+A rule is called {\em semi-normal} if it satisfies condition (b).  Any semi-normal rule
+can be transformed into an NNF rule as
+follows:
 \begin{itemize}
 \item make the list $c_1,\dots,c_k$ of 
 the symbolic constants that have at least one occurrence in the scope of an arithmetic operation other than interval $..$;
 \item  substitute for them fresh variables $X_1,\dots,X_k$, and append $X_1=c_1 \wedge\dots\wedge X_k=c_k$ to the body.  
 \end{itemize}
-In the sequel, we understand any semi-normal rule as a shorthand for the rule obtained from it using  this procedure.
-
-%Then the result of applying nu to a rule satisfying condition (b) is defined as the result of applying nu to the corresponding NNF rule.
 
 \section{The target language}
 
@@ -265,6 +262,8 @@ variables occurring in the rule
 by replacing $V_1,\dots,V_m$ with $\nu(V_1),\dots,\nu(V_m)$.  The free
 variables of this formula are the variables associated with aggregate
 expressions.
+
+The result of applying $\nu$ to a semi-normal rule is defined as the result of applying $\nu$ to the NNF rule obtained from it as described at the end of Section~\ref{sec:nnf}.
 
 % \section{Examples}
 
