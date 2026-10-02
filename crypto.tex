@@ -21,7 +21,24 @@
 \begin{document}
 	\maketitle
 
-\section{Program B}
+\paragraph{N-Queens Puzzle: Programs A, B, and C verbatim}
+  
+We would like to show how reasoning in classical first-order logic can
+be used to verify equivalence of two encodings of the $n$-Queens
+puzzle \cite[Tables~2 and~3]{geb11b}:
+\medskip
+
+\begin{center}Program $A$\end{center}
+$$
+\ba l
+n\,\{ q(1\,..\,n,1\,..\,n) \}\, n\\
+\ar q(X,Y_1) \land q(X,Y_2) \land Y_1 < Y_2\\
+\ar q(X_1,Y) \land q(X_2,Y) \land X_1 < X_2\\
+\ar q(X_1,Y_1) \land q(X_2,Y_2) \land X_1 < X_2 \land |X_1-X_2| = |Y_1-Y_2|
+\ea
+$$
+
+
 \medskip
 \begin{center}Program $B$\end{center}
 $$\ba l
@@ -33,8 +50,44 @@ $$\ba l
 \ea
 $$
 
+
+The lines presented below change Program B 
+to Program $C$. In particular Program C is obtained by modifying Program B
+as follows 
+\begin{itemize}
+\item replace the last two rules of Program B with the  content:
+\end{itemize}
+    %\lstinputlisting[language=Prolog, numbers=left, caption="Part of Program C"]
+%{queen4.lp}
 \medskip
-We now present Program B in a ``cannonical manner'' 
+\begin{center}Part of Program $C$\end{center}
+$$\ba l
+d1(X,Y,X-Y+n) \ar X = 1..n, Y = 1..n.\\
+d2(X,Y,X+Y-1) \ar X = 1..n, Y = 1..n.\\
+\ar Z = 1..2\times n-1, not\ \{ q(X,Y) : d1(X,Y,Z) \} 1.\\
+\ar Z = 1..2\times n-1, not\ \{ q(X,Y) : d2(X,Y,Z) \} 1.
+\ea
+$$
+
+\paragraph{Programs A, B, C in the language of Section~\ref{sec:nnf}}
+We now present Programs A, B, and C in the language of Section~\ref{sec:nnf}.
+In particular,
+some rules in these programs implicitly refer to the \co\ aggregate, and
+we view choice rules as abbreviations for rules with an atom in
+the head.  Written out in full, the Programs A and B become
+\begin{align}
+& q(X,Y) \ar \no\   \no\   q(X,Y) \land X = 1\,..\,n \land Y = 1\,..\,n	\label{a1}\\
+& \ar \no\ n\leq  \co\{ X,Y : q(X,Y) \land X = 1\,..\,n \land Y = 1\,..\,n \}
+  \leq n
+  \label{a2}\\
+& \ar q(X,Y_1) \land q(X,Y_2) \land Y_1 < Y_2\label{a3}\\
+& \ar q(X_1,Y) \land q(X_2,Y) \land X_1 < X_2\label{a4}\\
+& \ar q(X_1,Y_1) \land q(X_2,Y_2) \land X_1 < X_2 \land |X_1-X_2| = |Y_1-Y_2|
+  \label{a5}
+\end{align}
+
+\noindent and
+
 \begin{align}
 & q(X,Y) \ar \no\   \no\   q(X,Y) \land X = 1\,..\,n \land Y = 1\,..\,n\label{b1}\\
 & \ar X = 1\,..\,n \land \no\ 1\leq \co\{ Y : q(X,Y) \} \leq 1\label{b2}\\
@@ -47,42 +100,55 @@ We now present Program B in a ``cannonical manner''
   \label{b5}
 \end{align}
 
-\section{Program C}
-
-
-The lines presented below change Program B 
-to Program C. In particular Program C is obtained by modifying Program B
-as follows 
-\begin{itemize}
-\item replace the last two rules of Program B with the content of the  presneted lines.
-\end{itemize}
-    %\lstinputlisting[language=Prolog, numbers=left, caption="Part of Program C"]
-%{queen4.lp}
-$$\ba l
-d1(X,Y,X-Y+n) \ar X = 1..n, Y = 1..n.\\
-d2(X,Y,X+Y-1) \ar X = 1..n, Y = 1..n.\\
-\ar Z = 1..2\times n-1, not\ \{ q(X,Y) : d1(X,Y,Z) \} 1.\\
-\ar Z = 1..2\times n-1, not\ \{ q(X,Y) : d2(X,Y,Z) \} 1.
-\ea
-$$
-
-We now transcribe these lines in a ``cannonical manner'' (in addition to making $\co$ aggregates explicit we ``normalize'' the rules by ensurring that head atoms only appear with variables in their heads. This transformation is frequently performed as the preprocessing required for completing a program.):
+The four rules of Program C that replace the last two rules of Program B stand for
 
 \begin{align}
-&d1(X,Y,Z) \ar X = 1..n\wedge  Y = 1..n\wedge Z=X-Y+n.\label{c4}\\
-&d2(X,Y,Z) \ar X = 1..n\wedge Y = 1..n\wedge Z=X+Y-1.\label{c5}\\
+&d1(X,Y,X-Y+n) \ar X = 1..n\wedge  Y = 1..n.\label{c4}\\
+&d2(X,Y,X+Y-1) \ar X = 1..n\wedge Y = 1..n.\label{c5}\\
 &\ar Z = 1..2\times n-1\wedge not\ count \{ X,Y: q(X,Y) , d1(X,Y,Z) \} \leq 1.\label{c6}\\
 &\ar Z = 1..2\times n-1\wedge not\ count   \{X,Y:  q(X,Y) , d2(X,Y,Z) \} \leq 1.\label{c7}    
 \end{align}
 
-\section{Program B as a forumla}
-Rules~\eqref{b1} through~\eqref{b5} are in NNF. We now transform these rules into formulas using natural translation~$\nu$. 
-Rule~\eqref{b1} is transformed into the following formula using $\nu$:
+\section{Programs A, B, C as formulas}
+Most rules among~\eqref{a1} through~\eqref{c7} are in NNF, except rules~\eqref{b4},~\eqref{b5} and~\eqref{c4},~\eqref{c6}, and ~\eqref{c7} that are semi-normal.
+
+
+We now transform these rules into formulas using natural translation~$\nu$. 
+
+Rule~\eqref{a1} is transformed into the following formula:
 \beq
-\forall I J (\neg\neg q(I,J) \land 1\leq I \leq n \land 1 \leq J \leq n
- \to q(I,J)).
+\forall I J (\neg\neg q(I,J) \land 1\leq I \leq n \land 1 \leq J \leq n \to q(I,J)).
 \eeq{a1f}
 
+The representation of rule~(\ref{a2}) includes the function variable~$S_1$, 
+ which
+is meant to be used in accordance with the set definition $\sd(S_1)$ 
+\beq
+\forall V(V\in S_1 \lrar \exists IJ(V=(I,J)\land q(I,J) \land 1\leq I\leq n
+\land 1\leq J\leq n)).
+\eeq{d1}
+The formula corresponding to rule~(\ref{a2}) is
+\beq
+(n\leq \co(S_1)\leq n)\rar\bot.
+\eeq{a2f}
+
+Rules~(\ref{a3})--(\ref{a5}) become
+\beq
+\forall XY_1Y_2\big((q(X,Y_1) \land q(X,Y_2) \land Y_1 < Y_2) \to \bot\big),
+\eeq{a3f}
+\beq
+\forall X_1X_2Y\big((q(X_1,Y) \land q(X_2,Y) \land X_1 < X_2) \to \bot\big)
+\eeq{a4f}
+and
+\beq
+\forall I_1I_2J_1J_2
+\big((q(I_1,J_1) \land q(I_2,J_2) \land I_1<I_2 \land |I_1-I_2|=|J_1-J_2|) \to \bot\big).
+\eeq{a5f}
+
+
+
+
+Rule~\eqref{b1} is identical to rule~\eqref{a1}.
  The representation
 of rule~(\ref{b2}) includes the function variable~$S_2$, which
 is meant to be used in accordance with the set definition $\sd(S_2)$ 
@@ -93,29 +159,39 @@ The formula corresponding to rule~(\ref{b2}) is
 \beq
 \forall I(1\leq I\leq n \land \neg (1\leq \co(S_2(I))\leq 1))\to \bot.
 \eeq{b2f}
-Translating rule~(\ref{b3}) is similar; it involves the formulas
+Translating rule~(\ref{b3}) is similar; it involves the set definition $\sd(S_3)$:
 \beq
-\forall V I\Big(V\in S_3(I) \lrar \exists Y\big( V=(Y) \wedge q(Y,I)\big)\Big).
+\forall V J\Big(V\in S_3(J) \lrar \exists X\big( V=(X) \wedge q(X,J)\big)\Big).
 \eeq{d3}
-and 
+and formula
 \beq
-\forall I(1\leq I\leq n \land \neg (1\leq \co(S_3(I))\leq 1))\to \bot.
+\forall J(1\leq J\leq n \land \neg (1\leq \co(S_3(J))\leq 1))\to \bot.
 \eeq{b3f}
 
 % \end{adjustwidth}
 
+Recall that rules~(\ref{b4}) and~(\ref{b5}) are not in NNF, but they are semi-normal.  For clarity, we present the transformation of these rules  into NNF using the outlined procedure in Section~\ref{sec:nnf}:
+\begin{align*}
+& \ar Z = 1\,..\,2\times U-1
+  \land \no\   \co\{ X,Y : q(X,Y) \land Z = X-Y+U \} \leq  1\wedge U=n
+  \\
+& \ar Z = 1\,..\,2\times U-1
+  \land \no\   \co\{ X,Y : q(X,Y) \land Z = X+Y-1 \} \leq  1 \wedge U=n
+\end{align*}
+
+
 Rules~(\ref{b4}) and~(\ref{b5})  are converted into formulas containing new function variables~$S_4$
 and~$S_5$:
 \beq
-\forall K(1\leq K\leq 2\times n-1 \land\neg\co(S_4(K))\leq 1)\to\bot,
+\forall KN\big((1\leq K\leq 2\times N-1 \land\neg\co(S_4(K,N))\leq 1\wedge N=n)\to\bot\big),
 \eeq{b4f}
 \beq
-\forall K(1\leq K\leq 2\times n-1 \land\neg\co(S_5(K))\leq 1)\to\bot,
+\forall K\big((1\leq K\leq 2\times N-1 \land\neg\co(S_5(K))\leq 1\wedge N=n)\to\bot\big),
 \eeq{b5f}
 so that  $\sd(S_4)$ and $\sd(S_5)$ follow: 
 \beq
-\forall VK(V\in S_4(K) \lrar \exists IJ(V=(I,J) \land q(I,J)
-   \land K=I-J+n)),
+\forall VKN(V\in S_4(K,N) \lrar \exists IJN(V=(I,J) \land q(I,J)
+   \land K=I-J+N)),
 \eeq{d4}
 \beq
 \forall VK(V\in S_5(K) \lrar \exists IJ(V=(I,J) \land q(I,J)
@@ -123,32 +199,23 @@ so that  $\sd(S_4)$ and $\sd(S_5)$ follow:
 \eeq{d5}
 
 
-To stress the similarity between some of the formulas stemming from the translation we introduce notation for substitutions. For a formula $F$, by $\sub{F}{t}{t'}$ we denote the formula constructed from $F$ by replacing all occurrences of function symbol (constant or variable) $t$ in $F$ with function symbol (constant or variable) $t'$. 
-Thus, for example, $\sub{\eqref{b4f}}{S_4}{S_5}$ stands for \eqref{b5f}.
-Similarly, for a formula $F$, by $\sub{F}{p}{p'}$ we denote the formula constructed from $F$ by replacing all occurrences of predicate symbol (constant or variable) $p$ in $F$ with predicate symbol (constant or variable) $p'$.
-%We allow ourself to abuse this notation and use a list composed of terms and predicate symbols.
-
-\section{Program C as a forumla}
-Rules~\eqref{b1} through~\eqref{b3} are captured by formulas as described in the previous section.
-Rules~\eqref{c4} through~\eqref{c7} are in NNF. We now transform these rules into formulas using natural translation~$\nu$. 
-
-Rule~\eqref{c4} is captured by the following formula:
+Rule~\eqref{c4} is captured by the  formula:
 \beq
-\forall I J K (1\leq I\leq n \land 1\leq J\leq n \land 
-K=I-J+n \to d1(I,J,K)).
+\forall I J  N(1\leq I\leq n \land 1\leq J\leq n  
+ \wedge N=n\to d1(I,J,I-J+N)).
 \eeq{c4f}
-Rule~\eqref{c5} is captured by the following formula:
+Rule~\eqref{c5} is captured by the  formula:
 \beq
-\forall I J K (1\leq I\leq n \land 1\leq J\leq n \land 
-K=I+J-1 \to d2(I,J,K)).
+\forall I J  (1\leq I\leq n \land 1\leq J\leq n \land 
+ \to d2(I,J,I+J-1)).
 \eeq{c5f}
 Rules~(\ref{c6}) and~(\ref{c7})  are converted into formulas containing new function variables~$S_6$
 and~$S_7$:
 \beq
-\forall K(1\leq K\leq 2\times n-1 \land\neg\co(S_6(K))\leq 1)\to\bot,
+\forall KN(1\leq K\leq 2\times N-1 \land\neg\co(S_6(K))\leq 1\wedge N=n)\to\bot,
 \eeq{c6f}
 \beq
-\forall K(1\leq K\leq 2\times n-1 \land\neg\co(S_7(K))\leq 1)\to\bot,
+\forall KN(1\leq K\leq 2\times N-1 \land\neg\co(S_7(K))\leq 1\wedge N=n)\to\bot,
 \eeq{c7f}
 so that  $\sd(S_6)$ and $\sd(S_7)$ follow: 
 \beq
@@ -157,8 +224,15 @@ so that  $\sd(S_6)$ and $\sd(S_7)$ follow:
 \beq
 \forall VK\Big(V\in S_7(K) \lrar \exists IJ\big(V=(I,J) \land q(I,J) \land d2(I,J,K)\big)\Big).
 \eeq{d7}
-It is easy to see that  $\sub{\eqref{b4f}}{S_4}{S_6}$ stands for \eqref{c6f}
+\newpage
+
+To stress the similarity between some of the formulas stemming from the translation we introduce notation for substitutions. For a formula $F$, by $\sub{F}{t}{t'}$ we denote the formula constructed from $F$ by replacing all occurrences of function symbol (constant or variable) $t$ in $F$ with function symbol (constant or variable) $t'$. 
+Using this notation, it is easy to see that  $\sub{\eqref{b4f}}{S_4}{S_6}$ stands for \eqref{c6f}
 and  $\sub{\eqref{b4f}}{S_4}{S_7}$ stands for \eqref{c7f}.
+%Thus, for example, $\sub{\eqref{b4f}}{S_4}{S_5}$ stands for \eqref{b5f}.
+Similarly, for a formula $F$, by $\sub{F}{p}{p'}$ we denote the formula constructed from $F$ by replacing all occurrences of predicate symbol (constant or variable) $p$ in $F$ with predicate symbol (constant or variable) $p'$.
+%We allow ourself to abuse this notation and use a list composed of terms and predicate symbols.
+
 
 \section{Completions of Programs}
 We now proceed toward building completions for Programs B and C.  In this process we note that formulas~\eqref{a1f},~\eqref{c4f}, and~\eqref{c5f} are not completable due to the use of integer variables in the ``head'' atom. We rewrite them as follows (respectively):
@@ -375,4 +449,7 @@ to the N-Queens Puzzle} by Vladimir Lifschitz to perform this task.
 \begin{align}
 &named(\alpha). & \alpha\in \{t,w,o,f,o,u,r\} \\
 \end{align}
+
+\bibliographystyle{named}
+\bibliography{bib}
 \end{document}    
