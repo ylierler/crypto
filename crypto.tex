@@ -62,10 +62,10 @@ as follows
 \medskip
 \begin{center}Part of Program $C$\end{center}
 $$\ba l
-d1(X,Y,X-Y+n) \ar X = 1..n, Y = 1..n.\\
-d2(X,Y,X+Y-1) \ar X = 1..n, Y = 1..n.\\
-\ar Z = 1..2\times n-1, not\ \{ q(X,Y) : d1(X,Y,Z) \} 1.\\
-\ar Z = 1..2\times n-1, not\ \{ q(X,Y) : d2(X,Y,Z) \} 1.
+d1(X,Y,X-Y+n) \ar X = 1..n\wedge Y = 1..n.\\
+d2(X,Y,X+Y-1) \ar X = 1..n\wedge Y = 1..n.\\
+\ar Z = 1..2\times n-1\wedge not\ \{ q(X,Y) : d1(X,Y,Z) \} 1.\\
+\ar Z = 1..2\times n-1\wedge not\ \{ q(X,Y) : d2(X,Y,Z) \} 1.
 \ea
 $$
 
@@ -105,31 +105,33 @@ The four rules of Program C that replace the last two rules of Program B stand f
 \begin{align}
 &d1(X,Y,X-Y+n) \ar X = 1..n\wedge  Y = 1..n.\label{c4}\\
 &d2(X,Y,X+Y-1) \ar X = 1..n\wedge Y = 1..n.\label{c5}\\
-&\ar Z = 1..2\times n-1\wedge not\ count \{ X,Y: q(X,Y) , d1(X,Y,Z) \} \leq 1.\label{c6}\\
-&\ar Z = 1..2\times n-1\wedge not\ count   \{X,Y:  q(X,Y) , d2(X,Y,Z) \} \leq 1.\label{c7}    
+&\ar Z = 1..2\times n-1\wedge not\ count \{ X,Y: q(X,Y) \wedge d1(X,Y,Z) \} \leq 1.\label{c6}\\
+&\ar Z = 1..2\times n-1\wedge not\ count   \{X,Y:  q(X,Y) \wedge d2(X,Y,Z) \} \leq 1.\label{c7}    
 \end{align}
 
 \section{Programs A, B, C as formulas}
 Most rules among~\eqref{a1} through~\eqref{c7} are in NNF, except rules~\eqref{b4},~\eqref{b5} and~\eqref{c4},~\eqref{c6}, and ~\eqref{c7} that are semi-normal.
 
 
-We now transform these rules into formulas using natural translation~$\nu$. 
+We now transform these rules into formulas using natural translation~$\nu$. We note that we usually write $c(t_1,\dots,t_k)$ an an abbreviation for  $(c/k)(t_1,\dots,t_k)$.
+
+
 
 Rule~\eqref{a1} is transformed into the following formula:
 \beq
 \forall I J (\neg\neg q(I,J) \land 1\leq I \leq n \land 1 \leq J \leq n \to q(I,J)).
 \eeq{a1f}
 
-The representation of rule~(\ref{a2}) includes the function variable~$S_1$, 
+The representation of rule~(\ref{a2}) includes the object variable~$C_1$ of the sort set, 
  which
-is meant to be used in accordance with the set definition $\sd(S_1)$ 
+is meant to be used in accordance with the set definition $\sd(C_1)$ 
 \beq
-\forall V(V\in S_1 \lrar \exists IJ(V=(I,J)\land q(I,J) \land 1\leq I\leq n
+\forall V(V\in C_1 \lrar \exists IJ(V=(I,J)\land q(I,J) \land 1\leq I\leq n
 \land 1\leq J\leq n)).
 \eeq{d1}
 The formula corresponding to rule~(\ref{a2}) is
 \beq
-(n\leq \co(S_1)\leq n)\rar\bot.
+(n\leq \co(C_1)\leq n)\rar\bot.
 \eeq{a2f}
 
 Rules~(\ref{a3})--(\ref{a5}) become
@@ -150,22 +152,22 @@ and
 
 Rule~\eqref{b1} is identical to rule~\eqref{a1}.
  The representation
-of rule~(\ref{b2}) includes the function variable~$S_2$, which
-is meant to be used in accordance with the set definition $\sd(S_2)$ 
+of rule~(\ref{b2}) includes the function variable~$C_2$, which
+is meant to be used in accordance with the set definition $\sd(C_2)$ 
 \beq
-\forall V I\Big(V\in S_2(I) \lrar \exists Y\big( V=(Y) \wedge q(I,Y)\big)\Big).
+\forall V I\Big(V\in C_2(I) \lrar \exists Y\big( V=(Y) \wedge q(I,Y)\big)\Big).
 \eeq{d2}
 The formula corresponding to rule~(\ref{b2}) is
 \beq
-\forall I(1\leq I\leq n \land \neg (1\leq \co(S_2(I))\leq 1))\to \bot.
+\forall I(1\leq I\leq n \land \neg (1\leq \co(C_2(I))\leq 1))\to \bot.
 \eeq{b2f}
-Translating rule~(\ref{b3}) is similar; it involves the set definition $\sd(S_3)$:
+Translating rule~(\ref{b3}) is similar; it involves the set definition $\sd(C_3)$:
 \beq
-\forall V J\Big(V\in S_3(J) \lrar \exists X\big( V=(X) \wedge q(X,J)\big)\Big).
+\forall V J\Big(V\in C_3(J) \lrar \exists X\big( V=(X) \wedge q(X,J)\big)\Big).
 \eeq{d3}
 and formula
 \beq
-\forall J(1\leq J\leq n \land \neg (1\leq \co(S_3(J))\leq 1))\to \bot.
+\forall J(1\leq J\leq n \land \neg (1\leq \co(C_3(J))\leq 1))\to \bot.
 \eeq{b3f}
 
 % \end{adjustwidth}
@@ -180,21 +182,21 @@ Recall that rules~(\ref{b4}) and~(\ref{b5}) are not in NNF, but they are semi-no
 \end{align*}
 
 
-Rules~(\ref{b4}) and~(\ref{b5})  are converted into formulas containing new function variables~$S_4$
-and~$S_5$:
+Rules~(\ref{b4}) and~(\ref{b5})  are converted into formulas containing new function variables~$C_4$
+and~$C_5$:
 \beq
-\forall KN\big((1\leq K\leq 2\times N-1 \land\neg\co(S_4(K,N))\leq 1\wedge N=n)\to\bot\big),
+\forall KN\big((1\leq K\leq 2\times N-1 \land\neg\big(\co(C_4(K,N))\leq 1\big)\wedge N=n)\to\bot\big),
 \eeq{b4f}
 \beq
-\forall K\big((1\leq K\leq 2\times N-1 \land\neg\co(S_5(K))\leq 1\wedge N=n)\to\bot\big),
+\forall K\big((1\leq K\leq 2\times N-1 \land\neg\big(\co(C_5(K))\leq 1\big)\wedge N=n)\to\bot\big),
 \eeq{b5f}
-so that  $\sd(S_4)$ and $\sd(S_5)$ follow: 
+so that  $\sd(C_4)$ and $\sd(C_5)$ follow: 
 \beq
-\forall VKN(V\in S_4(K,N) \lrar \exists IJN(V=(I,J) \land q(I,J)
+\forall VKN(V\in C_4(K,N) \lrar \exists IJN(V=(I,J) \land q(I,J)
    \land K=I-J+N)),
 \eeq{d4}
 \beq
-\forall VK(V\in S_5(K) \lrar \exists IJ(V=(I,J) \land q(I,J)
+\forall VK(V\in C_5(K) \lrar \exists IJ(V=(I,J) \land q(I,J)
    \land K=I+J-1)).
 \eeq{d5}
 
@@ -206,36 +208,60 @@ Rule~\eqref{c4} is captured by the  formula:
 \eeq{c4f}
 Rule~\eqref{c5} is captured by the  formula:
 \beq
-\forall I J  (1\leq I\leq n \land 1\leq J\leq n \land 
+\forall I J  (1\leq I\leq n \land 1\leq J\leq n 
  \to d2(I,J,I+J-1)).
 \eeq{c5f}
-Rules~(\ref{c6}) and~(\ref{c7})  are converted into formulas containing new function variables~$S_6$
-and~$S_7$:
+Rules~(\ref{c6}) and~(\ref{c7})  are converted into formulas containing new function variables~$C_6$
+and~$C_7$:
 \beq
-\forall KN(1\leq K\leq 2\times N-1 \land\neg\co(S_6(K))\leq 1\wedge N=n)\to\bot,
+\forall KN(1\leq K\leq 2\times N-1 \land\neg\big(\co(C_6(K))\leq 1\big)\wedge N=n)\to\bot,
 \eeq{c6f}
 \beq
-\forall KN(1\leq K\leq 2\times N-1 \land\neg\co(S_7(K))\leq 1\wedge N=n)\to\bot,
+\forall KN(1\leq K\leq 2\times N-1 \land\neg\big(\co(C_7(K))\leq 1\big)\wedge N=n)\to\bot,
 \eeq{c7f}
-so that  $\sd(S_6)$ and $\sd(S_7)$ follow: 
+so that  $\sd(C_6)$ and $\sd(C_7)$ follow: 
 \beq
-\forall VK\Big(V\in S_6(K) \lrar \exists IJ\big(V=(I,J) \land q(I,J) \land d1(I,J,K)\big)\Big),
+\forall VK\Big(V\in C_6(K) \lrar \exists IJ\big(V=(I,J) \land q(I,J) \land d1(I,J,K)\big)\Big),
 \eeq{d6}
 \beq
-\forall VK\Big(V\in S_7(K) \lrar \exists IJ\big(V=(I,J) \land q(I,J) \land d2(I,J,K)\big)\Big).
+\forall VK\Big(V\in C_7(K) \lrar \exists IJ\big(V=(I,J) \land q(I,J) \land d2(I,J,K)\big)\Big).
 \eeq{d7}
 \newpage
 
 To stress the similarity between some of the formulas stemming from the translation we introduce notation for substitutions. For a formula $F$, by $\sub{F}{t}{t'}$ we denote the formula constructed from $F$ by replacing all occurrences of function symbol (constant or variable) $t$ in $F$ with function symbol (constant or variable) $t'$. 
-Using this notation, it is easy to see that  $\sub{\eqref{b4f}}{S_4}{S_6}$ stands for \eqref{c6f}
-and  $\sub{\eqref{b4f}}{S_4}{S_7}$ stands for \eqref{c7f}.
-%Thus, for example, $\sub{\eqref{b4f}}{S_4}{S_5}$ stands for \eqref{b5f}.
+Using this notation, it is easy to see that  $\sub{\eqref{b4f}}{C_4}{C_6}$ stands for \eqref{c6f}
+and  $\sub{\eqref{b4f}}{C_4}{C_7}$ stands for \eqref{c7f}.
+%Thus, for example, $\sub{\eqref{b4f}}{C_4}{C_5}$ stands for \eqref{b5f}.
 Similarly, for a formula $F$, by $\sub{F}{p}{p'}$ we denote the formula constructed from $F$ by replacing all occurrences of predicate symbol (constant or variable) $p$ in $F$ with predicate symbol (constant or variable) $p'$.
 %We allow ourself to abuse this notation and use a list composed of terms and predicate symbols.
 
 
-\section{Completions of Programs}
-We now proceed toward building completions for Programs B and C.  In this process we note that formulas~\eqref{a1f},~\eqref{c4f}, and~\eqref{c5f} are not completable due to the use of integer variables in the ``head'' atom. We rewrite them as follows (respectively):
+\section{Programs A, B, C Completions}
+We now proceed toward building completions for Programs A, B and C. 
+
+For programs A, B, and C definition of $q/2$ is a singleton composed of formula~\eqref{a1f}.
+In the process of building a ompletion that set will be transformed as follows:
+\[
+\big\{\exists I J (\neg\neg q(I,J) \land 1\leq I \leq n \land 1 \leq J \leq n 
+\wedge X=I\wedge Y=J) 
+\to q(X,Y)
+\big\}
+\]
+It is now easy to see that the completed definition of $q/2$ is:
+\beq
+\forall X Y \Big(q(X,Y)\lrar 
+\exists I J(\neg\neg q(I,J) \land 1\leq I \leq n \land 1 \leq J \leq n \wedge X=I\wedge Y=J)\Big).
+\eeq{a1fcdef}
+The completion of Program A has the form:
+\beq
+\forall C_1\Big(\eqref{d1}\rar\big(\eqref{a1fcdef}
+\wedge \eqref{a2f}\wedge\eqref{a3f}\wedge\eqref{a4f}\wedge\eqref{a5f}\big)
+\Big).
+\eeq{completionA}
+
+=====================================
+
+In this process we note that formulas~\eqref{a1f},~\eqref{c4f}, and~\eqref{c5f} are not completable due to the use of integer variables in the ``head'' atom. We rewrite them as follows (respectively):
 \beq
 \forall I J X Y (\neg\neg q(I,J) \land 1\leq I \leq n \land 1 \leq J \leq n \wedge X=I\wedge Y=J
  \to q(X,Y)).
@@ -258,7 +284,7 @@ The completed definition of $q$ is constructed from~\eqref{a1fc} and has the for
 The remaining formulas of Program B are already ``complete''.
 The completion of Program B is the conjunction of~\eqref{a1fcomplete},~\eqref{b2f},~\eqref{b3f},~\eqref{b4f}, and~\eqref{b5f} extended with the respective set definitions~\eqref{d2},~\eqref{d3},~\eqref{d4}, and~\eqref{d5} such that every function variable is existentially quantified:
 \beq
-\exists S_2~S_3~S_4~S_5\Big(\eqref{a1fcomplete}\wedge 
+\exists C_2~C_3~C_4~C_5\Big(\eqref{a1fcomplete}\wedge 
 \eqref{b2f}\wedge\eqref{b3f}\wedge\eqref{b4f}\wedge\eqref{b5f}
 \wedge\eqref{d2}\wedge\eqref{d3}\wedge\eqref{d4}\wedge\eqref{d5}\Big).
 \eeq{completionB}
@@ -291,7 +317,7 @@ With that when we form an {\em io}-compeltion that ``hides'' predicade symbols
 $d1$ and $d2$ by replacing them with predicate variables $D_1$ and $D_2$ and  existentially quantifying them. The {\em io}-compeltion for Program C is the following formula:
 
 \beq
-\exists D_1 D_2 S_2 S_3 S_6 S_7\Big(\eqref{a1fcomplete}\wedge
+\exists D_1 D_2 C_2 C_3 C_6 C_7\Big(\eqref{a1fcomplete}\wedge
 \eqref{b2f}\wedge\eqref{b3f}\wedge
 \sub{\eqref{d1fcomplete}}{d1}{D_1}\wedge 
 \sub{\eqref{d2fcomplete}}{d2}{D_2}\wedge 
@@ -316,49 +342,49 @@ Formulas \eqref{completionB} and \eqref{completionC} are equivalent to the follo
 \beq
 \ba l
 \eqref{a1fcomplete}\wedge  
-\exists S_2\big(\eqref{b2f} \wedge\eqref{d2}\big)
+\exists C_2\big(\eqref{b2f} \wedge\eqref{d2}\big)
 \wedge
-\exists S_3 \big(\eqref{b3f} \wedge\eqref{d3}\big)
+\exists C_3 \big(\eqref{b3f} \wedge\eqref{d3}\big)
 \wedge\\
-\exists S_4\big(\eqref{b4f}\wedge \eqref{d4}\big)
+\exists C_4\big(\eqref{b4f}\wedge \eqref{d4}\big)
 \wedge
-\exists S_5\big(\eqref{b5f}\wedge \eqref{d5}\big)
+\exists C_5\big(\eqref{b5f}\wedge \eqref{d5}\big)
 \ea
 \eeq{completionBin}
 \beq
 \ba l
 \eqref{a1fcomplete}\wedge  
-\exists S_2\big(\eqref{b2f} \wedge\eqref{d2}\big)
+\exists C_2\big(\eqref{b2f} \wedge\eqref{d2}\big)
 \wedge
-\exists S_3 \big(\eqref{b3f} \wedge\eqref{d3}\big)
+\exists C_3 \big(\eqref{b3f} \wedge\eqref{d3}\big)
 \wedge\\
-\exists D_1 S_6\big(\sub{\eqref{d1fcomplete}}{d1}{D_1}\wedge\eqref{c6f} \wedge \sub{\eqref{d6}}{d1}{D_1}\big)
+\exists D_1 C_6\big(\sub{\eqref{d1fcomplete}}{d1}{D_1}\wedge\eqref{c6f} \wedge \sub{\eqref{d6}}{d1}{D_1}\big)
 \wedge
-\exists D_2 S_5\big(\sub{\eqref{d2fcomplete}}{d2}{D_2}\wedge \eqref{c7f} \wedge\sub{\eqref{d7}}{d2}{D_2}\big)
+\exists D_2 C_5\big(\sub{\eqref{d2fcomplete}}{d2}{D_2}\wedge \eqref{c7f} \wedge\sub{\eqref{d7}}{d2}{D_2}\big)
 \ea
 \eeq{completionCin}
 When io-completions are presented in this form it is easy to see that our goal is derivable from proving that the following two formulas are tautulagies:
 \beq
 \eqref{a1fcomplete}\rar\Big(
-\exists S_4\big(\eqref{b4f}\wedge \eqref{d4}\big)
+\exists C_4\big(\eqref{b4f}\wedge \eqref{d4}\big)
 \lrar
-\exists D_1 S_6\big(\sub{\eqref{d1fcomplete}}{d1}{D_1}\wedge \eqref{c6f} \wedge\sub{\eqref{d6}}{d1}{D_1}\big)
+\exists D_1 C_6\big(\sub{\eqref{d1fcomplete}}{d1}{D_1}\wedge \eqref{c6f} \wedge\sub{\eqref{d6}}{d1}{D_1}\big)
 \Big)
 \eeq{claim1}
 and
 \beq
 \eqref{a1fcomplete}\rar\Big(
-\exists S_5\big(\eqref{b5f}\wedge \eqref{d5}\big)
+\exists C_5\big(\eqref{b5f}\wedge \eqref{d5}\big)
 \lrar
-\exists D_2 S_5\big(\sub{\eqref{d2fcomplete}}{d2}{D_2}\wedge \eqref{c7f} \wedge \sub{\eqref{d7}}{d2}{D_2}\big)
+\exists D_2 C_5\big(\sub{\eqref{d2fcomplete}}{d2}{D_2}\wedge \eqref{c7f} \wedge \sub{\eqref{d7}}{d2}{D_2}\big)
 \Big).
 \eeq{claim2}
 
 We start by focusing on the claim that~\eqref{claim1} is a tautology. To this end we focus on the queivalent transformations for its subformula at the righthandside of the equivalence  symbol $\lrar$. This subformula is equivalent to 
 $$
 \ba l
-\exists  S_6\Big(\eqref{c6f} \wedge \\
-\forall VK\Big(V\in S_6(K) \lrar \\
+\exists  C_6\Big(\eqref{c6f} \wedge \\
+\forall VK\Big(V\in C_6(K) \lrar \\
 \exists IJ\big(V=(I,J) \land q(I,J) \land 
  \exists I_1 J_1 K_1
     (1\leq I_1\leq n\wedge 1\leq J_1\leq n \wedge K_1=I_1-J_1+1 
@@ -371,8 +397,8 @@ $$
 which in turn is equivalent to
 $$
 \ba l
-\exists  S_6\Big(\eqref{c6f} \wedge \\
-\forall VK\Big(V\in S_6(K) \lrar \\
+\exists  C_6\Big(\eqref{c6f} \wedge \\
+\forall VK\Big(V\in C_6(K) \lrar \\
 \exists IJ\big(V=(I,J) \land q(I,J) \land 
     1\leq I\leq n\wedge 1\leq J\leq n \wedge K=I-J+n 
 \big)
@@ -383,8 +409,8 @@ $$
 which under assumption~\eqref{a1fcomplete} is equivalent to
 $$
 \ba l
-\exists  S_6\Big(\eqref{c6f} \wedge \\
-\forall VK\Big(V\in S_6(K) \lrar \\
+\exists  C_6\Big(\eqref{c6f} \wedge \\
+\forall VK\Big(V\in C_6(K) \lrar \\
 \exists IJ\big(V=(I,J) \land q(I,J) \land 
      \wedge K=I-J+n 
 \big)
@@ -392,7 +418,7 @@ $$
 \Big).
 \ea
 $$
-It is easy to see that if we substitute $S_6$ with $S_4$ in the last formula we obtain a formula 
+It is easy to see that if we substitute $C_6$ with $C_4$ in the last formula we obtain a formula 
 that is at the right hand side of the equivalence symbol $\lrar$ in~\eqref{claim1}.
 Thus, we have shown that~\eqref{claim1} is a tautology. The proof for the fact that~\eqref{claim2} is a tautology is similar.
 
