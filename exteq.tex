@@ -36,7 +36,7 @@
 
 \hyphenation{lif-schitz}
 
-\title{Representing Rules with Counting by Formulas\\
+\title{Clark's Completion for Programs with Counting\\
   (Incomplete Draft)}
 % \author{Vladimir Lifschitz\\ University of Texas}
 
@@ -46,34 +46,42 @@
 
 \begin{adjustwidth}{-1cm}{-1cm}
 
-   This note is an attempt to extend the definition of
-   the ``natural translation''~$\nu$ \cite{lif21,lif23,fan26b,fan26}
- to programs with counting.
+  \section{Introduction}
   
-  \section{Syntax of rules}\label{sec:nnf}
+  The definition of program completion \cite{cla78} has been extended
+  to programs containing arithmetic operations and some other constructs
+  used in answer set programming \cite{har17a,lif23,fan24b,fan22}.
+  This note is an attempt to give a definition of completion
+  that can be used   as a basis for reasoning about ASP encodings
+  of the n-Queens puzzle \cite[Section~3.1]{geb11b} and similar programs.
+  These programs use, explicitly or implicitly, \emph{count} aggregate
+  expressions to specify, for instance, the assumption about the total
+  number of queens.
+  
+  \section{Rules and programs}\label{sec:rules}
   
   In this section,
   the syntax of rules over a \mg\ signature %\cite[Section~2.1]{fan26b}
   is   generalized to programs with counting.
     Mini-\gringo\ signatures, terms, atoms,
   literals, comparisons, \mg\ dialects and definite/indefinite function
-  symbols as in the Dialects draft \cite[Sections~2 and~3]{fan26b}.  By~$D$ we
+  symbols are defined
+  as in the Dialects draft \cite[Sections~2 and~3]{fan26b}.  By~$D$ we
   denote a dialect of \mg\ that includes
   \begin{itemize}
-  \item no basic symbols other that numerals and symbolic constants, and
+  \item no basic symbols other than numerals and symbolic constants, and
     \item no indefinite function symbols
   other than the interval symbol $..$ characterized by the condition
   $$\widehat{..}(m,n)=\{k: m\leq k\leq n\}.$$
 \end{itemize}
-(These simplifying assumptions are satisfied for the N-Queens programs
-\cite[(1)--(5) and (6)--(10)]{lif26}).
+% (These simplifying assumptions are satisfied for the n-Queens programs
+% \cite[(1)--(5) and (6)--(10)]{lif26}).
 A term is \emph{interval-free} if it does not
 contain the interval symbol.
-
 A term of the form $\mathit{blank}(t_1,\dots,t_k)$, where $k\geq 2$,
 can be abbreviated as $(t_1,\dots,t_k)$.
 
-  An \emph{aggregate element} is a pair
+An \emph{aggregate element} is a pair
 $\bfx:{\bf L}$,
 where $\bfx$ is a non-empty tuple of distinct variables,
 and $\bf L$ is a conjunction of
@@ -91,52 +99,204 @@ H \ar B_1\land\cdots\land B_n
 each member~$B_i$ of the body is either a literal, or a comparison,
 or an aggregate atom possibly preceded by \no.  (Since negations in front of
 aggregate atoms are allowed, this is more general than in some of the
-earlier work \cite{lif22a,fan24}.)
+earlier work \cite{lif22a,fan24}.)  Rules with the empty head are called
+\emph{constraints}.
+
+A \emph{choice rule}
+\beq
+\{c(t_1,\dots,t_k)\}\ar B_1\land\cdots\land B_n
+\eeq{choice}
+where~$c$ is a symbolic constant, $t_1,\dots,t_k$ ($k\geq 0$) are terms, and
+$B_1,\dots,B_n$ are as above, is shorthand for the rule
+$$%\ba r
+c(X_1,\dots,X_k)
+\ar B_1\land\cdots\land B_n\land\no\ \no\ c(X_1,\dots,X_k)% \qquad\\
+\land X_1=t_1\land\cdots\land X_k=t_k,
+% \ea
+$$
+where $X_1,\dots,X_k$ are distinct variables that do not occur
+in~(\ref{choice}).
 % Rules with the empty head are called \emph{constraints}.
 
 A variable that occurs in a rule~$R$ is \emph{local} in~$R$ if each of
 its occurrences is within an aggregate element, and \emph{global} otherwise.
 A rule is \emph{pure} if, for every aggregate element $\bfx:{\bf L}$ in its
 body, all variables in the tuple~$\bfx$ are local \cite[Section~4]{lif22a}.
+A variable occurring in an aggregate element $\bfx:{\bf L}$ in the body of
+a pure rule is global iff it does not belong to~$\bf X$; thus the set of global
+variables in an aggregate element does not depend on the rest of the rule,
+assuming that the rule is pure.
 
 A \emph{program} is a finite set of pure rules.
 
+\section{Example: three n-Queens programs}\label{sec:examples}
+
+The encodings of the n-Queens puzzle that we are interested in can be
+represented in the syntax of Section~\ref{sec:rules} assuming that the
+dialect~$D$ includes symbols for addition, substraction, multiplication and
+absolute value.
+
+% \pagebreak
+Program~$A$ \cite[Table~2]{geb11b}:
+\begin{verbatim}
+
+% place n queens on the chess board
+n { q(1..n,1..n) } n.
+% at most one queen per row/column
+:- q(X,Y1), q(X,Y2), Y1 < Y2.
+:- q(X1,Y), q(X2,Y), X1 < X2.
+% at most one queen per diagonal
+:- q(X1,Y1), q(X2,Y2), X1 < X2, |X1-X2| = |Y1-Y2|.
+
+\end{verbatim}
+
+In the syntax of Section~\ref{sec:rules}:
+\begin{align}
+& \{q(1\,..\,n,1\,..\,n)\}\ar,\label{a1}\\
+& \ar \no\ n\leq  \co\{ X,Y : q(X,Y) \land X = 1\,..\,n \land Y = 1\,..\,n \}
+  \leq n,
+  \label{a2}\\
+& \ar q(X,Y_1) \land q(X,Y_2) \land Y_1 < Y_2,\label{a3}\\
+& \ar q(X_1,Y) \land q(X_2,Y) \land X_1 < X_2,\label{a4}\\
+& \ar q(X_1,Y_1) \land q(X_2,Y_2) \land X_1 < X_2 \land |X_1-X_2| = |Y_1-Y_2|.
+  \label{a5}
+\end{align}
+
+Program~$B$ \cite[Table~3]{geb11b}:
+\begin{verbatim}
+
+% place n queens on the chess board
+{ q(1..n,1..n) }.
+% exactly one queen per row/column
+:- X = 1..n, not 1 { q(X,Y) } 1.
+:- Y = 1..n, not 1 { q(X,Y) } 1.
+% at most one queen per diagonal
+:- D = 1..n*2-1, not { q(X,Y) : D==X-Y+n } 1.
+:- D = 1..n*2-1, not { q(X,Y) : D==X+Y-1 } 1.
+
+\end{verbatim}
+
+In the syntax of Section~\ref{sec:rules}, this program
+consists of Rule~(\ref{a1}) and the constraints
+\begin{align}
+&\ar X = 1\,..\,n \land \no\ 1\leq \co\{ Y : q(X,Y) \} \leq 1,\label{b2}\\
+& \ar Y = 1\,..\,n \land \no\ 1\leq \co\{ X : q(X,Y) \} \leq 1,\label{b3}\\
+& \ar Z = 1\,..\,2\times n-1
+  \land \no\   \co\{ X,Y : q(X,Y) \land Z = X-Y+n \} \leq  1,
+  \label{b4}\\
+& \ar Z = 1\,..\,2\times n-1
+  \land \no\   \co\{ X,Y : q(X,Y) \land Z = X+Y-1 \} \leq  1.
+  \label{b5}
+\end{align}
+
+% \pagebreak
+Program~$C$ \cite[Table~4]{geb11b}:
+\begin{verbatim}
+
+% place n queens on the chess board
+{ q(1..n,1..n) }.
+% exactly one queen per row/column
+:- X = 1..n, not 1 { q(X,Y) } 1.
+:- Y = 1..n, not 1 { q(X,Y) } 1.
+% pre-calculate the diagonals
+d1(X,Y,X-Y+n) :- X = 1..n, Y = 1..n.
+d2(X,Y,X+Y-1) :- X = 1..n, Y = 1..n.
+% at most one queen per diagonal
+:- D = 1..n*2-1, not { q(X,Y) : d1(X,Y,D) } 1.
+:- D = 1..n*2-1, not { q(X,Y) : d2(X,Y,D) } 1.
+
+\end{verbatim}
+
+In the syntax of Section~\ref{sec:rules}, this program consists of
+rules~(\ref{a1}),~(\ref{b2}),~(\ref{b3}) and
+\begin{align}
+&d1(X,Y,X-Y+n) \ar X = 1\,..\,n\wedge Y = 1\,..\,n,\label{c4}\\
+&d2(X,Y,X+Y-1) \ar X = 1\,..\,n\wedge Y = 1\,..\,n,\label{c5}\\
+&\ar Z = 1..2\times n-1\wedge not\ count \{ X,Y: q(X,Y) \wedge d1(X,Y,Z) \} \leq 1,\label{c6}\\
+&\ar Z = 1..2\times n-1\wedge not\ count   \{X,Y:  q(X,Y) \wedge d2(X,Y,Z) \} \leq 1.\label{c7}    
+\end{align}
+
+\section{Normal and semi-normal rules} \label{sec:normal}
+
 An \emph{equation} is a comparison of the form $t_1=t_2$.
-A rule is \emph{in numeric normal form
-  (NNF)} if
+A rule~$R$ is \emph{normal} if
 \begin{itemize}
 \item[(a)]
-  symbolic constants do not occur in it in the scope
-  of arithmetic function symbols other than the interval symbol, and
+  every occurrence of a term of the form $t_1\,..\,t_2$ in~$R$
+is the right-hand side of an equation, and
 \item[(b)]
-  every occurrence of a term of the form $t_1\,..\,t_2$ in it
-is the right-hand side of an equation.
+  symbolic constants do not occur in~$R$ in the scope
+  of arithmetic function symbols other than the interval symbol.
 \end{itemize}
 (So symbolic constants are allowed as endponts of an interval; this is
 different from what the Dialects draft requires \cite[Section~3]{fan26b}.)
-% All rules (1)--(10) in the N-Queens programs are in numeric normal form
-% in the sense of this definition.
 
-% \paragraph{Semi-normal rules}
-A rule is called {\em semi-normal} if it satisfies condition (b).  Any semi-normal rule
-can be transformed into an NNF rule as
+A rule is called {\em semi-normal} if it satisfies condition~(a) and the
+following restricted form of condition~(b):
+\begin{itemize}
+\item[(b$'$)]
+  terms of the form $c(t_1,\dots,t_k)$, where~$c$ is a symbolic constant,
+  do not occur in~$R$ in the scope
+  of arithmetic function symbols other than the interval symbol.
+\end{itemize}
+
+A program is \emph{normal} if all its rules are normal,
+and \emph{semi-normal} if all its rules are semi-normal.
+
+% \pagebreak
+Any semi-normal rule~$R$ can be transformed into a normal rule as
 follows:
 \begin{itemize}
 \item make the list $c_1,\dots,c_k$ of 
-the symbolic constants that have at least one occurrence in the scope of an arithmetic operation other than the interval symbol;
-\item  substitute fresh variables $X_1,\dots,X_k$ for $c_1,\dots,c_k$ and
-  append the conjunctive terms $X_1=c_1,\dots,X_k=c_k$ to the body.  
+  the symbolic constants that have at least one occurrence in~$R$
+  in the scope of an arithmetic operation other than the interval symbol;
+\item substitute distinct variables $X_1,\dots,X_k$ that do not occur in~$R$
+  for $c_1,\dots,c_k$;
+\item append the conjunctive terms $X_1=c_1,\dots,X_k=c_k$ to the body.
 \end{itemize}
+The normal rule obtained by this transformation will be denoted by
+$\mathit{normal}(R)$.  The notation $\mathit{normal}(\Pi)$, where~$\Pi$ is a
+semi-normal program, is understood in a similar way.
 
-A program is \emph{semi-normal} if all its rules are semi-normal.
+As an example, consider choice rule~(\ref{a1}).  It is shorthand for
+\beq
+q(X_1,X_2) \ar \no\ \no\ q(X_1,X_2)
+\land X_1 = 1\,..\,n \land X_2= 1\,..\,n,
+\eeq{aa1}
+and it is normal.  Constraints~(\ref{a2})--(\ref{a5}) are normal as well,
+so that~$A$ is a normal program.  Rules (\ref{b2}), (\ref{b3})
+and~(\ref{c5}) are normal.  Rules~(\ref{b4})--(\ref{c4}), (\ref{c6})
+and~(\ref{c7}) are semi-normal, so that~$B$ and~$C$ are semi-normal programs.
+The normal rules corresponding to~(\ref{b4})--(\ref{c4}), (\ref{c6})
+and~(\ref{c7}) can be written as
+\begin{align}
+&\ar Z = 1\,..\,2\times U-1
+  \land \no\   \co\{ X,Y : q(X,Y) \land Z = X-Y+U \} \leq  1\wedge U=n,
+  \label{bb4}
+  \\
+& \ar Z = 1\,..\,2\times U-1
+  \land \no\   \co\{ X,Y : q(X,Y) \land Z = X+Y-1 \} \leq  1 \wedge U=n,
+\label{bb5}\\
+& d1(X,Y,X-Y+U) \ar X = 1\,..\,U\wedge  Y = 1\,..\,U\wedge U=n,\label{cc4}\\
+&\ar Z = 1\,..\,2\times U-1\wedge not\ count \{ X,Y: q(X,Y) \wedge d1(X,Y,Z) \} \leq 1\wedge U=n,\label{cc6}\\
+&\ar Z = 1\,..\,2\times U-1\wedge not\ count   \{X,Y:  q(X,Y) \wedge d2(X,Y,Z) \} \leq 1\wedge U=n.\label{cc7}    
+\end{align}
+The program $\mathit{normal}(B)$ consists of
+rules~(\ref{a1}),~(\ref{b2}),~(\ref{b3}),~(\ref{bb4}) and~(\ref{bb5});
+$\mathit{normal}(C)$ consists of
+rules~(\ref{a1}),~(\ref{b2}),~(\ref{b3}),~(\ref{c5})
+and~(\ref{cc4})--(\ref{cc7}).
 
-\section{The target language}
+\section{Formulas}
 
-By~$\sigma^\#$ we denote the many-sorted signature that consists of
+In the next section we  generalize the ``natural translation''~$\nu$
+\cite{lif21,lif23,fan26b,fan26} to rules with counting. The
+generalized translation transforms normal rules into formulas over
+the signature~$\sigma^\#$, which consists of
 \begin{itemize}
 \item [(i)] the sort \emph{general}, the sort \emph{set}, and the
   subsort \emph{integer} of \emph{general},
-\item [(ii)] all numerals of~$D$ as object constants of the
+\item [(ii)] all numerals of the dialect~$D$ as object constants of the
   sort \emph{integer};
 \item [(iii)] all symbolic constants of~$D$ as object
    constants of the sort \emph{general};
@@ -162,36 +322,46 @@ are new: the sort \emph{set}, the function symbol $\co$, and the
 predicate symbol~$\in$.  On the other hand, the
 symbol~$\mathit{graph}_{..}$ is not included.)
 
+An atomic formula $(c/k)(t_1,\dots,t_k)$ can be abbreviated
+as $c(t_1,\dots,t_k)$.
 A term of the form $(\mathit{blank}\bs k)(t_1,\dots,t_k)$, where $k\geq 2$,
 can be abbreviated as $(t_1,\dots,t_k)$.
 
-
-Inequalities involving order relations other that~$\leq$, as well as chains
+Inequalities involving order relations other than~$\leq$, as well as chains
 of inequalities, are treated as abbreviations. We identify general variables
 with variables occurring in rules.
 
+In examples, the letters $I,\dots,N$ (and the same letters with subscripts)
+are integer variables; $U,\dots,Z$ are general variables; and~$S$ is a set
+variable.
+
 \section{Natural translation}
 
-The translation~$\nu$, defined below, transforms an NNF rule~(\ref{rule})
-into a formula over the signature~$\sigma^\#$ that may include second-order
-variables.  We define first how~$\nu$ applies to subexpressions of the rule.
-
-\medskip\noindent \emph{1. Applying~$\nu$ to terms.}
-Let~$V_1,\dots,V_m$ be all variables that occur in~(\ref{rule}) at least once
+About a rule~$R$ and a variable~$V$ we say that~$V$ is \emph{arithmetic
+  in}~$R$ if~$V$ occurs in~$R$ at least once
 \begin{itemize}
 \item
   in the scope of an arithmetic function symbol, or
 \item
   in the left-hand side of an equation containing the interval symbol.
 \end{itemize}
-Designate~$m$ distinct integer variables as $\nu(V_1),\dots,\nu(V_m)$.
-If~$t$ is a term that does not contain~$..$ then $\nu(t)$ is the term over
+
+We define first how~$\nu$ applies to some subexpressions of a normal rule.
+
+\medskip\noindent \emph{1. Applying~$\nu$ to terms.}
+Make the list $V_1,\dots,V_m$ of variables that are arithmetic in~$R$,
+and designate~$m$ distinct integer variables as $\nu(V_1),\dots,\nu(V_m)$.
+If~$t$ is a term occurring in~$R$ that does not contain the interval symbol,
+then $\nu(t)$ is the term over
 the signature~$\sigma^\#$ obtained from~$t$ by
 \begin{itemize}
 \item substituting $\nu(V_i)$ for each variable~$V_i$, and
-\item replacing each symbolic constant~$c$ in a subexpression of the
+\item replacing the symbolic constant~$c$ in each subexpression of the
   form $c(t_1,\dots,t_k)$ by~$c\bs k$.
 \end{itemize}
+
+\medskip
+The transformation~$\nu$ applies to tuples of terms componentwise.
 
 \medskip\noindent \emph{2. Applying~$\nu$ to literals:}
 \begin{itemize}
@@ -201,9 +371,6 @@ $\nu(p({\bf t}))$ is $(p/k)(\nu({\bf t}))$,
 \item $\nu(\no\ \no\ p({\bf t}))$ is $\neg\neg (p/k)(\nu({\bf t}))$,
 \end{itemize}
 where~$k$ is the length of the tuple~$\bf t$.
-
-\medskip
-The transformation~$\nu$ applies to tuples of terms componentwise.
 
 \medskip\noindent \emph{3. Applying~$\nu$ to comparisons: }
 $\nu(t_1\prec t_2)$ is $\nu(t_1)\prec\nu(t_2)$, if~$t_2$ does not
@@ -216,38 +383,41 @@ componentwise.
 
 \medskip\noindent \emph{4. Applying~$\nu$ to aggregate atoms and to negated
 aggregate atoms.}  Make the list of all occurrences of
-aggregate elements in the body of~(\ref{rule}) and choose, for each
-aggregate element $X_1,\dots,X_k:{\bf L}$ on the list, a
-variable~$C$ \emph{associated} with it, so that
+aggregate elements in the body of~$R$ and choose, for each
+aggregate element
+\beq
+X_1,\dots,X_k:{\bf L}
+\eeq{ae}
+on the list, a variable~$C$ \emph{associated} with it, so that
 \begin{itemize}
 \item if {\bf L} contains no global variables
   then~$C$ is an object variable of the sort \emph{set};
 \item if the global variables occurring in {\bf L} are $Y_1,\dots,Y_l$
   ($l>0$) then~$C$ is a function variable of arity~$n$; the sort of its value
   is \emph{set}; the sort of its $i$-th argument is \emph{integer}
-  if~$Y_i$ is one of the variables $V_1,\dots,V_m$, and \emph{general}
+  if~$Y_i$ is arithmetic in the rule, and \emph{general}
   otherwise.
 \end{itemize}
-The formula $\sd(C)$  (``the set definition for~$C$'') is defined as follows.
-If $C$ is an object variable then $\sd(C)$ is
-$$\forall V(V\in C\lrar\exists\, \nu(X_1)\cdots\nu(X_k)\,
-(V=(\nu(X_1),\dots,\nu(X_k))
-\land \nu({\bf L}))),$$
-where~$V$ is a general variable.
-(If $k=1$ then $(\nu(X_1),\dots,\nu(X_k))$ is understood as~$\nu(X_1)$.)
-If~$C$ is a function variable then $\sd(C)$ is
-$$\ba l
-\forall V \nu(Y_1) \cdots \nu(Y_l)(V\in C(\nu(Y_1),\dots,\nu(Y_l))\\
-\qquad\lrar
-\exists\, \nu(X_1)\cdots\nu(X_k)\,(V=(\nu(X_1),\dots,\nu(X_k))
-\land \nu({\bf L}))).
-\ea$$
-
-(Set definitions $\sd(C)$ are not used in the process of applying~$\nu$ to a
-rule, but they will be referred to in the definition of completion.)
-
+% The formula $\sd(C)$  (``the set definition for~$C$'') is defined as follows.
+% If $C$ is an object variable then $\sd(C)$ is
+% $$\forall V(V\in C\lrar\exists\, \nu(X_1)\cdots\nu(X_k)\,
+% (V=(\nu(X_1),\dots,\nu(X_k))
+% \land \nu({\bf L}))),$$
+% where~$V$ is a general variable.
+% (If $k=1$ then $(\nu(X_1),\dots,\nu(X_k))$ is understood as~$\nu(X_1)$.)
+% If~$C$ is a function variable then $\sd(C)$ is
+% $$\ba l
+% \forall V \nu(Y_1) \cdots \nu(Y_l)(V\in C(\nu(Y_1),\dots,\nu(Y_l))\\
+% \qquad\lrar
+% \exists\, \nu(X_1)\cdots\nu(X_k)\,(V=(\nu(X_1),\dots,\nu(X_k))
+% \land \nu({\bf L}))).
+% \ea$$
+% 
+% (Set definitions $\sd(C)$ are not used in the process of applying~$\nu$ to a
+% rule, but they will be referred to in the definition of completion.)
+% 
 The result of applying~$\nu$ to an aggregate atom
-containing an aggregate element $X_1,\dots,X_k:{\bf L}$ is the formula
+containing an aggregate element~(\ref{ae}) is the formula
 obtained by replacing $\co\{X_1,\dots,X_k:{\bf L}\}$ with
 $$\co(C(\nu(X_1),\dots,\nu(X_k))).$$
 Applying~$\nu$ to a negated aggregate atom is performed in the same way,
@@ -257,33 +427,237 @@ with $\no$ replaced by~$\neg$.
 \emph{5.} The result of applying~$\nu$ to the empty string is~$\bot$.
 
 \medskip\noindent
-\emph{6.} The result of applying~$\nu$ to rule~(\ref{rule}) is the formula
+\emph{6.} The result of applying~$\nu$ to a normal rule~(\ref{rule}) is
+the formula
 \beq
 \forall {\bf Z}(\nu(B_1)\land\cdots\land\nu(B_n) \to \nu(H)),
 \eeq{nu}
 where $\bf Z$ is obtained from the list of global
 variables occurring in the rule
-by replacing $V_1,\dots,V_m$ with $\nu(V_1),\dots,\nu(V_m)$.  The free
-variables of this formula are the variables associated with aggregate
-expressions.
+by replacing each arithmetic variable~$V$ with $\nu(V)$.
 
-The result of applying $\nu$ to a semi-normal rule is defined as the result
-of applying~$\nu$ to the NNF rule obtained from it as described at the end
-of Section~\ref{sec:nnf}.   The result of
-applying~$\nu$ to a semi-normal program~$\Pi$ is the set of sentences $\nu(R)$
-for all rules~$R$ of~$\Pi$.
+For any normal rule~$R$, the free variables of $\nu(R)$ are the variables
+associated with aggregate expressions in the body of~$R$.
+
+% The result of applying $\nu$ to a semi-normal rule~$R$ is the formula
+% $\nu(\mathit{normal}(R))$.  The result of
+% applying~$\nu$ to a semi-normal program~$\Pi$ is the set of sentences
+% $\nu(R)%$ for all rules~$R$ of~$\Pi$.
+
+\section{Example: translating rules of n-Queens programs}
+\label{sec:examples-nu}
+
+The result of applying~$\nu$ to rule~\eqref{aa1} is the formula
+\beq
+\forall I J (\neg\neg q(I,J) \land 1\leq I \leq n \land 1 \leq J \leq n \to q(I,J))
+\eeq{a1f}
+assuming that $I$ and $J$ are chosen as $\nu(X_1)$ and $\nu(X_2)$.
+
+The aggregate literal in the body of constraint~(\ref{a2}) contains the
+aggregate element
+\beq
+X,Y : q(X,Y) \land X = 1\,..\,n \land Y = 1\,..\,n,
+\eeq{ae1}
+which has no global variables.  The variable~$C_1$, associated
+with~(\ref{ae1}), is an object variable of the sort \emph{set}, and the
+result of applying~$\nu$ to rule~(\ref{a2}) is
+\beq
+\neg (n\leq \co(C_1)\leq n)\rar\bot.
+\eeq{a2f}
+
+Constraints~(\ref{a3}), (\ref{a4}) and~(\ref{a5}) are transformed into the
+formulas
+\beq
+\forall XY_1Y_2(q(X,Y_1) \land q(X,Y_2) \land Y_1 < Y_2 \to \bot),
+\eeq{a3f}
+\beq
+\forall X_1X_2Y(q(X_1,Y) \land q(X_2,Y) \land X_1 < X_2 \to \bot)
+\eeq{a4f}
+and
+\beq
+\forall I_1I_2J_1J_2
+(q(I_1,J_1) \land q(I_2,J_2) \land I_1<I_2 \land |I_1-I_2|=|J_1-J_2| \to\bot).
+\eeq{a5f}
+Thus the translation~$\nu(A)$ of program~$A$ consists of
+formulas~(\ref{a1f}) and~(\ref{a2f})--(\ref{a5f}).  The
+only free variable in these formulas is~$C_1$.
+
+The aggregate literal in the body of constraint~(\ref{b2}) contains the
+aggregate element
+\beq
+Y : q(X,Y);
+\eeq{ae2}
+its global variable~$X$ is arithmetic in~(\ref{b2}).  The variable~$C_2$,
+associated with~(\ref{ae2}), is a unary function variable; its value sort
+is \emph{set}, and its argument sort is \emph{integer}.
+The result of applying~$\nu$ to~(\ref{b2}) is
+\beq
+\forall I(1\leq I\leq n \land \neg (1\leq \co(C_2(I))\leq 1)\to \bot).
+\eeq{b2f}
+
+Translating rule~(\ref{b3}) is similar; in the aggregate element
+\beq
+X : q(X,Y)
+\eeq{ae3}
+the global variable~$Y$ is arithmetic, and the variable~$C_3$,
+associated with~(\ref{ae3}), is of the same kind as~$C_2$.
+The result of applying~$\nu$ to~(\ref{b3}) is
+\beq
+\forall J(1\leq J\leq n \land \neg (1\leq \co(C_3(J))\leq 1)\to \bot).
+\eeq{b3f}
+
+The aggregate literal in the body of constraint~(\ref{bb4}) contains the
+aggregate element
+\beq
+ X,Y : q(X,Y) \land Z = X-Y+U;
+\eeq{ae4}
+its global variables~$Z$ and~$U$ are arithmetic in~(\ref{bb4}).
+The variable~$C_4$,
+associated with~(\ref{ae4}), is a binary function variable; its value sort
+is \emph{set}, and each of its argument sorts is \emph{integer}.
+The result of applying~$\nu$ to~(\ref{bb4}) is
+\beq
+\forall KN
+(1\leq K\leq 2\times N-1 \land\neg(\co(C_4(K,N))\leq 1)\wedge N=n\to\bot).
+\eeq{b4f}
+
+The aggregate literal in the body of constraint~(\ref{bb5}) contains the
+aggregate element
+\beq
+ X,Y : q(X,Y) \land Z = X+Y-1;
+\eeq{ae5}
+its global variable~$Z$ is arithmetic in~(\ref{bb5}).
+The variable~$C_5$,
+associated with~(\ref{ae5}), is a unary function variable; its value sort
+is \emph{set}, and its argument sort is \emph{integer}.
+The result of applying~$\nu$ to~(\ref{bb5}) is
+\beq
+\forall KN
+(1\leq K\leq 2\times N-1 \land\neg(\co(C_5(K))\leq 1)\wedge N=n\to\bot).
+\eeq{b5f}
+
+Applying~$\nu$ to rules~(\ref{cc4}) and~(\ref{c5}) gives the formulas
+\beq
+\forall I J  N(1\leq I\leq n \land 1\leq J\leq n  
+ \wedge N=n\to d1(I,J,I-J+N)).
+\eeq{c4f}
+and
+\beq
+\forall I J  (1\leq I\leq n \land 1\leq J\leq n 
+ \to d2(I,J,I+J-1)).
+\eeq{c5f}
+
+The aggregate literal in the body of constraint~(\ref{cc6}) contains the
+aggregate element
+\beq
+ X,Y : q(X,Y) \land d1(X,Y,Z);
+\eeq{ae6}
+its global variable~$Z$ is arithmetic in~(\ref{cc6}).
+The variable~$C_6$,
+associated with~(\ref{ae6}), is a binary function variable; its value sort
+is \emph{set}, and its argument sort is \emph{integer}.
+The result of applying~$\nu$ to~(\ref{cc6}) is
+\beq
+\forall KN
+(1\leq K\leq 2\times N-1 \land\neg(\co(C_6(K))\leq 1)\wedge N=n\to\bot).
+\eeq{c6f}
+The aggregate literal in the body of constraint~(\ref{cc7}) contains the
+aggregate element
+\beq
+ X,Y : q(X,Y) \land d2(X,Y,Z);
+\eeq{ae7}
+its global variable~$Z$ is arithmetic in~(\ref{bb5}).
+The variable~$C_7$,
+associated with~(\ref{ae5}), is a unary function variable; its value sort
+is \emph{set}, and its argument sort is \emph{integer}.
+The result of applying~$\nu$ to~(\ref{cc7}) is
+\beq
+\forall KN
+(1\leq K\leq 2\times N-1 \land\neg(\co(C_7(K))\leq 1)\wedge N=n\to\bot).
+\eeq{c7f}
+
+\section{Descriptions of aggregate elements}
+
+The process of constructing the completion of a normal program~$\Pi$,
+described in the next section, involves applying the translation~$\nu$
+to each rule of~$\Pi$.  It uses also, for each aggregate expression
+occurring in~$\Pi$, its \emph{description}, which is a
+formula containing the variable~$C$ associated with that expression.
+For an aggregate expression $X_1,\dots,X_k :{\bf L}$, the description
+formula is constructed as follows.
+
+\medskip\noindent\emph{Case 1:} The aggregate expression does not contain
+global variables, so that $C$ is an object variable.  The description
+formula is
+$$\forall V(V\in C\lrar\exists\, \nu(X_1)\cdots\nu(X_k)\,
+(V=(\nu(X_1),\dots,\nu(X_k))
+\land \nu({\bf L}))),$$
+where~$V$ is a general variable.
+(If $k=1$ then $(\nu(X_1),\dots,\nu(X_k))$ is understood as~$\nu(X_1)$.)
+
+For instance, the description of aggregate element~(\ref{ae1}) is the formula
+\beq
+\forall V(V\in C_1 \lrar \exists IJ(V=(I,J)\land q(I,J) \land 1\leq I\leq n
+\land 1\leq J\leq n)),
+\eeq{d1}
+assuming that~$I$ and~$J$ are chosen as $\nu(X)$ and $\nu(Y)$.
+
+\medskip\noindent\emph{Case 2:} The aggregate expression contains
+global variables $W_1,\dots,W_l$ ($l>0$), so that $C$ is a function
+variable.  The description formula is
+$$\ba l
+\forall V \nu(W_1) \cdots \nu(W_l)(V\in C(\nu(W_1),\dots,\nu(W_l))\\
+\hskip 4cm\lrar
+\exists\, \nu(X_1)\cdots\nu(X_k)\,(V=(\nu(X_1),\dots,\nu(X_k))
+\land \nu({\bf L}))).
+\ea$$
+
+For instance, the description of aggregate element~(\ref{ae2}) is
+ \beq
+ \forall V I(V\in C_2(I) \lrar \exists Y( V=Y \wedge q(I,Y))).
+\eeq{d2}
+assuming that~$I$ is chosen as $\nu(Y)$.  The descriptions of aggregate
+elements~(\ref{ae3}), (\ref{ae4}), (\ref{ae5}), (\ref{ae6}) and~(\ref{ae7})
+are
+\beq
+\forall V J(V\in C_3(J) \lrar \exists X( V=X \wedge q(X,J))),
+\eeq{d3}
+\beq
+\forall VKN(V\in C_4(K,N) \lrar \exists IJ(V=(I,J) \land q(I,J)
+   \land K=I-J+N)),
+\eeq{d4}
+\beq
+\forall VK(V\in C_5(K) \lrar \exists IJ(V=(I,J) \land q(I,J)
+   \land K=I+J-1)),
+\eeq{d5}
+\beq
+\forall VK(V\in C_6(K) \lrar \exists IJ(V=(I,J) \land q(I,J) \land d1(I,J,K))),
+\eeq{d6}
+\beq
+\forall VK(V\in C_7(K) \lrar \exists IJ(V=(I,J) \land q(I,J) \land d2(I,J,K))).
+\eeq{d7}
 
 \section{Program completion}
 
-The \emph{definition} of a predicate constant $c/k$ in a semi-normal
-program~$\Pi$ is the set of all formulas~(\ref{nu}) in $\nu(\Pi)$ such that
-the consequent $\nu(H)$ contains $c/k$.  Every formula in~$\nu(\Pi)$ either
-belongs to a definition of some predicate constant or has the form
-$$\forall {\bf Z}(\mathit{Body} \to \bot);$$
-members of~$\nu(\Pi)$ that have this form are called \emph{constraints.}
+Constructing the completion of a normal program~$\Pi$ begins with applying
+the translation~$\nu$ to all rules of~$\Pi$.  The definition
+of~$\nu$ gives us some freedom in selecting the variables associated with the 
+aggregate expressions
+\beq
+\bfx_1:{\bf L_1},\dots,\bfx_m:{\bf L_m}
+\eeq{lae}
+occurring in rules of~$\Pi$; in the process of applying~$\nu$ we ensure
+that these variables $C_1,\dots,C_m$ are pairwise distinct.  The set
+of formulas $\nu(R)$ for all rules~$R$ of~$\Pi$ is denoted by $\nu(\Pi)$.
+The formulas describing aggregate expressions~(\ref{lae}) are denoted by
+$F_1(C_1),\dots,F_m(C_m)$.
 
-To construct the completed definition of~$c/k$, choose fresh general
-variables~$V_1,\dots,V_k$ and rewrite each formula
+The \emph{definition} of a predicate constant $c/k$ in~$\Pi$ is the
+set of all formulas~(\ref{nu}) in~$\nu(\Pi)$ such that $\nu(H)$ contains $c/k$.
+For every predicate constant~$c/k$ that occurs in $\nu(\Pi)$, its
+\emph{completed definition} is the formula constructed as follows.
+Choose general variables~$V_1,\dots,V_k$ that do not occur in~$\nu(\Pi)$
+and rewrite each formula
 $$\forall {\bf Z}(\mathit{Body} \to (c/k)(t_1,\dots,t_k))$$
 in the definition of~$c/k$ as
 $$\exists{\bf Z} (\mathit{Body}\land V_1=t_1\land\cdots
@@ -291,251 +665,63 @@ $$\exists{\bf Z} (\mathit{Body}\land V_1=t_1\land\cdots
 After this transformation, the definition of~$c/k$ has the form
 $$\{F_1 \to (c/k)(V_1,\dots,V_k),\dots,F_l \to (c/k)(V_1,\dots,V_k)\}$$
 for some formulas~$F_1,\dots,F_l$.
-The \emph{completed definition} of~$c/k$ in~$\Pi$ is the formula
+The completed definition of~$c/k$ is the formula
 $$\forall V_1\cdots V_k ((c/k)(V_1,\dots,V_k) \lrar F_1\lor\cdots\lor F_l).$$
 
-The \emph{completion} of a semi-normal program~$\Pi$ is the sentence
-$$\forall C_1\cdots C_m (\sd(C_1)\land\cdots\land \sd(C_m) \to G),$$
-where $C_1,\dots,C_m$ are the variables associated with aggregate elements
-occurring in~$\Pi$, and~$G$ is the conjunction of the completed definitions
-of all predicate constants occurring in~$\nu(\Pi)$ and all constraints
-of~$\nu(\Pi)$.
-
-\section{N-Queens Puzzle: Programs A, B, and C}
-  
-%We would like to show how reasoning in classical first-order logic can
-%be used to verify equivalence of
-Let us consider three encodings of the $n$-Queens
-puzzle \cite[Tables~2 and~3]{geb11b}.
-\medskip
-
-\begin{center}Program $A$\end{center}
-$$
-\ba l
-n\,\{ q(1\,..\,n,1\,..\,n) \}\, n\\
-\ar q(X,Y_1) \land q(X,Y_2) \land Y_1 < Y_2\\
-\ar q(X_1,Y) \land q(X_2,Y) \land X_1 < X_2\\
-\ar q(X_1,Y_1) \land q(X_2,Y_2) \land X_1 < X_2 \land |X_1-X_2| = |Y_1-Y_2|
-\ea
-$$
-
-
-\medskip
-\begin{center}Program $B$\end{center}
-$$\ba l
-\{ q(1\,..\,n,1\,..\,n) \}\\
-\ar X = 1\,..\,n \land \no\ 1\, \{ q(X,Y) \}\, 1\\
-\ar Y = 1\,..\,n \land \no\ 1\, \{ q(X,Y) \}\, 1\\
-\ar Z = 1\,..\,2\times n-1 \land \no\   \{ q(X,Y) : Z = X-Y+n \}\, 1\\
-\ar Z = 1\,..\,2\times n-1 \land \no\   \{ q(X,Y) : Z = X+Y-1 \}\, 1\\
-\ea
-$$
-
-
-The lines presented below change Program B 
-to Program $C$. In particular, Program~C is obtained by modifying Program B
-as follows 
-\begin{itemize}
-\item replace the last two rules of Program B with the  content:
-\end{itemize}
-    %\lstinputlisting[language=Prolog, numbers=left, caption="Part of Program C"]
-%{queen4.lp}
-\medskip
-\begin{center}Part of Program $C$\end{center}
-$$\ba l
-d1(X,Y,X-Y+n) \ar X = 1..n\wedge Y = 1..n.\\
-d2(X,Y,X+Y-1) \ar X = 1..n\wedge Y = 1..n.\\
-\ar Z = 1..2\times n-1\wedge not\ \{ q(X,Y) : d1(X,Y,Z) \} 1.\\
-\ar Z = 1..2\times n-1\wedge not\ \{ q(X,Y) : d2(X,Y,Z) \} 1.
-\ea
-$$
-
-\paragraph{Programs A, B, C in the language of Section~\ref{sec:nnf}}
-We now present Programs A, B, and C in the language of Section~\ref{sec:nnf}.
-In particular,
-some rules in these programs implicitly refer to the \co\ aggregate, and
-we view choice rules as abbreviations for rules with an atom in
-the head.  Written out in full, the Programs A and B become
-\begin{align}
-& q(X,Y) \ar \no\   \no\   q(X,Y) \land X = 1\,..\,n \land Y = 1\,..\,n	\label{a1}\\
-& \ar \no\ n\leq  \co\{ X,Y : q(X,Y) \land X = 1\,..\,n \land Y = 1\,..\,n \}
-  \leq n
-  \label{a2}\\
-& \ar q(X,Y_1) \land q(X,Y_2) \land Y_1 < Y_2\label{a3}\\
-& \ar q(X_1,Y) \land q(X_2,Y) \land X_1 < X_2\label{a4}\\
-& \ar q(X_1,Y_1) \land q(X_2,Y_2) \land X_1 < X_2 \land |X_1-X_2| = |Y_1-Y_2|
-  \label{a5}
-\end{align}
-
-\noindent and
-
-\begin{align}
-& q(X,Y) \ar \no\   \no\   q(X,Y) \land X = 1\,..\,n \land Y = 1\,..\,n\label{b1}\\
-& \ar X = 1\,..\,n \land \no\ 1\leq \co\{ Y : q(X,Y) \} \leq 1\label{b2}\\
-& \ar Y = 1\,..\,n \land \no\ 1\leq \co\{ X : q(X,Y) \} \leq 1\label{b3}\\
-& \ar Z = 1\,..\,2\times n-1
-  \land \no\   \co\{ X,Y : q(X,Y) \land Z = X-Y+n \} \leq  1
-  \label{b4}\\
-& \ar Z = 1\,..\,2\times n-1
-  \land \no\   \co\{ X,Y : q(X,Y) \land Z = X+Y-1 \} \leq  1
-  \label{b5}
-\end{align}
-
-The four rules of Program C that replace the last two rules of Program B stand for
-
-\begin{align}
-&d1(X,Y,X-Y+n) \ar X = 1..n\wedge  Y = 1..n.\label{c4}\\
-&d2(X,Y,X+Y-1) \ar X = 1..n\wedge Y = 1..n.\label{c5}\\
-&\ar Z = 1..2\times n-1\wedge not\ count \{ X,Y: q(X,Y) \wedge d1(X,Y,Z) \} \leq 1.\label{c6}\\
-&\ar Z = 1..2\times n-1\wedge not\ count   \{X,Y:  q(X,Y) \wedge d2(X,Y,Z) \} \leq 1.\label{c7}    
-\end{align}
-
-\subsection{Programs A, B, C as formulas}
-Most rules among~\eqref{a1} through~\eqref{c7} are in NNF, except rules~\eqref{b4},~\eqref{b5} and~\eqref{c4},~\eqref{c6}, and ~\eqref{c7} that are semi-normal.
-
-
-We now transform these rules into formulas using natural translation~$\nu$. We note that we usually write $c(t_1,\dots,t_k)$ an an abbreviation for  $(c/k)(t_1,\dots,t_k)$.
-
-
-
-Rule~\eqref{a1} is transformed into the following formula:
+For example, the definition of $q/2$ in program~$A$ is formula~(\ref{a1f}),
+and its completed definition is
 \beq
-\forall I J (\neg\neg q(I,J) \land 1\leq I \leq n \land 1 \leq J \leq n \to q(I,J)).
-\eeq{a1f}
+\forall V_1V_2(q(V_1,V_2)\lrar 
+\exists I J(\neg\neg q(I,J) \land 1\leq I \leq n \land 1 \leq J \leq n
+\land V_1=I\land V_2=J)).
+\eeq{a1fcdef}
 
-The representation of rule~(\ref{a2}) includes the object variable~$C_1$ of the sort set, 
- which
-is meant to be used in accordance with the set definition $\sd(C_1)$ 
-\beq
-\forall V(V\in C_1 \lrar \exists IJ(V=(I,J)\land q(I,J) \land 1\leq I\leq n
-\land 1\leq J\leq n)).
-\eeq{d1}
-The formula corresponding to rule~(\ref{a2}) is
-\beq
-(n\leq \co(C_1)\leq n)\rar\bot.
-\eeq{a2f}
+The \emph{completion} of~$\Pi$ is the sentence
+$$\forall C_1\cdots C_m (F_1(C_1)\land\cdots\land F_m(C_m)
+\to G(C_1,\dots,C_m)),$$
+where $G(C_1,\dots,C_m)$ is the conjunction of the completed definitions
+of all predicate constants occurring in~$\nu(\Pi)$ and the formulas~$\nu(R)$
+for all constraints~$R$ in~$\Pi$.
 
-Rules~(\ref{a3})--(\ref{a5}) become
+For example, the completion of program~$A$ is the sentence
+$$\forall C_1(F_1(C_1) \to G_A(C_1)),$$
+where $F_1(C_1)$ is~(\ref{d1}), and $G_A(C_1)$ is the conjunction of
+formulas~(\ref{a1fcdef}) and (\ref{a2f})--(\ref{a5f}).
+
+
+
+The completion of a semi-normal program~$\Pi$ is defined as the completion
+of the program~$\mathit{normal}(\Pi)$.
+
+The completion of program~$B$ is the sentence
+$$\forall C_2 C_3 C_4 C_5\big((F_2(C_2)\wedge F_3(C_3) \wedge F_4(C_4) \wedge F_5(C_5))\to  G_B(C_2, C_3, C_4, C_5)\big),$$
+where $F_2(C_2)$ is~(\ref{d2}), $F_3(C_3)$ is~(\ref{d3}), $F_4(C_4)$ is~(\ref{d4}),
+$F_5(C_5)$ is~(\ref{d5}),
+ and $G_B(C_2, C_3, C_4, C_5)$ is the conjunction of
+formulas~(\ref{a1fcdef}), (\ref{b2f}), (\ref{b3f}), (\ref{b4f}), and (\ref{b5f}).
+
+
+The completed definitions for $d1/2$ and $d2/2$ in program~$C$ follow:
 \beq
-\forall XY_1Y_2\big((q(X,Y_1) \land q(X,Y_2) \land Y_1 < Y_2) \to \bot\big),
-\eeq{a3f}
-\beq
-\forall X_1X_2Y\big((q(X_1,Y) \land q(X_2,Y) \land X_1 < X_2) \to \bot\big)
-\eeq{a4f}
+\forall V_1V_2V_3( d1(V_1,V_2,V_3)\lrar
+\exists I J  N(1\leq I\leq n \land 1\leq J\leq n  
+ \wedge N=n \land V_1=I\land V_2=J \land V_3= I-J+N)).
+\eeq{c4fcdef}
 and
 \beq
-\forall I_1I_2J_1J_2
-\big((q(I_1,J_1) \land q(I_2,J_2) \land I_1<I_2 \land |I_1-I_2|=|J_1-J_2|) \to \bot\big).
-\eeq{a5f}
-
-
-
-
-Rule~\eqref{b1} is identical to rule~\eqref{a1}.
- The representation
-of rule~(\ref{b2}) includes the function variable~$C_2$, which
-is meant to be used in accordance with the set definition $\sd(C_2)$ 
-\beq
-\forall V I\Big(V\in C_2(I) \lrar \exists Y\big( V=(Y) \wedge q(I,Y)\big)\Big).
-\eeq{d2}
-The formula corresponding to rule~(\ref{b2}) is
-\beq
-\forall I(1\leq I\leq n \land \neg (1\leq \co(C_2(I))\leq 1))\to \bot.
-\eeq{b2f}
-Translating rule~(\ref{b3}) is similar; it involves the set definition $\sd(C_3)$:
-\beq
-\forall V J\Big(V\in C_3(J) \lrar \exists X\big( V=(X) \wedge q(X,J)\big)\Big).
-\eeq{d3}
-and formula
-\beq
-\forall J(1\leq J\leq n \land \neg (1\leq \co(C_3(J))\leq 1))\to \bot.
-\eeq{b3f}
-
-% \end{adjustwidth}
-
-Recall that rules~(\ref{b4}) and~(\ref{b5}) are not in NNF, but they are semi-normal.  For clarity, we present the transformation of these rules  into NNF using the outlined procedure in Section~\ref{sec:nnf}:
-\begin{align*}
-& \ar Z = 1\,..\,2\times U-1
-  \land \no\   \co\{ X,Y : q(X,Y) \land Z = X-Y+U \} \leq  1\wedge U=n
-  \\
-& \ar Z = 1\,..\,2\times U-1
-  \land \no\   \co\{ X,Y : q(X,Y) \land Z = X+Y-1 \} \leq  1 \wedge U=n
-\end{align*}
-
-
-Rules~(\ref{b4}) and~(\ref{b5})  are converted into formulas containing new function variables~$C_4$
-and~$C_5$:
-\beq
-\forall KN\big((1\leq K\leq 2\times N-1 \land\neg\big(\co(C_4(K,N))\leq 1\big)\wedge N=n)\to\bot\big),
-\eeq{b4f}
-\beq
-\forall K\big((1\leq K\leq 2\times N-1 \land\neg\big(\co(C_5(K))\leq 1\big)\wedge N=n)\to\bot\big),
-\eeq{b5f}
-so that  $\sd(C_4)$ and $\sd(C_5)$ follow: 
-\beq
-\forall VKN(V\in C_4(K,N) \lrar \exists IJN(V=(I,J) \land q(I,J)
-   \land K=I-J+N)),
-\eeq{d4}
-\beq
-\forall VK(V\in C_5(K) \lrar \exists IJ(V=(I,J) \land q(I,J)
-   \land K=I+J-1)).
-\eeq{d5}
-
-
-Rule~\eqref{c4} is captured by the  formula:
-\beq
-\forall I J  N(1\leq I\leq n \land 1\leq J\leq n  
- \wedge N=n\to d1(I,J,I-J+N)).
-\eeq{c4f}
-Rule~\eqref{c5} is captured by the  formula:
-\beq
-\forall I J  (1\leq I\leq n \land 1\leq J\leq n 
- \to d2(I,J,I+J-1)).
-\eeq{c5f}
-Rules~(\ref{c6}) and~(\ref{c7})  are converted into formulas containing new function variables~$C_6$
-and~$C_7$:
-\beq
-\forall KN(1\leq K\leq 2\times N-1 \land\neg\big(\co(C_6(K))\leq 1\big)\wedge N=n)\to\bot,
-\eeq{c6f}
-\beq
-\forall KN(1\leq K\leq 2\times N-1 \land\neg\big(\co(C_7(K))\leq 1\big)\wedge N=n)\to\bot,
-\eeq{c7f}
-so that  $\sd(C_6)$ and $\sd(C_7)$ follow: 
-\beq
-\forall VK\Big(V\in C_6(K) \lrar \exists IJ\big(V=(I,J) \land q(I,J) \land d1(I,J,K)\big)\Big),
-\eeq{d6}
-\beq
-\forall VK\Big(V\in C_7(K) \lrar \exists IJ\big(V=(I,J) \land q(I,J) \land d2(I,J,K)\big)\Big).
-\eeq{d7}
-\newpage
-
-
-\subsection{Programs A, B, C Completions}
-We now proceed toward building completions for Programs A, B and C. 
-
-For programs A, B, and C definition of $q/2$ is a singleton composed of formula~\eqref{a1f}.
-In the process of building a ompletion that set will be transformed as follows:
-\[
-\big\{\exists I J (\neg\neg q(I,J) \land 1\leq I \leq n \land 1 \leq J \leq n 
-\wedge X=I\wedge Y=J) 
-\to q(X,Y)
-\big\}
-\]
-It is now easy to see that the completed definition of $q/2$ is:
-\beq
-\forall X Y \Big(q(X,Y)\lrar 
-\exists I J(\neg\neg q(I,J) \land 1\leq I \leq n \land 1 \leq J \leq n \wedge X=I\wedge Y=J)\Big).
-\eeq{a1fcdef}
-The completion of Program A has the form:
-\beq
-\forall C_1\Big(\eqref{d1}\rar\big(\eqref{a1fcdef}
-\wedge \eqref{a2f}\wedge\eqref{a3f}\wedge\eqref{a4f}\wedge\eqref{a5f}\big)
-\Big).
-\eeq{completionA}
+\forall V_1V_2V_3(d2(V_1,V_2,V_3)\lrar 
+\exists I J  (1\leq I\leq n \land 1\leq J\leq n 
+\wedge V_1=I \land V_2=J \land V_3= I+J-1)).
+\eeq{c5fcdef}
+The completion of program~$C$ is the sentence
+$$\forall C_2 C_3 C_6 C_7\big((F_2(C_2)\wedge F_3(C_3) \wedge F_6(C_6) \wedge F_7(C_7))\to  G_C(C_2, C_3, C_6, C_7)\big),$$
+where  $F_6(C_6)$ is~(\ref{d6}),
+$F_7(C_7)$ is~(\ref{d7}),
+ and $G_C(C_2, C_3, C_4, C_5)$ is the conjunction of
+formulas~(\ref{a1fcdef}),~(\ref{c4fcdef}),~(\ref{c5fcdef}),  (\ref{b2f}), (\ref{b3f}), (\ref{c6f}), and (\ref{c7f}).
 
 
 \bibliographystyle{named}
 \bibliography{bib}
 \end{adjustwidth}
 \end{document}
-
