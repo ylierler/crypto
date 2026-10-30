@@ -1,17 +1,19 @@
 \documentclass[11pt]{article}
+
+
 \usepackage{amsmath,amsthm}
 \usepackage{named}
 \usepackage{changepage}
 
 \newtheorem{proposition}{Proposition}
 \newtheorem{lemma}{Lemma}
+\newtheorem{theorem}{Theorem}
 
 \def\o{\overline}
 \def\bs{\backslash}
 \def\std{\mathit{Std}}
 \def\head{\mathit{Head}}
 \def\body{\mathit{Body}}
-% \def\p2f{\mathit{p2f}}
 \def\ph{\mathit{PH}}
 \def\asm{\mathit{Asm}}
 \def\ug{\mathit{UG}}
@@ -31,8 +33,23 @@
 \def\kbugsd{\emph{KB, UG, SD}}
 \def\bfx{{\bf X}}
 \def\sd{\mathit{SD}}
+\def\I{\mathcal{I}}
+
 \newcommand{\co}{\ensuremath{\mathit{count}}}
 \newcommand{\no}{\ensuremath{\mathit{not}}}
+
+\def\dOne{\mathit{Chessboard\/}}
+\def\aTwofgeq{\mathit{Atleast\_n\/}}
+\def\aTwofleq{\mathit{Atmost\_n\/}}
+\def\aThreefs{\mathit{Atmost1\_per\_column\/}}
+\def\aFourfs{\mathit{Atmost1\_per\_row\/}}
+\def\aFivefs{\mathit{Atmost1\_per\_diagonal\/}}
+\def\bTwofgeq{\mathit{Atleast1\_per\_column\/}}
+\def\bTwofleq{\mathit{Atmost1\_per\_column\_alt\/}}
+\def\bThreefgeq{\mathit{Atleast1\_per\_row\/}}
+\def\bThreefleq{\mathit{Atmost1\_per\_row\_alt\/}}
+\def\bFourfs{\mathit{Atmost1\_up\/}}
+\def\bFivefs{\mathit{Atmost1\_down\/}}
 
 \hyphenation{lif-schitz}
 
@@ -69,13 +86,14 @@
   as in the Dialects draft \cite[Sections~2 and~3]{fan26b}.  By~$D$ we
   denote a dialect of \mg\ that includes
   \begin{itemize}
-  \item no basic symbols other than numerals and symbolic constants, and
+\item the symbolic constant $\mathit{blank}$;
+  \item the basic symbols $\mathit{inf}$ and $\mathit{sup}$, both
+    different from symbolic constants; $\mathit{inf}$ is less than all
+    numerals, and $\mathit{sup}$ is greater  than all numerals;
     \item no indefinite function symbols
   other than the interval symbol $..$ characterized by the condition
   $$\widehat{..}(m,n)=\{k: m\leq k\leq n\}.$$
 \end{itemize}
-% (These simplifying assumptions are satisfied for the n-Queens programs
-% \cite[(1)--(5) and (6)--(10)]{lif26}).
 A term is \emph{interval-free} if it does not
 contain the interval symbol.
 A term of the form $\mathit{blank}(t_1,\dots,t_k)$, where $k\geq 2$,
@@ -87,9 +105,11 @@ where $\bfx$ is a non-empty tuple of distinct variables,
 and $\bf L$ is a conjunction of
 literals and comparisons such that every member of~$\bfx$ occurs in~$\bf L$
 \cite[Section~4]{lif22a}.  An \emph{aggregate atom} is an expression of
-one of the forms
-$$t_1\leq \co \{E\},\ \co \{E\}\leq t_2,\ t_1\leq \co \{E\}\leq t_2,$$
+the form $t_1\leq \co \{E\}\leq t_2$,
 where~$E$ is an aggregate element, and~$t_1$, $t_2$ are interval-free terms.
+The expression $t\leq \co \{E\}$ stands for $t\leq \co \{E\}\leq
+\mathit{sup}$, and $\co \{E\}\leq t$ stands for $\mathit{inf}\leq
+\co \{E\}\leq t$.
 
 A \emph{rule} is an expression of the form
 \beq
@@ -119,13 +139,13 @@ in~(\ref{choice}).
 % Rules with the empty head are called \emph{constraints}.
 
 A variable that occurs in a rule~$R$ is \emph{local} in~$R$ if each of
-its occurrences is within an aggregate element, and \emph{global} otherwise.
+its occurrences is within some aggregate element, and \emph{global} otherwise.
 A rule is \emph{pure} if, for every aggregate element $\bfx:{\bf L}$ in its
 body, all variables in the tuple~$\bfx$ are local \cite[Section~4]{lif22a}.
-A variable occurring in an aggregate element $\bfx:{\bf L}$ in the body of
-a pure rule is global iff it does not belong to~$\bf X$; thus the set of global
-variables in an aggregate element does not depend on the rest of the rule,
-assuming that the rule is pure.
+% A variable occurring in an aggregate element $\bfx:{\bf L}$ in the body of
+% a pure rule is global iff it does not belong to~$\bf X$; thus the set of
+% global variables in an aggregate element does not depend on the rest of
+% the rule, assuming that the rule is pure.
 
 A \emph{program} is a finite set of pure rules.
 
@@ -133,7 +153,7 @@ A \emph{program} is a finite set of pure rules.
 
 The encodings of the n-Queens puzzle that we are interested in can be
 represented in the syntax of Section~\ref{sec:rules} assuming that the
-dialect~$D$ includes symbols for addition, substraction, multiplication and
+dialect~$D$ includes symbols for addition, subtraction, multiplication and
 absolute value.
 
 % \pagebreak
@@ -161,6 +181,8 @@ In the syntax of Section~\ref{sec:rules}:
 & \ar q(X_1,Y_1) \land q(X_2,Y_2) \land X_1 < X_2 \land |X_1-X_2| = |Y_1-Y_2|.
   \label{a5}
 \end{align}
+(We take the liberty to drop the overline in numerals $\o 1,\o 2,\dots$.)
+\medskip
 
 Program~$B$ \cite[Table~3]{geb11b}:
 \begin{verbatim}
@@ -171,13 +193,13 @@ Program~$B$ \cite[Table~3]{geb11b}:
 :- X = 1..n, not 1 { q(X,Y) } 1.
 :- Y = 1..n, not 1 { q(X,Y) } 1.
 % at most one queen per diagonal
-:- D = 1..n*2-1, not { q(X,Y) : D==X-Y+n } 1.
-:- D = 1..n*2-1, not { q(X,Y) : D==X+Y-1 } 1.
+:- D = 1..n*2-1, not { q(X,Y) : D = X-Y+n } 1.
+:- D = 1..n*2-1, not { q(X,Y) : D = X+Y-1 } 1.
 
 \end{verbatim}
 
 In the syntax of Section~\ref{sec:rules}, this program
-consists of Rule~(\ref{a1}) and the constraints
+consists of rule~(\ref{a1}) and the constraints
 \begin{align}
 &\ar X = 1\,..\,n \land \no\ 1\leq \co\{ Y : q(X,Y) \} \leq 1,\label{b2}\\
 & \ar Y = 1\,..\,n \land \no\ 1\leq \co\{ X : q(X,Y) \} \leq 1,\label{b3}\\
@@ -210,10 +232,10 @@ d2(X,Y,X+Y-1) :- X = 1..n, Y = 1..n.
 In the syntax of Section~\ref{sec:rules}, this program consists of
 rules~(\ref{a1}),~(\ref{b2}),~(\ref{b3}) and
 \begin{align}
-&d1(X,Y,X-Y+n) \ar X = 1\,..\,n\wedge Y = 1\,..\,n,\label{c4}\\
-&d2(X,Y,X+Y-1) \ar X = 1\,..\,n\wedge Y = 1\,..\,n,\label{c5}\\
-&\ar Z = 1..2\times n-1\wedge not\ count \{ X,Y: q(X,Y) \wedge d1(X,Y,Z) \} \leq 1,\label{c6}\\
-&\ar Z = 1..2\times n-1\wedge not\ count   \{X,Y:  q(X,Y) \wedge d2(X,Y,Z) \} \leq 1.\label{c7}    
+&d1(X,Y,X-Y+n) \ar X = 1\,..\,n\land Y = 1\,..\,n,\label{c4}\\
+&d2(X,Y,X+Y-1) \ar X = 1\,..\,n\land Y = 1\,..\,n,\label{c5}\\
+&\ar Z = 1..2\times n-1\land not\ count \{ X,Y: q(X,Y) \land d1(X,Y,Z) \} \leq 1,\label{c6}\\
+&\ar Z = 1..2\times n-1\land not\ count   \{X,Y:  q(X,Y) \land d2(X,Y,Z) \} \leq 1.\label{c7}    
 \end{align}
 
 \section{Normal and semi-normal rules} \label{sec:normal}
@@ -225,11 +247,12 @@ A rule~$R$ is \emph{normal} if
   every occurrence of a term of the form $t_1\,..\,t_2$ in~$R$
 is the right-hand side of an equation, and
 \item[(b)]
-  symbolic constants do not occur in~$R$ in the scope
-  of arithmetic function symbols other than the interval symbol.
+basic symbols other than numerals do not occur in~$R$ in the scope
+of arithmetic function symbols other than the interval symbol.
 \end{itemize}
-(So symbolic constants are allowed as endponts of an interval; this is
-different from what the Dialects draft requires \cite[Section~3]{fan26b}.)
+(So symbolic constants, $\mathit{inf}$ and $\mathit{sup}$ are allowed
+as endpoints of an interval; this is different from what the Dialects draft
+requires \cite[Section~3]{fan26b}.)
 
 A rule is called {\em semi-normal} if it satisfies condition~(a) and the
 following restricted form of condition~(b):
@@ -248,7 +271,7 @@ Any semi-normal rule~$R$ can be transformed into a normal rule as
 follows:
 \begin{itemize}
 \item make the list $c_1,\dots,c_k$ of 
-  the symbolic constants that have at least one occurrence in~$R$
+  basic symbols other than numerals that have at least one occurrence in~$R$
   in the scope of an arithmetic operation other than the interval symbol;
 \item substitute distinct variables $X_1,\dots,X_k$ that do not occur in~$R$
   for $c_1,\dots,c_k$;
@@ -266,20 +289,21 @@ q(X_1,X_2) \ar \no\ \no\ q(X_1,X_2)
 and it is normal.  Constraints~(\ref{a2})--(\ref{a5}) are normal as well,
 so that~$A$ is a normal program.  Rules (\ref{b2}), (\ref{b3})
 and~(\ref{c5}) are normal.  Rules~(\ref{b4})--(\ref{c4}), (\ref{c6})
-and~(\ref{c7}) are semi-normal, so that~$B$ and~$C$ are semi-normal programs.
+and~(\ref{c7}) are semi-normal, but not normal.  So~$B$ and~$C$ are
+semi-normal programs.
 The normal rules corresponding to~(\ref{b4})--(\ref{c4}), (\ref{c6})
 and~(\ref{c7}) can be written as
 \begin{align}
 &\ar Z = 1\,..\,2\times U-1
-  \land \no\   \co\{ X,Y : q(X,Y) \land Z = X-Y+U \} \leq  1\wedge U=n,
+  \land \no\   \co\{ X,Y : q(X,Y) \land Z = X-Y+U \} \leq  1\land U=n,
   \label{bb4}
   \\
 & \ar Z = 1\,..\,2\times U-1
-  \land \no\   \co\{ X,Y : q(X,Y) \land Z = X+Y-1 \} \leq  1 \wedge U=n,
+  \land \no\   \co\{ X,Y : q(X,Y) \land Z = X+Y-1 \} \leq  1 \land U=n,
 \label{bb5}\\
-& d1(X,Y,X-Y+U) \ar X = 1\,..\,U\wedge  Y = 1\,..\,U\wedge U=n,\label{cc4}\\
-&\ar Z = 1\,..\,2\times U-1\wedge not\ count \{ X,Y: q(X,Y) \wedge d1(X,Y,Z) \} \leq 1\wedge U=n,\label{cc6}\\
-&\ar Z = 1\,..\,2\times U-1\wedge not\ count   \{X,Y:  q(X,Y) \wedge d2(X,Y,Z) \} \leq 1\wedge U=n.\label{cc7}    
+& d1(X,Y,X-Y+U) \ar X = 1\,..\,U\land  Y = 1\,..\,U\land U=n,\label{cc4}\\
+&\ar Z = 1\,..\,2\times U-1\land not\ count \{ X,Y: q(X,Y) \land d1(X,Y,Z) \} \leq 1\land U=n,\label{cc6}\\
+&\ar Z = 1\,..\,2\times U-1\land not\ count   \{X,Y:  q(X,Y) \land d2(X,Y,Z) \} \leq 1\land U=n.\label{cc7}    
 \end{align}
 The program $\mathit{normal}(B)$ consists of
 rules~(\ref{a1}),~(\ref{b2}),~(\ref{b3}),~(\ref{bb4}) and~(\ref{bb5});
@@ -298,7 +322,7 @@ the signature~$\sigma^\#$, which consists of
   subsort \emph{integer} of \emph{general},
 \item [(ii)] all numerals of the dialect~$D$ as object constants of the
   sort \emph{integer};
-\item [(iii)] all symbolic constants of~$D$ as object
+\item [(iii)] all basic symbols of~$D$ other than numerals as object
    constants of the sort \emph{general};
  \item [(iv)] expressions $c\bs k$, where~$c$ is a symbolic constant of~$D$
    and~$k$ is a positive integer, as $k$-ary function constants, with
@@ -327,8 +351,8 @@ as $c(t_1,\dots,t_k)$.
 A term of the form $(\mathit{blank}\bs k)(t_1,\dots,t_k)$, where $k\geq 2$,
 can be abbreviated as $(t_1,\dots,t_k)$.
 
-Inequalities involving order relations other than~$\leq$, as well as chains
-of inequalities, are treated as abbreviations. We identify general variables
+Order relations other than~$\leq$ and chains
+of inequalities are treated as abbreviations. We identify general variables
 with variables occurring in rules.
 
 In examples, the letters $I,\dots,N$ (and the same letters with subscripts)
@@ -390,36 +414,18 @@ X_1,\dots,X_k:{\bf L}
 \eeq{ae}
 on the list, a variable~$C$ \emph{associated} with it, so that
 \begin{itemize}
-\item if {\bf L} contains no global variables
+\item[(i)] if {\bf L} contains no global variables
   then~$C$ is an object variable of the sort \emph{set};
-\item if the global variables occurring in {\bf L} are $Y_1,\dots,Y_l$
-  ($l>0$) then~$C$ is a function variable of arity~$n$; the sort of its value
+\item[(ii)] if the global variables occurring in {\bf L} are $Y_1,\dots,Y_l$
+  ($l>0$) then~$C$ is a function variable of arity~$l$; the sort of its value
   is \emph{set}; the sort of its $i$-th argument is \emph{integer}
   if~$Y_i$ is arithmetic in the rule, and \emph{general}
   otherwise.
 \end{itemize}
-% The formula $\sd(C)$  (``the set definition for~$C$'') is defined as follows.
-% If $C$ is an object variable then $\sd(C)$ is
-% $$\forall V(V\in C\lrar\exists\, \nu(X_1)\cdots\nu(X_k)\,
-% (V=(\nu(X_1),\dots,\nu(X_k))
-% \land \nu({\bf L}))),$$
-% where~$V$ is a general variable.
-% (If $k=1$ then $(\nu(X_1),\dots,\nu(X_k))$ is understood as~$\nu(X_1)$.)
-% If~$C$ is a function variable then $\sd(C)$ is
-% $$\ba l
-% \forall V \nu(Y_1) \cdots \nu(Y_l)(V\in C(\nu(Y_1),\dots,\nu(Y_l))\\
-% \qquad\lrar
-% \exists\, \nu(X_1)\cdots\nu(X_k)\,(V=(\nu(X_1),\dots,\nu(X_k))
-% \land \nu({\bf L}))).
-% \ea$$
-% 
-% (Set definitions $\sd(C)$ are not used in the process of applying~$\nu$ to a
-% rule, but they will be referred to in the definition of completion.)
-% 
 The result of applying~$\nu$ to an aggregate atom
 containing an aggregate element~(\ref{ae}) is the formula
-obtained by replacing $\co\{X_1,\dots,X_k:{\bf L}\}$ with
-$$\co(C(\nu(X_1),\dots,\nu(X_k))).$$
+obtained by replacing $\co\{X_1,\dots,X_k:{\bf L}\}$ with $\co(C)$ in case~(i),
+and with $\co(C(\nu(Y_1),\dots,\nu(Y_l)))$ in case~(ii).
 Applying~$\nu$ to a negated aggregate atom is performed in the same way,
 with $\no$ replaced by~$\neg$.
 
@@ -518,7 +524,8 @@ is \emph{set}, and each of its argument sorts is \emph{integer}.
 The result of applying~$\nu$ to~(\ref{bb4}) is
 \beq
 \forall KN
-(1\leq K\leq 2\times N-1 \land\neg(\co(C_4(K,N))\leq 1)\wedge N=n\to\bot).
+(1\leq K\leq 2\times N-1
+\land\neg(\mathit{inf}\leq\co(C_4(K,N))\leq 1)\land N=n\to\bot).
 \eeq{b4f}
 
 The aggregate literal in the body of constraint~(\ref{bb5}) contains the
@@ -533,17 +540,18 @@ is \emph{set}, and its argument sort is \emph{integer}.
 The result of applying~$\nu$ to~(\ref{bb5}) is
 \beq
 \forall KN
-(1\leq K\leq 2\times N-1 \land\neg(\co(C_5(K))\leq 1)\wedge N=n\to\bot).
+(1\leq K\leq 2\times N-1
+\land\neg(\mathit{inf}\leq\co(C_5(K))\leq 1)\land N=n\to\bot).
 \eeq{b5f}
 
 Applying~$\nu$ to rules~(\ref{cc4}) and~(\ref{c5}) gives the formulas
 \beq
-\forall I J  N(1\leq I\leq n \land 1\leq J\leq n  
- \wedge N=n\to d1(I,J,I-J+N)).
+\forall I J  N(1\leq I\leq N \land 1\leq J\leq N
+ \land N=n\to d1(I,J,I-J+N)),
 \eeq{c4f}
 and
 \beq
-\forall I J  (1\leq I\leq n \land 1\leq J\leq n 
+\forall I J  (1\leq I\leq n \land 1\leq J\leq n
  \to d2(I,J,I+J-1)).
 \eeq{c5f}
 
@@ -554,26 +562,27 @@ aggregate element
 \eeq{ae6}
 its global variable~$Z$ is arithmetic in~(\ref{cc6}).
 The variable~$C_6$,
-associated with~(\ref{ae6}), is a binary function variable; its value sort
+associated with~(\ref{ae6}), is a unary function variable; its value sort
 is \emph{set}, and its argument sort is \emph{integer}.
 The result of applying~$\nu$ to~(\ref{cc6}) is
 \beq
 \forall KN
-(1\leq K\leq 2\times N-1 \land\neg(\co(C_6(K))\leq 1)\wedge N=n\to\bot).
+(1\leq K\leq 2\times N-1 \land\neg(\mathit{inf}\leq\co(C_6(K))\leq 1)\land N=n\to\bot).
 \eeq{c6f}
 The aggregate literal in the body of constraint~(\ref{cc7}) contains the
 aggregate element
 \beq
  X,Y : q(X,Y) \land d2(X,Y,Z);
 \eeq{ae7}
-its global variable~$Z$ is arithmetic in~(\ref{bb5}).
+its global variable~$Z$ is arithmetic in~(\ref{cc7}).
 The variable~$C_7$,
-associated with~(\ref{ae5}), is a unary function variable; its value sort
+associated with~(\ref{ae7}), is a unary function variable; its value sort
 is \emph{set}, and its argument sort is \emph{integer}.
 The result of applying~$\nu$ to~(\ref{cc7}) is
 \beq
 \forall KN
-(1\leq K\leq 2\times N-1 \land\neg(\co(C_7(K))\leq 1)\wedge N=n\to\bot).
+(1\leq K\leq 2\times N-1
+\land\neg(\mathit{inf}\leq\co(C_7(K))\leq 1)\land N=n\to\bot).
 \eeq{c7f}
 
 \section{Descriptions of aggregate elements}
@@ -605,22 +614,25 @@ assuming that~$I$ and~$J$ are chosen as $\nu(X)$ and $\nu(Y)$.
 \medskip\noindent\emph{Case 2:} The aggregate expression contains
 global variables $W_1,\dots,W_l$ ($l>0$), so that $C$ is a function
 variable.  The description formula is
-$$\ba l
+\begin{equation}
+\ba l
 \forall V \nu(W_1) \cdots \nu(W_l)(V\in C(\nu(W_1),\dots,\nu(W_l))\\
 \hskip 4cm\lrar
 \exists\, \nu(X_1)\cdots\nu(X_k)\,(V=(\nu(X_1),\dots,\nu(X_k))
 \land \nu({\bf L}))).
-\ea$$
+\ea
+  \label{eq:descr2}
+\end{equation}
 
 For instance, the description of aggregate element~(\ref{ae2}) is
  \beq
- \forall V I(V\in C_2(I) \lrar \exists Y( V=Y \wedge q(I,Y))).
+ \forall V I(V\in C_2(I) \lrar \exists Y( V=Y \land q(I,Y))).
 \eeq{d2}
-assuming that~$I$ is chosen as $\nu(Y)$.  The descriptions of aggregate
+assuming that~$I$ is chosen as $\nu(X)$.  The descriptions of aggregate
 elements~(\ref{ae3}), (\ref{ae4}), (\ref{ae5}), (\ref{ae6}) and~(\ref{ae7})
 are
 \beq
-\forall V J(V\in C_3(J) \lrar \exists X( V=X \wedge q(X,J))),
+\forall V J(V\in C_3(J) \lrar \exists X( V=X \land q(X,J))),
 \eeq{d3}
 \beq
 \forall VKN(V\in C_4(K,N) \lrar \exists IJ(V=(I,J) \land q(I,J)
@@ -631,10 +643,10 @@ are
    \land K=I+J-1)),
 \eeq{d5}
 \beq
-\forall VK(V\in C_6(K) \lrar \exists IJ(V=(I,J) \land q(I,J) \land d1(I,J,K))),
+\forall VK(V\in C_6(K) \lrar \exists XY(V=(X,Y) \land q(X,Y) \land d1(X,Y,K))),
 \eeq{d6}
 \beq
-\forall VK(V\in C_7(K) \lrar \exists IJ(V=(I,J) \land q(I,J) \land d2(I,J,K))).
+\forall VK(V\in C_7(K) \lrar \exists XY(V=(X,Y) \land q(X,Y) \land d2(X,Y,K))).
 \eeq{d7}
 
 \section{Program completion}
@@ -663,11 +675,10 @@ in the definition of~$c/k$ as
 $$\exists{\bf Z} (\mathit{Body}\land V_1=t_1\land\cdots
 \land V_k=t_k) \to (c/k)(V_1,\dots,V_k).$$
 After this transformation, the definition of~$c/k$ has the form
-$$\{F_1 \to (c/k)(V_1,\dots,V_k),\dots,F_l \to (c/k)(V_1,\dots,V_k)\}$$
-for some formulas~$F_1,\dots,F_l$.
+$$\{E_1 \to (c/k)(V_1,\dots,V_k),\dots,E_l \to (c/k)(V_1,\dots,V_k)\}$$
+for some formulas~$E_1,\dots,E_l$.
 The completed definition of~$c/k$ is the formula
-$$\forall V_1\cdots V_k ((c/k)(V_1,\dots,V_k) \lrar F_1\lor\cdots\lor F_l).$$
-
+$$\forall V_1\cdots V_k ((c/k)(V_1,\dots,V_k) \lrar E_1\lor\cdots\lor E_l).$$
 For example, the definition of $q/2$ in program~$A$ is formula~(\ref{a1f}),
 and its completed definition is
 \beq
@@ -676,52 +687,532 @@ and its completed definition is
 \land V_1=I\land V_2=J)).
 \eeq{a1fcdef}
 
-The \emph{completion} of~$\Pi$ is the sentence
+The \emph{completion} of a normal program~$\Pi$, denoted by
+$\mathit{comp}(\Pi)$, is the sentence
 $$\forall C_1\cdots C_m (F_1(C_1)\land\cdots\land F_m(C_m)
 \to G(C_1,\dots,C_m)),$$
-where $G(C_1,\dots,C_m)$ is the conjunction of the completed definitions
-of all predicate constants occurring in~$\nu(\Pi)$ and the formulas~$\nu(R)$
-for all constraints~$R$ in~$\Pi$.
+where $G(C_1,\dots,C_m)$ is the conjunction of
+\begin{itemize}
+\item   the completed definitions of all predicate constants occurring
+  in~$\nu(\Pi)$, and
+\item the formulas~$\nu(R)$ for all constraints~$R$ in~$\Pi$.
+\end{itemize}
+For a semi-normal program~$\Pi$, $\mathit{comp}(\Pi)$ is defined as
+$\mathit{comp}(\mathit{normal}(\Pi))$.
 
-For example, the completion of program~$A$ is the sentence
-$$\forall C_1(F_1(C_1) \to G_A(C_1)),$$
-where $F_1(C_1)$ is~(\ref{d1}), and $G_A(C_1)$ is the conjunction of
-formulas~(\ref{a1fcdef}) and (\ref{a2f})--(\ref{a5f}).
-
-
-
-The completion of a semi-normal program~$\Pi$ is defined as the completion
-of the program~$\mathit{normal}(\Pi)$.
-
-The completion of program~$B$ is the sentence
-$$\forall C_2 C_3 C_4 C_5\big((F_2(C_2)\wedge F_3(C_3) \wedge F_4(C_4) \wedge F_5(C_5))\to  G_B(C_2, C_3, C_4, C_5)\big),$$
-where $F_2(C_2)$ is~(\ref{d2}), $F_3(C_3)$ is~(\ref{d3}), $F_4(C_4)$ is~(\ref{d4}),
-$F_5(C_5)$ is~(\ref{d5}),
- and $G_B(C_2, C_3, C_4, C_5)$ is the conjunction of
-formulas~(\ref{a1fcdef}), (\ref{b2f}), (\ref{b3f}), (\ref{b4f}), and (\ref{b5f}).
-
-
-The completed definitions for $d1/2$ and $d2/2$ in program~$C$ follow:
+For example, the completion of n-Queens program~$A$, denoted by $\mathit{comp}(A)$,  is the sentence
 \beq
-\forall V_1V_2V_3( d1(V_1,V_2,V_3)\lrar
-\exists I J  N(1\leq I\leq n \land 1\leq J\leq n  
- \wedge N=n \land V_1=I\land V_2=J \land V_3= I-J+N)).
+\forall C_1(F^A_1(C_1) \to G_A(C_1)),
+\eeq{compA}
+where $F^A_1(C_1)$ is~(\ref{d1}), and $G_A(C_1)$ is the conjunction of
+formulas~(\ref{a1fcdef}) and (\ref{a2f})--(\ref{a5f}).
+The completion of  program~$B$, denoted by $\mathit{comp}(B)$, is the sentence
+\beq
+\forall C_2\cdots C_5(F^B_2(C_2)\land\cdots \land F^B_5(C_5)\to
+G_B(C_2,\dots,C_5)),
+\eeq{compB}
+where $F^B_2(C_2)$ is~(\ref{d2}), $F^B_3(C_3)$ is~(\ref{d3}), $F^B_4(C_4)$ is~(\ref{d4}),
+$F^B_5(C_5)$ is~(\ref{d5}), and $G_B(C_2,\dots, C_5)$ is the conjunction of
+formulas~(\ref{a1fcdef}), (\ref{b2f}), (\ref{b3f}), (\ref{b4f}),
+and (\ref{b5f}).
+
+To form the completion of program~$C$, we construct first the completed
+definitions of $d1/3$ and $d2/3$ in this program:
+\beq\ba l
+\forall V_1V_2V_3( d1(V_1,V_2,V_3)\lrar\\
+\hskip 21mm
+\exists I J  N(1\leq I\leq N \land 1\leq J\leq N \land N=n \\
+\hskip 33mm
+\land\; V_1=I\land V_2=J \land V_3= I-J+N));
+\ea
 \eeq{c4fcdef}
 and
 \beq
-\forall V_1V_2V_3(d2(V_1,V_2,V_3)\lrar 
+\ba l\forall V_1V_2V_3(d2(V_1,V_2,V_3)\lrar \\
+\hskip 17mm
 \exists I J  (1\leq I\leq n \land 1\leq J\leq n 
-\wedge V_1=I \land V_2=J \land V_3= I+J-1)).
+\land V_1=I \land V_2=J \land V_3= I+J-1)).
+\ea
 \eeq{c5fcdef}
 The completion of program~$C$ is the sentence
-$$\forall C_2 C_3 C_6 C_7\big((F_2(C_2)\wedge F_3(C_3) \wedge F_6(C_6) \wedge F_7(C_7))\to  G_C(C_2, C_3, C_6, C_7)\big),$$
-where  $F_6(C_6)$ is~(\ref{d6}),
-$F_7(C_7)$ is~(\ref{d7}),
- and $G_C(C_2, C_3, C_4, C_5)$ is the conjunction of
-formulas~(\ref{a1fcdef}),~(\ref{c4fcdef}),~(\ref{c5fcdef}),  (\ref{b2f}), (\ref{b3f}), (\ref{c6f}), and (\ref{c7f}).
+\beq
+\forall C_2 C_3 C_6 C_7(F^B_2(C_2)\land F^B_3(C_3)\land F^C_6(C_6)\land F^C_7(C_7)
+\to  G_C(C_2, C_3, C_6, C_7)),
+\eeq{compC}
+where $F^C_6(C_6)$ is~(\ref{d6}),
+$F^C_7(C_7)$ is~(\ref{d7}),
+ and $G_C(C_2, C_3, C_6, C_7)$ is the conjunction of
+formulas~(\ref{a1fcdef}),~(\ref{c4fcdef}),~(\ref{c5fcdef}),  (\ref{b2f}), (\ref{b3f}), (\ref{c6f}) and (\ref{c7f}).
+
+\section{Regular Interpretations}\label{sec:regint}
+An interpretation~$\I$ of the signature~$\sigma^\#$ is \emph{regular} if
+\begin{itemize}
+\item the domain $|\mathit{integer}|^\I$ of the sort \emph{integer} is the
+  set of numerals, and $|\mathit{set}|^\I$ is the powerset of
+  $|\mathit{general}|^\I$;
+\item for every numeral~$c$, the corresponding element $c^\I$
+  of~$|\mathit{integer}|^\I$ is~$c$,
+\item for every function constant $c\bs k$, the function $(c\bs k)^\I$ is
+  one-to-one;
+\item for every definite arithmetic function symbol~$f$, $f^\I=f$;
+\item for every~$s$ in~$|\mathit{set}|^\I$, $\co^\I(s)$ is $\o n$ if the
+  cardinality~$n$ of~$s$ is finite, and is~$\mathit{sup}$  otherwise;
+\item $\leq^\I$ is a total order on $|\mathit{general}|^\I$ such that, for
+  every pair~$c_1$,~$c_2$ of numerals,
+  \begin{itemize}
+  \item
+    $(c_1)^\I\leq(c_2)^\I$ iff $c_1\leq c_2$, and
+  \item
+    for every~$g$ in $|\mathit{general}|^\I$, if $(c_1)^\I\leq g\leq(c_2)^\I$
+    then $g\in|\mathit{integer}|^\I$;
+  \end{itemize}
+\item for every~$g$ in~$|\mathit{general}|^\I$ and every~$s$ in
+  $|\mathit{set}|^\I$, $g\in^\I s$ iff $g\in s$.
+\end{itemize}
+
+We now list an interesting property of regular interpretations that will be used in the proof of the claim relating n-Queens programs A, B, and C.
+\begin{lemma}\label{lem:eu-general}
+  For a formula $F(C)$  that is the description of an aggregate expression so that~$C$ is the variable associated with that expression, every regular interpretation of $\sigma^\#$ satisfies the formulas
+ \medskip
+ 
+ (a) $\exists C\,F(C)$
+
+ \medskip\noindent and
+
+ \medskip
+ (b)
+ \begin{tabular}{l} 
+  $\forall C C'(F(C)\land F(C') \to C=C')$.
+\end{tabular}
+\end{lemma}
+
+\begin{proof}
+Consider arbitrary aggregate expression
+
+Let  $X_1,\dots,X_k :{\bf L}$ denote an aggregate expression that $F(C)$ is a description of.
+There are two cases to consider. One when this aggregate expression does not contain global variables, and the other when it does. We focus on the second case, as the first case is similar and simpler.
+Take $W_1,\dots,W_l$ to be the global variables occurring in ${\bf L}$. Variable  $C$ is a function variable and formula $F(C)$ has the form~\eqref{eq:descr2}.
+In this case, formula (a) is
+$$
+\ba l
+\exists C(
+  \forall V \nu(W_1) \cdots \nu(W_l)(V\in C(\nu(W_1),\dots,\nu(W_l))\\
+\hskip 4cm\lrar
+\exists\, \nu(X_1)\cdots\nu(X_k)\,(V=(\nu(X_1),\dots,\nu(X_k))
+\land \nu({\bf L}))) ).
+\ea
+$$    
+It is entailed by the formula
+$$
+\ba l
+\forall \nu(W_1) \cdots \nu(W_l) \exists S \forall V (V\in S 
+\\
+\hskip 4cm\lrar
+\exists\, \nu(X_1)\cdots\nu(X_k)\,(V=(\nu(X_1),\dots,\nu(X_k))
+\land \nu({\bf L}))),
+\ea
+$$
+which is satisfied by all regular interpretations, because the domain of
+the sort \emph{set} is the entire powerset of the domain of the sort
+\emph{general}.  
+Furthermore, formula~(b) is
+$$\ba l
+\forall C C'\Big( \Big( \big(
+ \forall V \nu(W_1) \cdots \nu(W_l)(V\in C(\nu(W_1),\dots,\nu(W_l))\\
+\hskip 4cm\lrar
+\exists\, \nu(X_1)\cdots\nu(X_k)\,(V=(\nu(X_1),\dots,\nu(X_k))
+\land \nu({\bf L}))) \big)  \wedge\\
+\ \ \ \ \ \ \ \  \ \ \  \big(\forall V \nu(W_1) \cdots \nu(W_l)(V\in C'(\nu(W_1),\dots,\nu(W_l))\\
+\hskip 4cm\lrar
+\exists\, \nu(X_1)\cdots\nu(X_k)\,(V=(\nu(X_1),\dots,\nu(X_k))
+\land \nu({\bf L})))\big)\Big)\\
+\hskip 7.5cm
+\to C=C'\Big).
+\ea
+$$
+The conjunction in the antecedent implies
+$$
+\ba l
+\forall V \nu(W_1) \cdots \nu(W_l) (V\in C(\nu(W_1),\dots,\nu(W_l))\\
+\hskip 4cm\lrar
+V\in C'(\nu(W_1),\dots,\nu(W_l)))
+\ea
+$$
+and consequently
+$$
+\forall \nu(W_1) \cdots \nu(W_l) (C(\nu(W_1),\dots,\nu(W_l))= C'(\nu(W_1),\dots,\nu(W_l)))
+$$
+and hence $C=C'$.
+\end{proof}
+
+
+\section{Statement of Theorem~\ref{thm:ab} and its Reformulations}
+
+
+\begin{theorem}\label{thm:ab}
+The formula
+\beq
+\exists N(N=n\land N>0) \to (\mathit{comp}(A)\lrar\mathit{comp}(B))
+\eeq{thm1}
+is satisfied by all regular interpretations of $\sigma^\#$.
+\end{theorem}
+
+\subsection*{First reformulation}
+
+As the first step towards proving Theorem~\ref{thm:ab}, we reformulate it
+as an assertion about provability in a first-order theory.
+
+
+Lemma below is immediate consequence of Lemma~\ref{lem:eu-general}.
+\medskip
+\begin{lemma}\label{lem:eu}
+  Every regular interpretation of $\sigma^\#$ satisfies the formulas
+ \medskip
+ 
+ (a) $\exists C_1\,F^A_1(C_1)$;\ \  $\exists C_i\,F^B_i(C_i)$;\ \    $\exists C_j\,F^C_j(C_j)$;
+ 
+ \medskip\noindent and
+
+ \medskip
+ (b)
+ \begin{tabular}{l} 
+  $\forall C_1C'_1(F^A_1(C_1)\land F^A_1(C'_1) \to C_1=C'_1)$;\\  
+ $\forall C_iC'_i(F^B_i(C_i)\land F^B_i(C'_i) \to C_i=C'_i)$;\\  
+   $\forall C_jC'_j(F^C_j(C_j)\land F^C_j(C'_j) \to C_j=C'_j)$
+\end{tabular}
+
+% \beq\exists C_i\,F_i(C_i)\eeq{exists}
+%  \beq\forall C_iC'_i(F_i(C_i)\land F_i(C'_i) \to C_i=C'_i)\eeq{unique}
+ \medskip\noindent
+  ($i=2,\dots,5$; $j=6,7$).
+\end{lemma}
+
+Consider the extension of the signature $\sigma^\#$ obtained by adding
+constants $C_1^*,\dots,C_5^*$ similar to the variables $C_1,\dots,C_5$.
+(So $C_1^*$ is an object constant of the sort \emph{set\/};~$C_2^*$
+is a function constant with the value sort \emph{set} and the argument
+sort is \emph{integer\/}; and so forth.)  By~$T_{AB}$ we denote the
+first-order theory over the extended signature with the following axioms:
+\begin{itemize}
+\item the sentences over~$\sigma^\#$ that are satisfied by all regular
+  interpretations;
+\item the antecedent $\exists N(N=n\land N>0)$ of~(\ref{thm1});
+  we will denote this axiom by~$\ug$;
+\item the first-order sentences $F^A_1(C^*_1),F^B_2(C^*_2),\dots,F^B_5(C^*_5)$ 
+  obtained from $F^A_1(C_1)$, $F^B_2(C_2)$, $\dots,$ $F^B_5(C_5)$ by
+  substituting the constants $C^*_1,\dots,C^*_5$ for the variables
+  $C_1,\dots,C_5$; these sentences are
+\end{itemize}
+\begin{align}
+& \forall V(V\in C^*_1 \lrar \exists IJ(V=(I,J)\land q(I,J) \land 1\leq I\leq n
+\land 1\leq J\leq n)),\label{dd1}
+  \\
+& \forall V I(V\in C^*_2(I) \lrar q(I,V)),\label{dd2}
+  \\
+&  \forall V J(V\in C^*_3(J) \lrar q(V,J)),\label{dd3}
+  \\
+&\forall VKN(V\in C^*_4(K,N) \lrar \exists IJ(V=(I,J) \land q(I,J)
+   \land K=I-J+N)),\label{dd4}
+  \\
+&\forall VK(V\in C^*_5(K) \lrar \exists IJ(V=(I,J) \land q(I,J)
+   \land K=I+J-1))\label{dd5}
+\end{align}
+(Formulas~$F^B_2(C_2^*)$ and~$F^B_3(C_3^*)$ are simplfied here.)
+
+\medskip\noindent{\bf Theorem~\ref{thm:ab}, first reformulation.}
+\emph{The sentence
+  \beq
+  G_A(C^*_1) \lrar G_B(C^*_2,\dots,C^*_5)
+  \eeq{reform1}
+is provable in the theory $T_{AB}$.}
+
+\medskip
+This reformulation is proved below, and then the
+original version of Theorem~\ref{thm:ab}
+will follow.  Indeed, consider any regular interpretation~$\I$
+of the signature~$\sigma^\#$ that satisfies the antecedent~$\ug$
+of~(\ref{thm1}); we need to verify that~$\I$ satisfies the consequent
+of~(\ref{thm1}).
+Consider an extension of~$\I$ to the signature of~$T_{AB}$ that
+satisifes $F^A_1(C_1^*),F^B_2(C_2^*),\dots,F_5(C_5^*)$; such an extension exists by
+Lemma~\ref{lem:eu}(a). We take the liberty to denote that
+extension by the same symbol~$\I$. Since~$\I$ satisfies all axioms of
+the theory~$T_{AB}$,
+$\I$ satisfies its theorem~(\ref{reform1}), which is equivalent to
+$$\forall C_1( C_1=C_1^*\to G_A(C_1)) \lrar
+\forall C_2\cdots C_5(C_2=C_2^* \land\cdots \land C_5=C_5^* \to
+G_B(C_2,\dots,C_5)).$$
+From Lemma~\ref{lem:eu}(b) we conclude
+that~$\I$ satisfies also the formulas
+$$
+\ba l
+\forall C_1(F^A_1(C_1) \lrar C_1=C^*_1),\\
+\forall C_i(F^B_i(C_i) \lrar C_i=C^*_i) \qquad (i=2,\dots,5),\\
+\ea
+$$
+It follows that~$\I$ satisfies the equivalence
+$$\forall C_1(F^A_1(C_1) \to G_A(C_1)) \lrar
+\forall C_2\cdots C_5(F^B_2(C_2)\land\cdots \land F^B_5(C_5)\to
+G_B(C_2,\dots,C_5)),$$
+which is identical to the consequent $\mathit{comp}(A)\lrar\mathit{comp}(B)$
+of~(\ref{thm1}).
+
+\subsection*{Second reformulation}
+
+In this section we simplify several subformulas of equivalence~(\ref{reform1}).
+Recall that $G_A(C_1)$ is the conjunction of
+formulas~(\ref{a1fcdef}) and (\ref{a2f})--(\ref{a5f}), and
+$G_B(C_2,\dots, C_5)$ is the conjunction of
+formulas~(\ref{a1fcdef}), (\ref{b2f}), (\ref{b3f}), (\ref{b4f}),
+and (\ref{b5f}).
+
+\medskip\noindent\emph{1.}
+Formula~(\ref{a1fcdef}) is logically equivalent to the formula
+$$
+\forall X Y (q(X,Y) \to
+1 \leq X \leq n \land 1 \leq Y \leq n \land \exists I(I=X)
+\land \exists J(J=Y) \land \exists N(N=n)),
+$$
+which will be denoted by~$\dOne$.  It belongs to both
+conjunctions, and by~$T'_{AB}$ we denote the theory obtained by adding~$\dOne$
+to~$T_{AB}$ as an axiom.
+
+\medskip\noindent\emph{2.}
+The result of substituting $C_1^*$ for $C_1$ in~(\ref{a2f}) is equivalent
+in~$T_{AB}$ to
+the conjunction of the formulas
+$\co(C^*_1)\geq n$ and $\co(C^*_1)\leq n$.  These formulas will be
+denoted by~$\aTwofgeq$ and~$\aTwofleq$.
+
+\medskip\noindent\emph{3.}
+Formula~(\ref{a3f}) is equivalent in~$T_{AB}$ to the formula
+$$\forall XY_1Y_2(q(X,Y_1) \land q(X,Y_2) \to Y_1 \geq Y_2),$$
+which implies
+$$\forall XY_1Y_2(q(X,Y_1) \land q(X,Y_2) \to Y_2 \geq Y_1)$$
+(substitute~$Y_2$,~$Y_1$ for~$Y_1$,~$Y_2$). It follows that~(\ref{a3f}) is
+equivalent to
+$$
+\forall XY_1Y_2(q(X,Y_1) \land q(X,Y_2) \to Y_1 = Y_2).
+$$
+This formula will be denoted by $\aThreefs$.
+
+\medskip\noindent\emph{4.}
+A similar calculation shows that~(\ref{a4f})
+is equivalent to the formula
+$$\forall X_1X_2Y(q(X_1,Y) \land q(X_2,Y) \to X_1 = X_2),$$
+denoted by $\aFourfs$.
+
+\medskip\noindent\emph{5.}
+Formula~(\ref{a5f})
+is equivalent in~$T_{AB}$ to the formula
+$$\forall I_1I_2J_1J_2
+(q(I_1,J_1) \land q(I_2,J_2) \land |I_1-I_2|=|J_1-J_2| \to I_1 \geq I_2),$$
+which implies
+$$\forall I_1I_2J_1J_2
+(q(I_1,J_1) \land q(I_2,J_2) \land |I_1-I_2|=|J_1-J_2| \to I_2 \geq I_1)
+$$
+(substitute~$I_2,\,I_1,\,J_2,\,J_1$ for $I_1,\,I_2,\,J_1,\,J_2$).
+Hence~(\ref{a5f}) is equivalent to
+$$
+\forall I_1I_2J_1J_2
+(q(I_1,J_1) \land q(I_2,J_2) \land |I_1-I_2|=|J_1-J_2|\to I_1= I_2)
+$$
+and to
+\beq
+\forall I_1I_2J_1J_2
+(q(I_1,J_1)\land q(I_2,J_2) \land |I_1-I_2|=|J_1-J_2|
+\to (I_1,J_1) = (I_2,J_2)).
+\eeq{a5ff}
+(We use here the fact that the function $(\mathit{blank}\bs 2)^\I$ is
+one-to-one for any regular interpretation~$\I$, so that the sentence
+$$\forall X_1Y_1X_2Y_2((X_1,Y_1)=(X_2,Y_2) \lrar X_1=X_2 \land Y_1=Y_2)$$
+is an axiom of $T_{AB}$.)
+Formula~(\ref{a5ff}) will be denoted by $\aFivefs$.
+
+\medskip\noindent\emph{6.}
+The result of substituting $C_2^*$ for $C_2$ in~(\ref{b2f}) is equivalent
+in~$T_{AB}$ to
+the conjunction of the formula
+$$
+\forall I(1\leq I\leq n \to \co(C^*_2(I)) \geq 1),
+$$
+denoted by $\bTwofgeq$, and the formula
+$$
+\forall I(1\leq I\leq n \to \co(C^*_2(I))\leq 1),
+$$
+denoted by $\bTwofleq$.
+
+\medskip\noindent\emph{7.}
+The result of substituting $C_3^*$ for $C_3$ in~(\ref{b3f}) is equivalent
+in~$T_{AB}$ to
+the conjunction of the formula
+$$
+\forall I(1\leq I\leq n \to \co(C^*_3(I)) \geq 1),
+$$
+denoted by $\bThreefgeq$, and the formula
+$$
+\forall I(1\leq I\leq n \to \co(C^*_3(I))\leq 1),
+$$
+denoted by $\bThreefleq$.
+
+\medskip\noindent\emph{8.}
+The result of substituting $C_4^*$ for $C_4$ in~(\ref{b4f}) is equivalent
+in~$T_{AB}$ to the formula
+$$
+\forall KN(1\leq K\leq 2\times N-1  \land N=n \to \co(C^*_4(K,N))\leq 1),
+$$
+denoted by $\bFourfs$.
+
+\medskip\noindent\emph{9.}
+The result of substituting $C_5^*$ for $C_5$ in~(\ref{b5f}) is equivalent
+in~$T_{AB}$ to
+the formula
+$$
+\forall KN(1\leq K\leq 2\times N-1 \land N=n \to \co(C^*_5(K))\leq 1),
+$$
+denoted by $\bFivefs$.
+
+\medskip
+The calculations above show that Theorem~\ref{thm:ab} can be further
+reformulated as follows:
+
+\medskip\noindent{\bf Theorem~\ref{thm:ab}, second reformulation.}
+\emph{The formula
+\beq
+\ba r
+\aTwofgeq\land \aTwofleq\land \aThreefs\land \aFourfs\;\land\quad\\
+\aFivefs
+\ea
+\eeq{gamma1}
+is equivalent in~$T'_{AB}$ to the formula
+\beq
+\ba r
+\bTwofgeq\land \bTwofleq\bThreefgeq\;\land\quad\\
+\bThreefleq\;\land\bFourfs\land \bFivefs.
+\ea
+\eeq{gamma2}
+}
+
+\section{Deriving Theorem~\ref{thm:ab} from lemmas}\label{sec:deriving}
+
+Theorem~\ref{thm:ab} in the second reformulation is derived here from
+several lemmas, which are proved in Sections $...$ .
+\medskip
+
+\begin{lemma}\label{claim1}
+$T'_{AB}\vdash \bTwofgeq \to \aTwofgeq$.
+\end{lemma}
+\medskip
+
+\begin{lemma}\label{claim2}
+$T'_{AB}\vdash \bTwofleq \to \aTwofleq$.
+\end{lemma}
+\medskip
+
+\begin{lemma}\label{claim3}
+$T'_{AB}\vdash \bTwofleq \lrar \aThreefs$.
+\end{lemma}
+\medskip
+
+\begin{lemma}\label{claim4}
+$T'_{AB}\vdash \bThreefleq\lrar\aFourfs$.
+\end{lemma}
+\medskip
+
+\begin{lemma}\label{claim5}
+$T'_{AB}\vdash \aFivefs \lrar \bFourfs \land \bFivefs$.
+\end{lemma}
+\medskip
+
+\begin{lemma}\label{claim6}
+$T'_{AB}\vdash\aTwofgeq  \land \aThreefs \to \bTwofgeq$.
+\end{lemma}
+\medskip
+ 
+\begin{lemma}\label{claim7}
+$T'_{AB}\vdash\aTwofgeq \land \aFourfs \to \bThreefgeq$.
+\end{lemma}
+\medskip
+
+To prove Theorem~\ref{thm:ab}, assume first (\ref{gamma1}) and condider
+the conjunctive terms of~(\ref{gamma2}), one by one:
+\medskip
+
+$\dOne$ is part of (\ref{gamma1});
+
+$\bTwofgeq$ follows by Lemma~\ref{claim6};
+
+$\bTwofleq$ follows by Lemma~\ref{claim3};
+
+$\bThreefgeq$ follows by Lemma~\ref{claim7};
+
+$\bThreefleq$ follows by Lemma~\ref{claim4};
+
+$\bFourfs$ and $\bFivefs$ follow by Lemma~\ref{claim5}.
+
+\medskip\noindent
+Now assume (\ref{gamma2}) and condider the conjunctive terms
+of~(\ref{gamma1}):
+\medskip
+
+$\dOne$ is part of~(\ref{gamma2});
+
+$\aTwofgeq$ follows by Lemma~\ref{claim1};
+
+$\aTwofleq$ follows by Lemma~\ref{claim2};
+
+$\aThreefs$ follows by Lemma~\ref{claim3};
+
+$\aFourfs$ follows by Lemma~\ref{claim4};
+
+$\aFivefs$ follows by Lemma~\ref{claim5}.
 
 
 \bibliographystyle{named}
 \bibliography{bib}
 \end{adjustwidth}
 \end{document}
+
+\section{Finite sets}
+
+The formula $\exists I(I=\co(S))$, expressing that~$S$ is finite, is denoted
+by~$\fnt(S)$.
+
+The sentences
+\beq
+\forall S(\exists MN\forall X(X\in S \to M\leq X\leq N) \to \fnt(S))
+\eeq{fin1}
+and
+\beq
+\ba r
+\forall S(\exists MN\forall X(X\in S \to
+\exists YZ(X=(Y,Z) \land M\leq Y\leq N\land M\leq Z\leq N)) \to
+\quad\\
+\fnt(S))
+\ea
+\eeq{fin2}
+are satisfied by all regular interpretations.  Hence they are axioms
+of~$T'_{AB}$.
+
+The sentence
+\beq
+\fnt(C_1^*)
+\eeq{finC1}
+is a theorem of~$T'_{AB}$.  Indeed, axioms~(\ref{dd1}) and~$\ug$ imply
+$$
+\exists N\forall V(V\in C^*_1 \to \exists IJ(V=(I,J)\land
+1\leq I\leq N \land 1\leq J\leq N)),
+$$
+and~(\ref{finC1}) follows by~(\ref{fin2}).
+  
+
+\section{Proofs of the Lemmas~\ref{claim3} and~\ref{claim4}}\label{sec:lemmas}
+
+  The proof of Lemma~\ref{claim3} the formula
+\beq
+\fnt(S)\to (\co(S)\leq 1 \lrar \forall XY(X\in S \land Y\in S \to X=Y)).
+\eeq{m}
+(Here, as in Section~\ref{sec:deriving}, by asserting a formula over
+the signature~$\sigma^\#$ we express the clain that is satisfied by all
+regular interpretations.)
+
