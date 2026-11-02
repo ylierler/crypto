@@ -34,6 +34,7 @@
 \def\bfx{{\bf X}}
 \def\sd{\mathit{SD}}
 \def\I{\mathcal{I}}
+\def\pp{\mathcal{pp}}
 
 \newcommand{\co}{\ensuremath{\mathit{count}}}
 \newcommand{\no}{\ensuremath{\mathit{not}}}
@@ -846,7 +847,7 @@ and hence $C=C'$.
 \end{proof}
 
 
-\section{Statement of Theorem~\ref{thm:ab} and its Reformulations}
+\section{Statement of Theorem~\ref{thm:ab} and its Reformulations:\\ Relating n-Queens Programs A and B}
 
 
 \begin{theorem}\label{thm:ab}
@@ -1167,10 +1168,177 @@ $\aFourfs$ follows by Lemma~\ref{claim4};
 
 $\aFivefs$ follows by Lemma~\ref{claim5}.
 
+\section{Completion with private predicates}
+
+We now target our next goal to  extablish the precise relationship between n-Queens programs B and C. 
+We start by noting that these programs share predicate constant $q/2$ while predicate constants  $d1/3$ and $d2/3$ are unique to program C.  
+Yet, if we consider the output/extrenal behavior of program C we find atoms constructed with predicate constants $d1/3$, $d2/3$ ``inessential''; it is atoms constructed with predicate constant $q/2$ that encode the solution. \cite{fan23a} formalized the notion of {\em external behavior} and defined the {\em equivalence with respect to a user guide}.
+The key to that equivalence is the allowance to treat predicate symbols differently. In particular, in our sample programs the predicate constant $q/2$ is treated as an \emph{output} one, while $d1/3$ and $d2/3$ are treated as \emph{private} predicate constants.  Such distinction allows us to extend the notion of completion to programs with private predicate constants. 
+
+Recall that the completion of program~$C$ is the sentence~\eqref{compC}.
+Predicate constants $d1/3$ and $d2/3$ are private to program~$C$. We associate predicate variables $D_1/3$ and $D_2/3$ with them, respectively.
+The completion of program~$C$ with respect to the privtae predicate constants $\{d1,d2\}$
+follows
+\beq
+\ba l
+\forall D_1 D_2 C_2 C_3 C_6 C_7(F^B_2(C_2)\land F^B_3(C_3)\land F^C_6(C_6,D_1)\land F^C_7(C_7,D_2)\\
+\hskip 21mm
+\to  G_C(C_2, C_3, C_6, C_7,D_1,D_2)),
+\ea
+\eeq{compCP}
+where $F^C_6(C_6,D_1)$ is
+$$
+\forall VK(V\in C_6(K) \lrar \exists XY(V=(X,Y) \land q(X,Y) \land D_1(X,Y,K)));
+$$
+ $F^C_7(C_7,D_2)$ is
+$$
+\forall VK(V\in C_7(K) \lrar \exists XY(V=(X,Y) \land q(X,Y) \land D_2(X,Y,K)));
+$$
+and $G_C(C_2, C_3, C_6, C_7, D_1, D_2)$ is the conjunction of
+formulas
+$$
+\ba l
+\forall V_1V_2V_3( D_1(V_1,V_2,V_3)\lrar\\
+\hskip 21mm
+\exists I J  N(1\leq I\leq N \land 1\leq J\leq N \land N=n \\
+\hskip 33mm
+\land\; V_1=I\land V_2=J \land V_3= I-J+N));
+\ea
+$$%\eeq{c4fcdef}
+and
+$$%\beq
+\ba l\forall V_1V_2V_3(D_2(V_1,V_2,V_3)\lrar \\
+\hskip 17mm
+\exists I J  (1\leq I\leq n \land 1\leq J\leq n 
+\land V_1=I \land V_2=J \land V_3= I+J-1));
+\ea
+$$%\eeq{c5fcdef}
+and (\ref{b2f}), (\ref{b3f}), (\ref{c6f}) and (\ref{c7f}).
+
+
+
+
+
+
+\section{Statement of Theorem~\ref{thm:bc}:\\ Relating n-Queens Programs B and C}
+
+\begin{theorem}\label{thm:bc}
+The formula
+\beq
+\exists N(N=n\land N>0) \to (\mathit{comp}(B)\lrar\mathit{comp}(C,\{d1,d2\}))
+\eeq{eq:thm:bc}
+is satisfied by all regular interpretations of $\sigma^\#$.
+\end{theorem}
+
+\subsection*{First reformulation}
+
+=============== This has to be rewritten for the new theorem. it is copy paste of above
+
+As the first step towards proving Theorem~\ref{thm:ab}, we reformulate it
+as an assertion about provability in a first-order theory.
+
+
+Lemma below is immediate consequence of Lemma~\ref{lem:eu-general}.
+\medskip
+\begin{lemma}\label{lem:eu}
+  Every regular interpretation of $\sigma^\#$ satisfies the formulas
+ \medskip
+ 
+ (a) $\exists C_1\,F^A_1(C_1)$;\ \  $\exists C_i\,F^B_i(C_i)$;\ \    $\exists C_j\,F^C_j(C_j)$;
+ 
+ \medskip\noindent and
+
+ \medskip
+ (b)
+ \begin{tabular}{l} 
+  $\forall C_1C'_1(F^A_1(C_1)\land F^A_1(C'_1) \to C_1=C'_1)$;\\  
+ $\forall C_iC'_i(F^B_i(C_i)\land F^B_i(C'_i) \to C_i=C'_i)$;\\  
+   $\forall C_jC'_j(F^C_j(C_j)\land F^C_j(C'_j) \to C_j=C'_j)$
+\end{tabular}
+
+% \beq\exists C_i\,F_i(C_i)\eeq{exists}
+%  \beq\forall C_iC'_i(F_i(C_i)\land F_i(C'_i) \to C_i=C'_i)\eeq{unique}
+ \medskip\noindent
+  ($i=2,\dots,5$; $j=6,7$).
+\end{lemma}
+
+Consider the extension of the signature $\sigma^\#$ obtained by adding
+constants $C_1^*,\dots,C_5^*$ similar to the variables $C_1,\dots,C_5$.
+(So $C_1^*$ is an object constant of the sort \emph{set\/};~$C_2^*$
+is a function constant with the value sort \emph{set} and the argument
+sort is \emph{integer\/}; and so forth.)  By~$T_{AB}$ we denote the
+first-order theory over the extended signature with the following axioms:
+\begin{itemize}
+\item the sentences over~$\sigma^\#$ that are satisfied by all regular
+  interpretations;
+\item the antecedent $\exists N(N=n\land N>0)$ of~(\ref{thm1});
+  we will denote this axiom by~$\ug$;
+\item the first-order sentences $F^A_1(C^*_1),F^B_2(C^*_2),\dots,F^B_5(C^*_5)$ 
+  obtained from $F^A_1(C_1)$, $F^B_2(C_2)$, $\dots,$ $F^B_5(C_5)$ by
+  substituting the constants $C^*_1,\dots,C^*_5$ for the variables
+  $C_1,\dots,C_5$; these sentences are
+\end{itemize}
+\begin{align}
+& \forall V(V\in C^*_1 \lrar \exists IJ(V=(I,J)\land q(I,J) \land 1\leq I\leq n
+\land 1\leq J\leq n)),\label{dd1}
+  \\
+& \forall V I(V\in C^*_2(I) \lrar q(I,V)),\label{dd2}
+  \\
+&  \forall V J(V\in C^*_3(J) \lrar q(V,J)),\label{dd3}
+  \\
+&\forall VKN(V\in C^*_4(K,N) \lrar \exists IJ(V=(I,J) \land q(I,J)
+   \land K=I-J+N)),\label{dd4}
+  \\
+&\forall VK(V\in C^*_5(K) \lrar \exists IJ(V=(I,J) \land q(I,J)
+   \land K=I+J-1))\label{dd5}
+\end{align}
+(Formulas~$F^B_2(C_2^*)$ and~$F^B_3(C_3^*)$ are simplfied here.)
+
+\medskip\noindent{\bf Theorem~\ref{thm:ab}, first reformulation.}
+\emph{The sentence
+  \beq
+  G_A(C^*_1) \lrar G_B(C^*_2,\dots,C^*_5)
+  \eeq{reform1}
+is provable in the theory $T_{AB}$.}
+
+\medskip
+This reformulation is proved below, and then the
+original version of Theorem~\ref{thm:ab}
+will follow.  Indeed, consider any regular interpretation~$\I$
+of the signature~$\sigma^\#$ that satisfies the antecedent~$\ug$
+of~(\ref{thm1}); we need to verify that~$\I$ satisfies the consequent
+of~(\ref{thm1}).
+Consider an extension of~$\I$ to the signature of~$T_{AB}$ that
+satisifes $F^A_1(C_1^*),F^B_2(C_2^*),\dots,F_5(C_5^*)$; such an extension exists by
+Lemma~\ref{lem:eu}(a). We take the liberty to denote that
+extension by the same symbol~$\I$. Since~$\I$ satisfies all axioms of
+the theory~$T_{AB}$,
+$\I$ satisfies its theorem~(\ref{reform1}), which is equivalent to
+$$\forall C_1( C_1=C_1^*\to G_A(C_1)) \lrar
+\forall C_2\cdots C_5(C_2=C_2^* \land\cdots \land C_5=C_5^* \to
+G_B(C_2,\dots,C_5)).$$
+From Lemma~\ref{lem:eu}(b) we conclude
+that~$\I$ satisfies also the formulas
+$$
+\ba l
+\forall C_1(F^A_1(C_1) \lrar C_1=C^*_1),\\
+\forall C_i(F^B_i(C_i) \lrar C_i=C^*_i) \qquad (i=2,\dots,5),\\
+\ea
+$$
+It follows that~$\I$ satisfies the equivalence
+$$\forall C_1(F^A_1(C_1) \to G_A(C_1)) \lrar
+\forall C_2\cdots C_5(F^B_2(C_2)\land\cdots \land F^B_5(C_5)\to
+G_B(C_2,\dots,C_5)),$$
+which is identical to the consequent $\mathit{comp}(A)\lrar\mathit{comp}(B)$
+of~(\ref{thm1}).
+
 
 \bibliographystyle{named}
 \bibliography{bib}
 \end{adjustwidth}
+
+
+
 \end{document}
 
 \section{Finite sets}
