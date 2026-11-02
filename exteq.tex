@@ -1232,83 +1232,49 @@ is satisfied by all regular interpretations of $\sigma^\#$.
 
 \subsection*{First reformulation}
 
-=============== This has to be rewritten for the new theorem. it is copy paste of above
 
-As the first step towards proving Theorem~\ref{thm:ab}, we reformulate it
+
+As the first step towards proving Theorem~\ref{thm:bc}, we reformulate it
 as an assertion about provability in a first-order theory.
 
-
-Lemma below is immediate consequence of Lemma~\ref{lem:eu-general}.
-\medskip
-\begin{lemma}\label{lem:eu}
-  Every regular interpretation of $\sigma^\#$ satisfies the formulas
- \medskip
- 
- (a) $\exists C_1\,F^A_1(C_1)$;\ \  $\exists C_i\,F^B_i(C_i)$;\ \    $\exists C_j\,F^C_j(C_j)$;
- 
- \medskip\noindent and
-
- \medskip
- (b)
- \begin{tabular}{l} 
-  $\forall C_1C'_1(F^A_1(C_1)\land F^A_1(C'_1) \to C_1=C'_1)$;\\  
- $\forall C_iC'_i(F^B_i(C_i)\land F^B_i(C'_i) \to C_i=C'_i)$;\\  
-   $\forall C_jC'_j(F^C_j(C_j)\land F^C_j(C'_j) \to C_j=C'_j)$
-\end{tabular}
-
-% \beq\exists C_i\,F_i(C_i)\eeq{exists}
-%  \beq\forall C_iC'_i(F_i(C_i)\land F_i(C'_i) \to C_i=C'_i)\eeq{unique}
- \medskip\noindent
-  ($i=2,\dots,5$; $j=6,7$).
-\end{lemma}
-
-Consider the extension of the signature $\sigma^\#$ obtained by adding
-constants $C_1^*,\dots,C_5^*$ similar to the variables $C_1,\dots,C_5$.
-(So $C_1^*$ is an object constant of the sort \emph{set\/};~$C_2^*$
-is a function constant with the value sort \emph{set} and the argument
-sort is \emph{integer\/}; and so forth.)  By~$T_{AB}$ we denote the
-first-order theory over the extended signature with the following axioms:
+Consider one more extension of the signature $\sigma^\#$ obtained 
+from the signature extended in an earlier section
+by adding
+constants $D_1^*,D_2^*,C_6^*,C_7^*$ similar to the variables 
+$D_1,D_2,C_6,C_7$.
+(So, for instance, $D_1^*$ is a predicate constant whose arguments are of general sort;~$C_6^*$
+is a function constant with the value sort \emph{set} whose two arguments are of  \emph{general\/}
+sort; and so forth.)  By~$T_{ABC}$ we denote the
+first-order theory~$T_{AB}$ extended  with the following axioms:
 \begin{itemize}
-\item the sentences over~$\sigma^\#$ that are satisfied by all regular
-  interpretations;
-\item the antecedent $\exists N(N=n\land N>0)$ of~(\ref{thm1});
-  we will denote this axiom by~$\ug$;
-\item the first-order sentences $F^A_1(C^*_1),F^B_2(C^*_2),\dots,F^B_5(C^*_5)$ 
-  obtained from $F^A_1(C_1)$, $F^B_2(C_2)$, $\dots,$ $F^B_5(C_5)$ by
-  substituting the constants $C^*_1,\dots,C^*_5$ for the variables
-  $C_1,\dots,C_5$; these sentences are
-\end{itemize}
+\item the first-order sentences  $F^C(C^*_6,D_1^*)$, $F^C_7(C^*_7,D_2^*)$ 
+  obtained from $F^C(C_6,D_1),F^C(C_7,D_2)$ by
+  substituting the constants $C^*_6,C^*_7,D_1^*,D_2^*$ for the variables
+  $C_6,C_7,D_1,D_2$; these sentences are
 \begin{align}
-& \forall V(V\in C^*_1 \lrar \exists IJ(V=(I,J)\land q(I,J) \land 1\leq I\leq n
-\land 1\leq J\leq n)),\label{dd1}
-  \\
-& \forall V I(V\in C^*_2(I) \lrar q(I,V)),\label{dd2}
-  \\
-&  \forall V J(V\in C^*_3(J) \lrar q(V,J)),\label{dd3}
-  \\
-&\forall VKN(V\in C^*_4(K,N) \lrar \exists IJ(V=(I,J) \land q(I,J)
-   \land K=I-J+N)),\label{dd4}
-  \\
-&\forall VK(V\in C^*_5(K) \lrar \exists IJ(V=(I,J) \land q(I,J)
-   \land K=I+J-1))\label{dd5}
+&\forall VK(V\in C^*_6(K) \lrar \exists XY(V=(X,Y) \land q(X,Y) \land D^*_1(X,Y,K))),\label{dd6}\\
+&\forall VK(V\in C^*_7(K) \lrar \exists XY(V=(X,Y) \land q(X,Y) \land D^*_2(X,Y,K))),\label{dd7};
 \end{align}
-(Formulas~$F^B_2(C_2^*)$ and~$F^B_3(C_3^*)$ are simplfied here.)
+\end{itemize}
 
-\medskip\noindent{\bf Theorem~\ref{thm:ab}, first reformulation.}
+\medskip\noindent{\bf Theorem~\ref{thm:bc}, first reformulation.}
 \emph{The sentence
   \beq
-  G_A(C^*_1) \lrar G_B(C^*_2,\dots,C^*_5)
-  \eeq{reform1}
-is provable in the theory $T_{AB}$.}
-
+  G_B(C^*_2,\dots,C^*_5)\lrar G_C(C^*_2, C^*_3, C^*_6, C^*_7, D^*_1, D^*_2) 
+  \eeq{reform2.1}
+is provable in the theory $T_{ABC}$.}
 \medskip
 This reformulation is proved below, and then the
-original version of Theorem~\ref{thm:ab}
+original version of Theorem~\ref{thm:bc}
 will follow.  Indeed, consider any regular interpretation~$\I$
 of the signature~$\sigma^\#$ that satisfies the antecedent~$\ug$
-of~(\ref{thm1}); we need to verify that~$\I$ satisfies the consequent
-of~(\ref{thm1}).
-Consider an extension of~$\I$ to the signature of~$T_{AB}$ that
+of~(\ref{thm2}); we need to verify that~$\I$ satisfies the consequent
+of~(\ref{thm2}).
+Consider an extension of~$\I$ to the signature of~$T_{ABC}$ that
+
+================ double check from here; the rest is copy from earlier section proof of thm1
+
+
 satisifes $F^A_1(C_1^*),F^B_2(C_2^*),\dots,F_5(C_5^*)$; such an extension exists by
 Lemma~\ref{lem:eu}(a). We take the liberty to denote that
 extension by the same symbol~$\I$. Since~$\I$ satisfies all axioms of
