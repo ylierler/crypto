@@ -935,7 +935,7 @@ of the signature~$\sigma^\#$ that satisfies the antecedent~$\ug$
 of~(\ref{thm1}); we need to verify that~$\I$ satisfies the consequent
 of~(\ref{thm1}).
 Consider an extension of~$\I$ to the signature of~$T_{AB}$ that
-satisifes $F^A_1(C_1^*),F^B_2(C_2^*),\dots,F_5(C_5^*)$; such an extension exists by
+satisifes $F^A_1(C_1^*),F^B_2(C_2^*),\dots,F_5^B(C_5^*)$; such an extension exists by
 Lemma~\ref{lem:eu}(a). We take the liberty to denote that
 extension by the same symbol~$\I$. Since~$\I$ satisfies all axioms of
 the theory~$T_{AB}$,
@@ -1172,12 +1172,16 @@ $\aFivefs$ follows by Lemma~\ref{claim5}.
 
 We now target our next goal to  extablish the precise relationship between n-Queens programs B and C. 
 We start by noting that these programs share predicate constant $q/2$ while predicate constants  $d1/3$ and $d2/3$ are unique to program C.  
-Yet, if we consider the output/extrenal behavior of program C we find atoms constructed with predicate constants $d1/3$, $d2/3$ ``inessential''; it is atoms constructed with predicate constant $q/2$ that encode the solution. \cite{fan23a} formalized the notion of {\em external behavior} and defined the {\em equivalence with respect to a user guide}.
+Yet, if we consider the output/extrenal behavior of program $C$ we find atoms constructed with predicate constants $d1/3$, $d2/3$ ``inessential''; it is atoms constructed with predicate constant $q/2$ that encode the solution. \cite{fan23a} formalized the notion of {\em external behavior} and defined the {\em equivalence with respect to a user guide}.
 The key to that equivalence is the allowance to treat predicate symbols differently. In particular, in our sample programs the predicate constant $q/2$ is treated as an \emph{output} one, while $d1/3$ and $d2/3$ are treated as \emph{private} predicate constants.  Such distinction allows us to extend the notion of completion to programs with private predicate constants. 
+
+
+For a program $P$ with private predicate constants $\{p_1,\dots,p_k\}$, we first associate predicate variables $P_1,\dots,P_k$ with them, respectively so that their arity and sorts coincide. Then
+we define the completion of $P$ with respect to $\{p_1,\dots,p_k\}$ as the formula obtained from the completion of $P$ by replacing the predicate constants $p_1,\dots,p_k$ with the associated predicate variables $P_1,\dots,P_k$, respectively.  The resulting formula is denoted by $\mathit{comp}(P,\{p_1,\dots,p_k\})$.
 
 Recall that the completion of program~$C$ is the sentence~\eqref{compC}.
 Predicate constants $d1/3$ and $d2/3$ are private to program~$C$. We associate predicate variables $D_1/3$ and $D_2/3$ with them, respectively.
-The completion of program~$C$ with respect to the privtae predicate constants $\{d1,d2\}$
+The completion of program~$C$ with respect to the private predicate constants $\{d1,d2\}$
 follows
 \beq
 \ba l
@@ -1239,28 +1243,33 @@ as an assertion about provability in a first-order theory.
 
 Consider one more extension of the signature $\sigma^\#$ obtained 
 from the signature extended in an earlier section
-by adding
-constants $D_1^*,D_2^*,C_6^*,C_7^*$ similar to the variables 
-$D_1,D_2,C_6,C_7$.
-(So, for instance, $D_1^*$ is a predicate constant whose arguments are of general sort;~$C_6^*$
-is a function constant with the value sort \emph{set} whose two arguments are of  \emph{general\/}
-sort; and so forth.)  By~$T_{ABC}$ we denote the
+by adding 
+\begin{itemize}
+%\item predicate
+%constants $d1/3$, $d2/3$ (stemming from the signature of formula encoding Program C) 
+%and 
+\item function constants
+$C_6^*,C_7^*$ similar to the variables 
+$C_6,C_7$, so that~$C_6^*$ and $C_7^*$ are function constants with 
+ the value sort \emph{set} and the argument sort is {\em integer}.
+\end{itemize}    
+By~$T_{ABC}$ we denote the
 first-order theory~$T_{AB}$ extended  with the following axioms:
 \begin{itemize}
-\item the first-order sentences  $F^C(C^*_6,D_1^*)$, $F^C_7(C^*_7,D_2^*)$ 
-  obtained from $F^C(C_6,D_1),F^C(C_7,D_2)$ by
-  substituting the constants $C^*_6,C^*_7,D_1^*,D_2^*$ for the variables
+\item the first-order sentences  $F^C_6(C^*_6,d1)$, $F^C_7(C^*_7,d2)$ 
+  obtained from $F^C_6(C_6,D_1),F^C_7(C_7,D_2)$ by
+  substituting the constants $C^*_6,C^*_7,d1,d2$ for the variables
   $C_6,C_7,D_1,D_2$; these sentences are
 \begin{align}
-&\forall VK(V\in C^*_6(K) \lrar \exists XY(V=(X,Y) \land q(X,Y) \land D^*_1(X,Y,K))),\label{dd6}\\
-&\forall VK(V\in C^*_7(K) \lrar \exists XY(V=(X,Y) \land q(X,Y) \land D^*_2(X,Y,K))),\label{dd7};
+&\forall VK(V\in C^*_6(K) \lrar \exists XY(V=(X,Y) \land q(X,Y) \land d_1(X,Y,K))),\label{dd6}\\
+&\forall VK(V\in C^*_7(K) \lrar \exists XY(V=(X,Y) \land q(X,Y) \land d_2(X,Y,K))),\label{dd7};
 \end{align}
 \end{itemize}
 
 \medskip\noindent{\bf Theorem~\ref{thm:bc}, first reformulation.}
 \emph{The sentence
   \beq
-  G_B(C^*_2,\dots,C^*_5)\lrar G_C(C^*_2, C^*_3, C^*_6, C^*_7, D^*_1, D^*_2) 
+  G_B(C^*_2,\dots,C^*_5)\lrar G_C(C^*_2, C^*_3, C^*_6, C^*_7, d1, d2) 
   \eeq{reform2.1}
 is provable in the theory $T_{ABC}$.}
 \medskip
@@ -1268,35 +1277,82 @@ This reformulation is proved below, and then the
 original version of Theorem~\ref{thm:bc}
 will follow.  Indeed, consider any regular interpretation~$\I$
 of the signature~$\sigma^\#$ that satisfies the antecedent~$\ug$
-of~(\ref{thm2}); we need to verify that~$\I$ satisfies the consequent
-of~(\ref{thm2}).
+of~(\ref{eq:thm:bc}); we need to verify that~$\I$ satisfies the consequent
+of~(\ref{eq:thm:bc}).
 Consider an extension of~$\I$ to the signature of~$T_{ABC}$ that
-
-================ double check from here; the rest is copy from earlier section proof of thm1
-
-
-satisifes $F^A_1(C_1^*),F^B_2(C_2^*),\dots,F_5(C_5^*)$; such an extension exists by
-Lemma~\ref{lem:eu}(a). We take the liberty to denote that
+satisfies $F^A_1(C_1^*), F^B_2(C_2^*),\dots,F^B_5(C_5^*)$, and $F^C_6(C_6^*,d1),F^C_7(C_7^*,d2)$; such an extension exists by
+Lemma~\ref{lem:eu}(a) and the observation that $F^C_6(C_6^*,d1),F^C_7(C_7^*,d2)$ coincide with the formulas 
+$F^C_6(C_6^*),F^C_7(C_7^*)$, respectively.
+We take the liberty to denote that
 extension by the same symbol~$\I$. Since~$\I$ satisfies all axioms of
-the theory~$T_{AB}$,
-$\I$ satisfies its theorem~(\ref{reform1}), which is equivalent to
-$$\forall C_1( C_1=C_1^*\to G_A(C_1)) \lrar
+the theory~$T_{ABC}$,
+$\I$ satisfies its theorem~(\ref{reform2.1}), which is equivalent to
+$$
+\ba{l}
 \forall C_2\cdots C_5(C_2=C_2^* \land\cdots \land C_5=C_5^* \to
-G_B(C_2,\dots,C_5)).$$
+G_B(C_2,\dots,C_5))\lrar  \\
+\hspace{4mm}
+\forall C_2 C_3 C_6 C_7 D_1 D_2( 
+  C_2=C_2^*\land
+  C_3=C_3^*\land
+  C_6=C_7^*\land
+  C_7=C_7^*\land
+  D_1=d1\land
+  D_2=d2\to 
+  \\
+\hspace{16mm} G_C(C_2,C_3,C_6,C_7,D_1,D_2)).
+  \ea
+  $$
 From Lemma~\ref{lem:eu}(b) we conclude
 that~$\I$ satisfies also the formulas
 $$
 \ba l
 \forall C_1(F^A_1(C_1) \lrar C_1=C^*_1),\\
 \forall C_i(F^B_i(C_i) \lrar C_i=C^*_i) \qquad (i=2,\dots,5),\\
+\forall C_j(F^C_j(C_j) \lrar C_j=C^*_j) \qquad (j=6,7),
 \ea
 $$
+and consequently,
+$$
+\ba l
+\forall C_6(F^C_6(C_6,d1) \lrar C_6=C^*_6),\\
+\forall C_7(F^C_7(C_7,d2) \lrar C_7=C^*_7).\\
+\ea
+$$
+
 It follows that~$\I$ satisfies the equivalence
-$$\forall C_1(F^A_1(C_1) \to G_A(C_1)) \lrar
+$$
+\ba{l}
 \forall C_2\cdots C_5(F^B_2(C_2)\land\cdots \land F^B_5(C_5)\to
-G_B(C_2,\dots,C_5)),$$
-which is identical to the consequent $\mathit{comp}(A)\lrar\mathit{comp}(B)$
-of~(\ref{thm1}).
+G_B(C_2,\dots,C_5))\lrar\\
+\hspace{4mm}
+\forall C_2 C_3 C_6 C_7 D_1 D_2( 
+  F^B_2(C_2)\land
+  F^B_3(C_3)\land
+  F^C_6(C_6,d1)\land
+  F^C_7(C_7,d2)\land
+  D_1=d1\land
+  D_2=d2\to 
+  \\
+\hspace{16mm} G_C(C_2,C_3,C_6,C_7,D_1,D_2)).
+\ea$$
+and consequently,
+$$
+\ba{l}
+\forall C_2\cdots C_5(F^B_2(C_2)\land\cdots \land F^B_5(C_5)\to
+G_B(C_2,\dots,C_5))\lrar\\
+\hspace{4mm}
+\forall C_2 C_3 C_6 C_7 D_1 D_2( 
+  F^B_2(C_2)\land
+  F^B_3(C_3)\land
+  F^C_6(C_6,D1)\land
+  F^C_7(C_7,D2)\land
+ \to 
+  \\
+\hspace{16mm} G_C(C_2,C_3,C_6,C_7,D_1,D_2)).
+\ea$$
+which is identical to the consequent $\mathit{comp}(B)\lrar\mathit{comp}(C,\{d1,d2\})$
+of~(\ref{eq:thm:bc}).
 
 
 \bibliographystyle{named}
