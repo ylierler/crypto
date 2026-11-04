@@ -51,6 +51,8 @@
 \def\bThreefleq{\mathit{Atmost1\_per\_row\_alt\/}}
 \def\bFourfs{\mathit{Atmost1\_up\/}}
 \def\bFivefs{\mathit{Atmost1\_down\/}}
+\def\diagO{\mathit{Diagonal1\/}}
+\def\diagT{\mathit{Diagonal2\/}}
 
 \hyphenation{lif-schitz}
 
@@ -745,6 +747,23 @@ $F^C_7(C_7)$ is~(\ref{d7}),
  and $G_C(C_2, C_3, C_6, C_7)$ is the conjunction of
 formulas~(\ref{a1fcdef}),~(\ref{c4fcdef}),~(\ref{c5fcdef}),  (\ref{b2f}), (\ref{b3f}), (\ref{c6f}) and (\ref{c7f}).
 
+\beq\ba l
+\forall V_1V_2V_3( d1(V_1,V_2,V_3)\lrar\\
+\hskip 21mm
+\exists I J  N(1\leq I\leq N \land 1\leq J\leq N \land N=n \\
+\hskip 33mm
+\land\; V_1=I\land V_2=J \land V_3= I-J+N));
+\ea
+\eeq{c4fcdef}
+and
+\beq
+\ba l\forall V_1V_2V_3(d2(V_1,V_2,V_3)\lrar \\
+\hskip 17mm
+\exists I J  (1\leq I\leq n \land 1\leq J\leq n 
+\land V_1=I \land V_2=J \land V_3= I+J-1)).
+\ea
+\eeq{c5fcdef}
+
 \section{Regular Interpretations}\label{sec:regint}
 An interpretation~$\I$ of the signature~$\sigma^\#$ is \emph{regular} if
 \begin{itemize}
@@ -858,7 +877,7 @@ The formula
 is satisfied by all regular interpretations of $\sigma^\#$.
 \end{theorem}
 
-\subsection*{First reformulation}
+\subsection{First reformulation}
 
 As the first step towards proving Theorem~\ref{thm:ab}, we reformulate it
 as an assertion about provability in a first-order theory.
@@ -958,7 +977,7 @@ G_B(C_2,\dots,C_5)),$$
 which is identical to the consequent $\mathit{comp}(A)\lrar\mathit{comp}(B)$
 of~(\ref{thm1}).
 
-\subsection*{Second reformulation}
+\subsection{Second reformulation}\label{sec:reformThm1}
 
 In this section we simplify several subformulas of equivalence~(\ref{reform1}).
 Recall that $G_A(C_1)$ is the conjunction of
@@ -1200,24 +1219,26 @@ $$
 $$
 and $G_C(C_2, C_3, C_6, C_7, D_1, D_2)$ is the conjunction of
 formulas
-$$
+(\ref{a1fcdef}),
+(\ref{b2f}), (\ref{b3f}), (\ref{c6f}), (\ref{c7f}) and formulas
+\beq
 \ba l
 \forall V_1V_2V_3( D_1(V_1,V_2,V_3)\lrar\\
 \hskip 21mm
 \exists I J  N(1\leq I\leq N \land 1\leq J\leq N \land N=n \\
 \hskip 33mm
-\land\; V_1=I\land V_2=J \land V_3= I-J+N));
+\land\; V_1=I\land V_2=J \land V_3= I-J+N)),
 \ea
-$$%\eeq{c4fcdef}
+\eeq{c4fcdefV}
 and
-$$%\beq
+\beq
 \ba l\forall V_1V_2V_3(D_2(V_1,V_2,V_3)\lrar \\
 \hskip 17mm
 \exists I J  (1\leq I\leq n \land 1\leq J\leq n 
-\land V_1=I \land V_2=J \land V_3= I+J-1));
+\land V_1=I \land V_2=J \land V_3= I+J-1)).
 \ea
-$$%\eeq{c5fcdef}
-and (\ref{b2f}), (\ref{b3f}), (\ref{c6f}) and (\ref{c7f}).
+\eeq{c5fcdefV}
+
 
 
 
@@ -1234,7 +1255,7 @@ The formula
 is satisfied by all regular interpretations of $\sigma^\#$.
 \end{theorem}
 
-\subsection*{First reformulation}
+\subsection{First reformulation}
 
 
 
@@ -1262,7 +1283,7 @@ first-order theory~$T_{AB}$ extended  with the following axioms:
   $C_6,C_7,D_1,D_2$; these sentences are
 \begin{align}
 &\forall VK(V\in C^*_6(K) \lrar \exists XY(V=(X,Y) \land q(X,Y) \land d_1(X,Y,K))),\label{dd6}\\
-&\forall VK(V\in C^*_7(K) \lrar \exists XY(V=(X,Y) \land q(X,Y) \land d_2(X,Y,K))),\label{dd7};
+&\forall VK(V\in C^*_7(K) \lrar \exists XY(V=(X,Y) \land q(X,Y) \land d_2(X,Y,K)))\label{dd7}.
 \end{align}
 \end{itemize}
 
@@ -1307,7 +1328,7 @@ From Lemma~\ref{lem:eu}(b) we conclude
 that~$\I$ satisfies also the formulas
 $$
 \ba l
-\forall C_1(F^A_1(C_1) \lrar C_1=C^*_1),\\
+%\forall C_1(F^A_1(C_1) \lrar C_1=C^*_1),\\
 \forall C_i(F^B_i(C_i) \lrar C_i=C^*_i) \qquad (i=2,\dots,5),\\
 \forall C_j(F^C_j(C_j) \lrar C_j=C^*_j) \qquad (j=6,7),
 \ea
@@ -1353,6 +1374,192 @@ G_B(C_2,\dots,C_5))\lrar\\
 \ea$$
 which is identical to the consequent $\mathit{comp}(B)\lrar\mathit{comp}(C,\{d1,d2\})$
 of~(\ref{eq:thm:bc}).
+
+\subsection{Second reformulation}
+
+In this section we simplify several subformulas of equivalence~(\ref{eq:thm:bc}).
+Recall that 
+$G_B(C_2,\dots, C_5)$ is the conjunction of
+formulas~(\ref{a1fcdef}), (\ref{b2f}), (\ref{b3f}), (\ref{b4f}),
+and (\ref{b5f})
+and 
+$G_C(C_2,C_3,C_6,C_7,D_1,D_2)$ is the conjunction of
+formulas~(\ref{a1fcdef}), (\ref{b2f}), (\ref{b3f}), (\ref{c6f}), (\ref{c7f}),  (\ref{c4fcdefV}) and
+(\ref{c5fcdefV}).
+
+Recall that theory $T_{ABC}$ includes all statements of theory $T_{AB}$.
+Now we use the  simplifications and notation as
+introduced
+in Section~\ref{sec:reformThm1}
+within items 1, 6,  7, 8, and~9. 
+We observe that the claims of these items hold in the scope of theory $T_{ABC}$ and the considered conjunctions of this section. 
+By~$T'_{ABC}$ we denote the theory obtained by adding~$\dOne$
+to~$T_{ABC}$ as an axiom.
+
+The result of substituting $C_6^*$ for $C_6$ in~(\ref{c6f}) is equivalent
+in~$T_{ABC}$ to the formula
+$$
+\forall KN
+(1\leq K\leq 2\times N-1 \land N=n\to\co(C^*_6(K))\leq 1).
+$$
+denoted by $\bFourfs'$.
+
+The result of substituting $C_7^*$ for $C_7$ in~(\ref{c7f}) is equivalent
+in~$T_{ABC}$ to the formula
+$$
+\forall KN
+(1\leq K\leq 2\times N-1
+\land N=n\to
+\co(C_7(K))\leq 1).
+$$
+denoted by $\bFivefs'$.
+
+The result of substituting $d1$ for $D_1$
+in~(\ref{c4fcdefV}) is formula~\eqref{c4fcdef} and the result of substituting $d2$ for $D_2$
+in~(\ref{c5fcdefV}) is formula~\eqref{c5fcdef}.  
+We denote the former by $\diagO$ and the later by $\diagT$.
+
+
+
+\medskip
+The stated observations  show that Theorem~\ref{thm:bc} can be further
+reformulated as follows:
+
+\medskip\noindent{\bf Theorem~\ref{thm:bc}, second reformulation.}
+\emph{The formula~\eqref{gamma2}, namely,
+$$
+\ba r
+\bTwofgeq\land \bTwofleq\land \bThreefgeq\;\land\quad\\
+\bThreefleq\;\land\bFourfs\land \bFivefs.
+\ea
+$$%\eeq{gamma2}
+is equivalent in~$T'_{ABC}$ to the formula
+$$
+\ba r
+\bTwofgeq\land \bTwofleq\land \bThreefgeq\;\land\quad\\
+\bThreefleq\;\land\bFourfs'\land \bFivefs'\land\\\diagO\land\diagT.
+\ea
+$$%\eeq{gamma3}
+}
+
+\medskip
+The conclusion of the theorem trivially follows from the following claim
+\emph{The formula
+$$
+\ba r
+\bFourfs\land \bFivefs.
+\ea
+$$%\eeq{gamma2}
+is equivalent in~$T'_{ABC}$ to the formula
+$$
+\ba r
+\bFourfs'\land \bFivefs'\land\\\diagO\land\diagT.
+\ea
+$$
+}
+The last claim in turn follows from the following two lemmas.
+\begin{lemma}\label{claim8}
+$T'_{ABC}\vdash \bFourfs \lrar \bFourfs'\land\diagO$.
+\end{lemma}
+\begin{lemma}\label{claim9}
+$T'_{ABC}\vdash \bFivefs \lrar \bFivefs'\land\diagT$.
+\end{lemma}
+We now prove Lemmas~\ref{claim8} whereas Lemma~\ref{claim9} is proved similarly.
+\begin{proof}
+  We first prove that 
+  $T'_{ABC}\vdash \bFourfs \to \bFourfs'\land\diagO$.
+We observe that $\bFourfs$ is the formula equivalent to
+  $$
+\forall K(1\leq K\leq 2\times n-1   \to \co(C^*_4(K,n))\leq 1);
+$$
+and $\bFourfs'$ is the formula equivalent to
+$$
+\forall K
+(1\leq K\leq 2\times n-1 \to\co(C^*_6(K))\leq 1);
+$$
+and $\diagO$ is the formula equivalent to
+\beq
+\ba l
+\forall V_1V_2V_3( d1(V_1,V_2,V_3)\lrar\\
+\hskip 21mm
+\exists I J  (1\leq I\leq n \land 1\leq J\leq n\\
+\hskip 33mm
+\land\; V_1=I\land V_2=J \land V_3= I-J+n)).
+\ea
+\eeq{eq:DiagO}
+Recall that 
+$$\forall VKN(V\in C^*_4(K,N) \lrar \exists IJ(V=(I,J) \land q(I,J)
+   \land K=I-J+N))$$
+is an axiom in $T'_{ABC}$.
+Let us consider its instance with $N=n$:
+$$\forall VK(V\in C^*_4(K,n) \lrar \exists IJ(V=(I,J) \land q(I,J)
+   \land K=I-J+n)).$$
+
+Also,     
+$$ \forall VK(V\in C^*_6(K) \lrar \exists XY(V=(X,Y) \land q(X,Y) \land d_1(X,Y,K)))$$
+ is an axiom in $T'_{ABC}$. 
+From~\eqref{eq:DiagO}, we have that the following formula follows from this axiom:
+$$
+\ba{l}
+\diagO \to 
+\forall VK(V\in C^*_6(K) \lrar \exists XY(V=(X,Y) \land q(X,Y) \land 
+\exists I J  (1\leq I\leq n \land 1\leq J\leq n\\
+\hskip 33mm
+\land\; X=I\land Y=J \land K= I-J+n))
+)
+\ea
+$$
+which in turn is equivalent to 
+$$
+\ba{l}
+\diagO \to 
+\forall VK(V\in C^*_6(K) \lrar \exists I J(V=(I,J) \land q(I,J) \land 
+1\leq I\leq n \land 1\leq J\leq n\\
+\hskip 33mm
+\land K= I-J+n)
+).
+\ea
+$$
+We now recall that $\dOne$ is an axiom in $T'_{ABC}$. It is easy to see that $dOne$ implies the following formula
+$$
+\forall I J ( q(I,J) \to
+1\leq I\leq n \land 1\leq J\leq n).
+$$
+Consequently, putting the claims of last two formulas together, we have that
+$$
+\ba{l}
+\diagO \to 
+\forall VK(V\in C^*_6(K) \lrar \exists I J(V=(I,J) \land q(I,J) 
+\land K= I-J+n)
+)
+\ea
+$$
+follows from the axioms of $T'_{ABC}$. It is now easy to see that
+$$
+\ba{l}
+\diagO \to 
+\forall VK(V\in C^*_6(K) \lrar 
+V\in C^*_4(K,n) 
+)
+\ea
+$$
+and consequently,
+$$
+\ba{l}
+\diagO \to 
+\forall K(C^*_6(K) =
+C^*_4(K,n) 
+)
+\ea
+$$
+follows from the axioms of $T'_{ABC}$.
+
+....
+
+\end{proof}  
+
+
+
 
 
 \bibliographystyle{named}
