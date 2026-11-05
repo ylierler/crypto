@@ -1187,40 +1187,72 @@ $\aFourfs$ follows by Lemma~\ref{claim4};
 
 $\aFivefs$ follows by Lemma~\ref{claim5}.
 
-\section{Completion with private predicates}
+\section{Private Completion}
 
 We now target our next goal to  extablish the precise relationship between n-Queens programs B and C. 
 We start by noting that these programs share predicate constant $q/2$ while predicate constants  $d1/3$ and $d2/3$ are unique to program C.  
 Yet, if we consider the output/extrenal behavior of program $C$ we find atoms constructed with predicate constants $d1/3$, $d2/3$ ``inessential''; it is atoms constructed with predicate constant $q/2$ that encode the solution. \cite{fan23a} formalized the notion of {\em external behavior} and defined the {\em equivalence with respect to a user guide}.
-The key to that equivalence is the allowance to treat predicate symbols differently. In particular, in our sample programs the predicate constant $q/2$ is treated as an \emph{output} one, while $d1/3$ and $d2/3$ are treated as \emph{private} predicate constants.  Such distinction allows us to extend the notion of completion to programs with private predicate constants. 
+The key to that equivalence is the allowance to treat predicate symbols differently. In particular, in our sample programs the predicate constant $q/2$ is treated as an \emph{output} one, while $d1/3$ and $d2/3$ are treated as \emph{private} predicate constants.  Such distinction allows us to extend the notion of completion to programs with private predicate constants.
+
+For a program $P$ with private predicate constants $\{p_1,\dots,p_k\}$, we first associate with them pair-wise distinct predicate variables $P_1,\dots,P_k$, respectively so that their arity and sorts coincide. 
+The \emph{private completion} of a normal program~$\Pi$ with private predicate constants $\{p_1,\dots,p_k\}$, denoted by $\mathit{comp}(P,\{p_1,\dots,p_k\})$,
+starts by constructing the following formula
+\beq
+\forall C_1\cdots C_m \big((F_1(C_1)\land\cdots\land F_m(C_m)\land G^p(C_1,\dots,C_m))
+\to G^n(C_1,\dots,C_m)\big),
+\eeq{compP}
+where
+\begin{itemize}
+\item $G^p(C_1,\dots,C_m)$ is the conjunction of
+\begin{itemize}
+\item the completed definitions of all {\em private} predicate constants occurring
+  in~$\nu(\Pi)$
+\end{itemize}  
+\item $G^n(C_1,\dots,C_m)$ is the conjunction of
+\begin{itemize}
+\item   the completed definitions of all {\em non-private} predicate constants occurring
+  in~$\nu(\Pi)$, and
+\item the formulas~$\nu(R)$ for all constraints~$R$ in~$\Pi$
+\end{itemize}
+\end{itemize}
+Private completion  $\mathit{comp}(P,\{p_1,\dots,p_k\})$ is the universal closure of the formula
+obtained from~\eqref{compP} by replacing the predicate constants $p_1,\dots,p_k$ with the associated predicate variables $P_1,\dots,P_k$, respectively.  
+For a semi-normal program~$\Pi$, $\mathit{comp}(\Pi,\{p_1,\dots,p_k\})$ is defined as
+$\mathit{comp}(\mathit{normal}(\Pi),\{p_1,\dots,p_k\})$.
 
 
-For a program $P$ with private predicate constants $\{p_1,\dots,p_k\}$, we first associate predicate variables $P_1,\dots,P_k$ with them, respectively so that their arity and sorts coincide. Then
-we define the completion of $P$ with respect to $\{p_1,\dots,p_k\}$ as the formula obtained from the completion of $P$ by replacing the predicate constants $p_1,\dots,p_k$ with the associated predicate variables $P_1,\dots,P_k$, respectively.  The resulting formula is denoted by $\mathit{comp}(P,\{p_1,\dots,p_k\})$.
 
 Recall that the completion of program~$C$ is the sentence~\eqref{compC}.
-Predicate constants $d1/3$ and $d2/3$ are private to program~$C$. We associate predicate variables $D_1/3$ and $D_2/3$ with them, respectively.
-The completion of program~$C$ with respect to the private predicate constants $\{d1,d2\}$
+
+As discussed 
+predicate constants $d1/3$ and $d2/3$ are private to program~$C$. We associate predicate variables $D_1/3$ and $D_2/3$ with them, respectively.
+The private completion of program~$C$ with respect to the 
+private predicate constants $\{d1,d2\}$
 follows
 \beq
 \ba l
-\forall D_1 D_2 C_2 C_3 C_6 C_7(F^B_2(C_2)\land F^B_3(C_3)\land F^C_6(C_6,D_1)\land F^C_7(C_7,D_2)\\
+\forall D_1 D_2 C_2 C_3 C_6 C_7(F^B_2(C_2)\land F^B_3(C_3)\land F^C_6(C_6,D_1)\land F^C_7(C_7,D_2)\land {G}_C^p(D_1,D_2)\\
 \hskip 21mm
-\to  G_C(C_2, C_3, C_6, C_7,D_1,D_2)),
+\to  G^n_C(C_2, C_3, C_6, C_7)),
 \ea
 \eeq{compCP}
-where $F^C_6(C_6,D_1)$ is
+where
+\begin{itemize}
+\item $F^C_6(C_6,D_1)$ is
 $$
 \forall VK(V\in C_6(K) \lrar \exists XY(V=(X,Y) \land q(X,Y) \land D_1(X,Y,K)));
 $$
- $F^C_7(C_7,D_2)$ is
+ \item $F^C_7(C_7,D_2)$ is
 $$
 \forall VK(V\in C_7(K) \lrar \exists XY(V=(X,Y) \land q(X,Y) \land D_2(X,Y,K)));
 $$
-and $G_C(C_2, C_3, C_6, C_7, D_1, D_2)$ is the conjunction of
+\item $G^n_C(C_2, C_3, C_6, C_7)$ is the conjunction of
 formulas
 (\ref{a1fcdef}),
-(\ref{b2f}), (\ref{b3f}), (\ref{c6f}), (\ref{c7f}) and formulas
+(\ref{b2f}), (\ref{b3f}), (\ref{c6f}), (\ref{c7f});
+and 
+\item $G^p_C(D_1,D_2)$ is the conjunction of
+formulas
 \beq
 \ba l
 \forall V_1V_2V_3( D_1(V_1,V_2,V_3)\lrar\\
@@ -1233,11 +1265,12 @@ formulas
 and
 \beq
 \ba l\forall V_1V_2V_3(D_2(V_1,V_2,V_3)\lrar \\
-\hskip 17mm
+\hskip 10mm
 \exists I J  (1\leq I\leq n \land 1\leq J\leq n 
 \land V_1=I \land V_2=J \land V_3= I+J-1)).
 \ea
 \eeq{c5fcdefV}
+\end{itemize}
 
 
 
@@ -1613,3 +1646,47 @@ and~(\ref{finC1}) follows by~(\ref{fin2}).
 the signature~$\sigma^\#$ we express the clain that is satisfied by all
 regular interpretations.)
 
+\section{Alterbative definition of Private Completion}
+For a program $P$ with private predicate constants $\{p_1,\dots,p_k\}$, we first associate predicate variables $P_1,\dots,P_k$ with them, respectively so that their arity and sorts coincide. Then
+we define the completion of $P$ with respect to $\{p_1,\dots,p_k\}$ as the formula obtained from the completion of $P$ by replacing the predicate constants $p_1,\dots,p_k$ with the associated predicate variables $P_1,\dots,P_k$, respectively.  The resulting formula is denoted by $\mathit{comp}(P,\{p_1,\dots,p_k\})$.
+
+Recall that the completion of program~$C$ is the sentence~\eqref{compC}.
+Predicate constants $d1/3$ and $d2/3$ are private to program~$C$. We associate predicate variables $D_1/3$ and $D_2/3$ with them, respectively.
+The completion of program~$C$ with respect to the private predicate constants $\{d1,d2\}$
+follows
+\beq
+\ba l
+\forall D_1 D_2 C_2 C_3 C_6 C_7(F^B_2(C_2)\land F^B_3(C_3)\land F^C_6(C_6,D_1)\land F^C_7(C_7,D_2)\\
+\hskip 21mm
+\to  G_C(C_2, C_3, C_6, C_7,D_1,D_2)),
+\ea
+\eeq{compCP}
+where $F^C_6(C_6,D_1)$ is
+$$
+\forall VK(V\in C_6(K) \lrar \exists XY(V=(X,Y) \land q(X,Y) \land D_1(X,Y,K)));
+$$
+ $F^C_7(C_7,D_2)$ is
+$$
+\forall VK(V\in C_7(K) \lrar \exists XY(V=(X,Y) \land q(X,Y) \land D_2(X,Y,K)));
+$$
+and $G_C(C_2, C_3, C_6, C_7, D_1, D_2)$ is the conjunction of
+formulas
+(\ref{a1fcdef}),
+(\ref{b2f}), (\ref{b3f}), (\ref{c6f}), (\ref{c7f}) and formulas
+\beq
+\ba l
+\forall V_1V_2V_3( D_1(V_1,V_2,V_3)\lrar\\
+\hskip 21mm
+\exists I J  N(1\leq I\leq N \land 1\leq J\leq N \land N=n \\
+\hskip 33mm
+\land\; V_1=I\land V_2=J \land V_3= I-J+N)),
+\ea
+\eeq{c4fcdefV}
+and
+\beq
+\ba l\forall V_1V_2V_3(D_2(V_1,V_2,V_3)\lrar \\
+\hskip 17mm
+\exists I J  (1\leq I\leq n \land 1\leq J\leq n 
+\land V_1=I \land V_2=J \land V_3= I+J-1)).
+\ea
+\eeq{c5fcdefV}
