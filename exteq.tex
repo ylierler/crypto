@@ -1289,11 +1289,6 @@ first-order theory~$T_{AB}$ extended  with the following axioms:
 \end{align}
 \end{itemize}
 
-Note how
-the result of substituting $d1$ for $D_1$
-in~(\ref{c4fcdefV}) is formula~\eqref{c4fcdef}, denoted by $\diagO$, and
-the result of substituting $d2$ for $D_2$
-in~(\ref{c5fcdefV}) is formula~\eqref{c5fcdef}, denoted by $\diagT$.
 
 
 
@@ -1321,16 +1316,20 @@ the theory~$T_{ABC}$,
 $\I$ satisfies its theorem~(\ref{reform2.1}), which is equivalent to
 $$
 \ba{l}
-\forall C_2\cdots C_5(C_2=C_2^* \land\cdots \land C_5=C_5^* \to
-G_B(C_2,\dots,C_5))\lrar  \\
-\hspace{4mm}
-\forall C_2 C_3 C_6 C_7( 
+\forall C_2\cdots C_5(C_2=C_2^* \land\cdots \land C_5=C_5^* \to 
+\\
+\hspace{30mm}G_B(C_2,C_3,C_4,C_5))\ \lrar\\
+\hspace{0mm}
+\forall D_1 D_2 C_2 C_3 C_6 C_7( 
+  D_1=d1\land
+  D_2=d2\land\\
+\hspace{18mm}
   C_2=C_2^*\land
   C_3=C_3^*\land
-  C_6=C_7^*\land
+  C_6=C_6^*\land
   C_7=C_7^*\to
   \\
-\hspace{16mm} G^o_C(C_2,C_3,C_6,C_7)).
+\hspace{30mm} G_C(C_2,C_3,C_6,C_7,D_1,D_2)).
   \ea
   $$
 From Lemma~\ref{lem:eu}(b) we conclude
@@ -1353,40 +1352,42 @@ $$
 It follows that~$\I$ satisfies the equivalence
 $$
 \ba{l}
-\forall C_2\cdots C_5(F^B_2(C_2)\land\cdots \land F^B_5(C_5)\to
-G_B(C_2,\dots,C_5))\lrar\\
-\hspace{4mm}
-\forall C_2 C_3 C_6 C_7 D_1 D_2( 
+\forall C_2\cdots C_5(F^B_2(C_2)\land\cdots \land F^B_5(C_5)
+\to 
+\\
+\hspace{30mm}G_B(C_2,C_3,C_4,C_5))\ \lrar\\
+\hspace{0mm}
+\forall D_1 D_2 C_2 C_3 C_6 C_7( 
+D_1=d1\land
+  D_2=d2\land
   F^B_2(C_2)\land
   F^B_3(C_3)\land
   F^C_6(C_6,d1)\land
-  F^C_7(C_7,d2)\land
-  D_1=d1\land
-  D_2=d2\to 
+  F^C_7(C_7,d2)\to
   \\
-\hspace{16mm} G^o_C(C_2,C_3,C_6,C_7)).
+\hspace{16mm} G_C(C_2,C_3,C_6,C_7,d1,d2)).
 \ea$$
 and consequently,
 $$
 \ba{l}
 \forall C_2\cdots C_5(F^B_2(C_2)\land\cdots \land F^B_5(C_5)\to
 G_B(C_2,\dots,C_5))\lrar\\
-\hspace{4mm}
+\hspace{0mm}
 \forall D_1 D_2 C_2 C_3 C_6 C_7 ( 
   F^B_2(C_2)\land
   F^B_3(C_3)\land
-  F^C_6(C_6,D1)\land
-  F^C_7(C_7,D2)
+  F^C_6(C_6,D_1)\land
+  F^C_7(C_7,D_2)
  \to 
   \\
-\hspace{16mm} G^o_C(C_2,C_3,C_6,C_7)).
+\hspace{16mm} G_C(C_2,C_3,C_6,C_7,D_1,D_2)).
 \ea$$
 which is identical to the consequent $\mathit{comp}(B)\lrar\mathit{comp}(C,\{d1,d2\})$
 of~(\ref{eq:thm:bc}).
 
 \subsection{Second reformulation}
 
-In this section we simplify several subformulas of equivalence~(\ref{eq:thm:bc}).
+In this section we simplify several subformulas of equivalence~(\ref{reform2.1}).
 Recall that 
 $G_B(C_2,\dots, C_5)$ is the conjunction of
 formulas~(\ref{a1fcdef}), (\ref{b2f}), (\ref{b3f}), (\ref{b4f}),
@@ -1419,10 +1420,15 @@ $$
 \forall KN
 (1\leq K\leq 2\times N-1
 \land N=n\to
-\co(C_7(K))\leq 1).
+\co(C^*_7(K))\leq 1).
 $$
 denoted by $\bFivefs'$.
 
+Note how
+the result of substituting $d1$ for $D_1$
+in~(\ref{c4fcdefV}) is formula~\eqref{c4fcdef}, denoted by $\diagO$, and
+the result of substituting $d2$ for $D_2$
+in~(\ref{c5fcdefV}) is formula~\eqref{c5fcdef}, denoted by $\diagT$.
 
 
 
@@ -1449,7 +1455,7 @@ $$%\eeq{gamma3}
 }
 
 \medskip
-The conclusion of the theorem trivially follows from the following claim
+The conclusion of the theorem trivially follows from the following claim:
 \emph{The formula
 $$
 \ba r
@@ -1463,6 +1469,7 @@ $$
 \ea
 $$
 }
+\noindent
 The last claim in turn follows from the following two lemmas.
 \begin{lemma}\label{claim8}
 $T'_{ABC}\vdash \bFourfs \lrar \bFourfs'\land\diagO$.
