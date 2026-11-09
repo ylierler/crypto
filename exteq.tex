@@ -1333,9 +1333,9 @@ Consider one more extension of the signature $\sigma^\#$ obtained
 from the signature extended in Section~\ref{sec:reform1}
 by adding 
 \begin{itemize}
-%\item predicate
-%constants $d1/3$, $d2/3$ (stemming from the signature of formula encoding Program C) 
-%and 
+\item predicate
+constants $D^*_1/3$, $D^*_2/3$ with argument sorts {\em general}
+and 
 \item function constants
 $C_6^*,C_7^*$ similar to the variables 
 $C_6,C_7$, so that~$C_6^*$ and $C_7^*$ are function constants with 
@@ -1344,16 +1344,16 @@ $C_6,C_7$, so that~$C_6^*$ and $C_7^*$ are function constants with
 By~$T_{ABC}$ we denote the
 first-order theory~$T_{AB}$ extended  with the following axioms:
 \begin{itemize}
-\item the first-order sentences  $F^C_6(C^*_6,d1)$, $F^C_7(C^*_7,d2)$ 
+\item the first-order sentences  $F^C_6(C^*_6,D^*_1)$, $F^C_7(C^*_7,D^*_2)$ 
   obtained from $F^C_6(C_6,D_1),F^C_7(C_7,D_2)$ by
-  substituting the constants $C^*_6,C^*_7,d1,d2$ for the variables
+  substituting the constants $C^*_6,C^*_7,D^*_1,D^*_2$ for the variables
   $C_6,C_7,D_1,D_2$; these sentences are
 \begin{align}
-&\forall VK(V\in C^*_6(K) \lrar \exists XY(V=(X,Y) \land q(X,Y) \land d_1(X,Y,K))),\label{dd6}\\
-&\forall VK(V\in C^*_7(K) \lrar \exists XY(V=(X,Y) \land q(X,Y) \land d_2(X,Y,K)))\label{dd7};
+&\forall VK(V\in C^*_6(K) \lrar \exists XY(V=(X,Y) \land q(X,Y) \land D^*_1(X,Y,K))),\label{dd6}\\
+&\forall VK(V\in C^*_7(K) \lrar \exists XY(V=(X,Y) \land q(X,Y) \land D^*_2(X,Y,K)))\label{dd7};
 \end{align}
 \item sentences
- $H^C_1(d1)$ and $H^C_2(d2)$ which are formulas~\eqref{c4fcdef} and~\eqref{c5fcdef}, respectively; we choose to denote them by $\diagO$ and $\diagT$.
+ $H^C_1(D^*_1)$ and $H^C_2(D^*_2)$, respectively; we choose to denote them by $\diagO$ and $\diagT$.
 \end{itemize}
 
 
@@ -1362,7 +1362,7 @@ first-order theory~$T_{AB}$ extended  with the following axioms:
 \medskip\noindent{\bf Theorem~\ref{thm:bc}, first reformulation.}
 \emph{The sentence
   \beq
-  G_B(C^*_2,\dots,C^*_5)\lrar \big(G^p_C(d_1,d2) \to G^o_C(C^*_2, C^*_3, C^*_6, C^*_7,)\big) 
+  G_B(C^*_2,\dots,C^*_5)\lrar \big(G^p_C(D^*_1,D^*_2) \to G^o_C(C^*_2, C^*_3, C^*_6, C^*_7,)\big) 
   \eeq{reform2.1}
 is provable in the theory $T_{ABC}$.}
 
@@ -1373,10 +1373,16 @@ will follow.  Indeed, consider any regular interpretation~$\I$
 of the signature~$\sigma^\#$ that satisfies the antecedent~$\ug$
 of~(\ref{eq:thm:bc}); we need to verify that~$\I$ satisfies the consequent
 of~(\ref{eq:thm:bc}).
+
 Consider an extension of~$\I$ to the signature of~$T_{ABC}$ that
-satisfies $F^A_1(C_1^*), F^B_2(C_2^*),\dots,F^B_5(C_5^*)$, and $F^C_6(C_6^*,d1),F^C_7(C_7^*,d2)$; such an extension exists by
-Lemma~\ref{lem:eu}(a) and the observation that $F^C_6(C_6^*,d1),F^C_7(C_7^*,d2)$ coincide with the formulas 
-$F^C_6(C_6^*),F^C_7(C_7^*)$, respectively.
+satisfies $F^A_1(C_1^*), F^B_2(C_2^*),\dots,F^B_5(C_5^*)$, and $F^C_6(C_6^*,D^*_1),F^C_7(C_7^*,D^*_2)$; such an extension exists by
+Lemma~\ref{lem:eu}(a). While this claim is obvious for the most part, it makes sense to point at the following:
+\begin{itemize}
+\item formula $F^C_6(C_6^*,D^*_1)$ is obtained from the formula $F^C_6(C_6^*)$ by replacing the constant $D_1^*$ with the constant $d1$; by Lemma~\ref{lem:eu}(a) there exists an extension of~$\I$ that satisfies $F^C_6(C_6^*)$. Then we can choose the value of $D_1^*$ in that extension to be that of $d1$;
+and
+\item formula $F^C_7(C_7^*,D^*_2)$ is obtained from the formula $F^C_7(C_7^*)$ by replacing the constant $D_2^*$ with the constant $d2$. The reasoning of the previous bullet applies.
+\end{itemize}
+
 We take the liberty to denote that
 extension by the same symbol~$\I$. Since~$\I$ satisfies all axioms of
 the theory~$T_{ABC}$,
