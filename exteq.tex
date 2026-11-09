@@ -1187,41 +1187,76 @@ $\aFourfs$ follows by Lemma~\ref{claim4};
 
 $\aFivefs$ follows by Lemma~\ref{claim5}.
 
+
+
+
+
+
+
+
 \section{Private Completion}
 
-THIS SECTION SEEMS WRONG. LOOK BELOW FOR A CORRECT VERSION: Alternative. you will only need Theorem 2 from here.
 
-We now target our next goal to  extablish the precise relationship between n-Queens programs B and C. 
-We start by noting that these programs share predicate constant $q/2$ while predicate constants  $d1/3$ and $d2/3$ are unique to program C.  
-Yet, if we consider the output/extrenal behavior of program $C$ we find atoms constructed with predicate constants $d1/3$, $d2/3$ ``inessential''; it is atoms constructed with predicate constant $q/2$ that encode the solution. \cite{fan23a} formalized the notion of {\em external behavior} and defined the {\em equivalence with respect to a user guide}.
-The key to that equivalence is the allowance to treat predicate symbols differently. In particular, in our sample programs the predicate constant $q/2$ is treated as an \emph{output} one, while $d1/3$ and $d2/3$ are treated as \emph{private} predicate constants.  Such distinction allows us to extend the notion of completion to programs with private predicate constants.
+For a program $P$ with private predicate constants $\{p_1,\dots,p_k\}$, we first associate with them pair-wise distinct predicate variables $P_1,\dots,P_k$, respectively so that their arity and sorts coincide. 
+The \emph{private completion} of a normal program~$\Pi$ with private predicate constants $\{p_1,\dots,p_k\}$, denoted by $\mathit{comp}(P,\{p_1,\dots,p_k\})$,
+starts by constructing the following formula
+\beq
+\forall D_1\cdots D_k C_1\cdots C_m 
+\big((F_1(C_1)\land\cdots\land F_m(C_m)  \land G^p(C_1,\dots,C_m) )
+\to  G^o(C_1,\dots,C_m))\big),
+\eeq{compP}
+where
+\begin{itemize}
+\item $G^p(C_1,\dots,C_m)$ is the conjunction of
+\begin{itemize}
+\item the completed definitions of all {\em private} predicate constants occurring
+  in~$\nu(\Pi)$
+\end{itemize}  
+\item $G^o(C_1,\dots,C_m)$ is the conjunction of
+\begin{itemize}
+\item   the completed definitions of all {\em non-private} predicate constants occurring
+  in~$\nu(\Pi)$, and
+\item the formulas~$\nu(R)$ for all constraints~$R$ in~$\Pi$
+\end{itemize}
+\end{itemize}
+Private completion  $\mathit{comp}(P,\{p_1,\dots,p_k\})$ is the universal closure of the formula
+obtained from~\eqref{compP} by replacing the predicate constants $p_1,\dots,p_k$ with the associated predicate variables $P_1,\dots,P_k$, respectively.  
+For a semi-normal program~$\Pi$, $\mathit{comp}(\Pi,\{p_1,\dots,p_k\})$ is defined as
+$\mathit{comp}(\mathit{normal}(\Pi),\{p_1,\dots,p_k\})$.
 
-For a program $\Pi$ with private predicate constants $\{p_1,\dots,p_k\}$, we first associate predicate variables $P_1,\dots,P_k$ with them, respectively so that their arity and sorts coincide. Then
-we define the completion of $\Pi$ with respect to $\{p_1,\dots,p_k\}$ as the formula obtained from the completion of $P$ by replacing the predicate constants $p_1,\dots,p_k$ with the associated predicate variables $P_1,\dots,P_k$, respectively.  The resulting formula is denoted by $\mathit{comp}(\Pi,\{p_1,\dots,p_k\})$.
 
-Recall that the completion of program~$C$ is the sentence~\eqref{compC}.
-Predicate constants $d1/3$ and $d2/3$ are private to program~$C$. We associate predicate variables $D_1/3$ and $D_2/3$ with them, respectively.
-The completion of program~$C$ with respect to the private predicate constants $\{d1,d2\}$
+As discussed 
+predicate constants $d1/3$ and $d2/3$ are private to program~$C$. We associate predicate variables $D_1/3$ and $D_2/3$ with them, respectively.
+The private completion of program~$C$ with respect to the 
+private predicate constants $\{d1,d2\}$ -- $\mathit{comp}(C,\{d1,d2\})$ --
 follows
 \beq
 \ba l
-\forall D_1 D_2 C_2 C_3 C_6 C_7(F^B_2(C_2)\land F^B_3(C_3)\land F^C_6(C_6,D_1)\land F^C_7(C_7,D_2)\\
+\forall D_1 D_2 C_2 C_3 C_6 C_7\Big(\big(F^B_2(C_2)\land F^B_3(C_3)\land F^C_6(C_6,D_1)\land F^C_7(C_7,D_2)
+\land{G}_C^p(D_1,D_2)\big) 
+\\
 \hskip 21mm
-\to  G_C(C_2, C_3, C_6, C_7,D_1,D_2)),
+\to   
+G^o_C(C_2, C_3, C_6, C_7)\Big),
 \ea
 \eeq{compCP}
-where $F^C_6(C_6,D_1)$ is
+where
+\begin{itemize}
+\item $F^C_6(C_6,D_1)$ is
 $$
 \forall VK(V\in C_6(K) \lrar \exists XY(V=(X,Y) \land q(X,Y) \land D_1(X,Y,K)));
 $$
- $F^C_7(C_7,D_2)$ is
+ \item $F^C_7(C_7,D_2)$ is
 $$
 \forall VK(V\in C_7(K) \lrar \exists XY(V=(X,Y) \land q(X,Y) \land D_2(X,Y,K)));
 $$
-and $G_C(C_2, C_3, C_6, C_7, D_1, D_2)$ is the conjunction of
+\item $G^o_C(C_2, C_3, C_6, C_7)$ is the conjunction of
 formulas
 (\ref{a1fcdef}),
-(\ref{b2f}), (\ref{b3f}), (\ref{c6f}), (\ref{c7f}) and formulas
+(\ref{b2f}), (\ref{b3f}), (\ref{c6f}), (\ref{c7f});
+and 
+\item $G^p_C(D_1,D_2)$ is the conjunction of
+formulas
 \beq
 \ba l
 \forall V_1V_2V_3( D_1(V_1,V_2,V_3)\lrar\\
@@ -1234,20 +1269,47 @@ formulas
 and
 \beq
 \ba l\forall V_1V_2V_3(D_2(V_1,V_2,V_3)\lrar \\
-\hskip 17mm
+\hskip 10mm
 \exists I J  (1\leq I\leq n \land 1\leq J\leq n 
 \land V_1=I \land V_2=J \land V_3= I+J-1)).
 \ea
 \eeq{c5fcdefV}
+\end{itemize}
+We denote formulas~\eqref{c4fcdefV} and~\eqref{c5fcdefV} by $H^C_1(D_1)$ and $H^C_2(D_2)$, respectively.
 
-
-
-
-%Recall that the completion of program~$C$ is the sentence~\eqref{compC}.
-
-
-
-
+\begin{lemma}\label{lem:privatedefs}
+  Formulas
+  $$
+  \ba{l}
+  \forall D D' (H^C_1(D)\land H^C_1(D')\to D=D') \hbox{ and }\\
+  \forall D D' (H^C_2(D)\land H^C_2(D')\to D=D')\\
+  \ea
+  $$
+  are tautologies of first-order logic.
+\end{lemma}
+\begin{proof}
+We illustrate the proof for the first formula; the second one is proved similarly.
+  Formula $H^C_1(D)\land H^C_1(D')$ has the form 
+$$
+\ba l
+\forall V_1V_2V_3( D(V_1,V_2,V_3)\lrar\\
+\hskip 21mm
+\exists I J  N(1\leq I\leq N \land 1\leq J\leq N \land N=n \\
+\hskip 33mm
+\land\; V_1=I\land V_2=J \land V_3= I-J+N))\land\\
+\forall V_1V_2V_3( D'(V_1,V_2,V_3)\lrar\\
+\hskip 21mm
+\exists I J  N(1\leq I\leq N \land 1\leq J\leq N \land N=n \\
+\hskip 33mm
+\land\; V_1=I\land V_2=J \land V_3= I-J+N))
+\ea
+$$ 
+This formula implies
+$$
+\forall V_1V_2V_3( D(V_1,V_2,V_3)\lrar D'(V_1,V_2,V_3))
+$$
+which is equivalent to $D=D'$. 
+\end{proof}
 
 \section{Statement of Theorem~\ref{thm:bc}:\\ Relating n-Queens Programs B and C}
 
@@ -1258,6 +1320,394 @@ The formula
 \eeq{eq:thm:bc}
 is satisfied by all regular interpretations of $\sigma^\#$.
 \end{theorem}
+
+
+\subsection{First reformulation}
+
+
+
+As the first step towards proving Theorem~\ref{thm:bc}, we reformulate it
+as an assertion about provability in a first-order theory.
+
+Consider one more extension of the signature $\sigma^\#$ obtained 
+from the signature extended in Section~\ref{sec:reform1}
+by adding 
+\begin{itemize}
+%\item predicate
+%constants $d1/3$, $d2/3$ (stemming from the signature of formula encoding Program C) 
+%and 
+\item function constants
+$C_6^*,C_7^*$ similar to the variables 
+$C_6,C_7$, so that~$C_6^*$ and $C_7^*$ are function constants with 
+ the value sort \emph{set} and the argument sort is {\em integer}.
+\end{itemize}    
+By~$T_{ABC}$ we denote the
+first-order theory~$T_{AB}$ extended  with the following axioms:
+\begin{itemize}
+\item the first-order sentences  $F^C_6(C^*_6,d1)$, $F^C_7(C^*_7,d2)$ 
+  obtained from $F^C_6(C_6,D_1),F^C_7(C_7,D_2)$ by
+  substituting the constants $C^*_6,C^*_7,d1,d2$ for the variables
+  $C_6,C_7,D_1,D_2$; these sentences are
+\begin{align}
+&\forall VK(V\in C^*_6(K) \lrar \exists XY(V=(X,Y) \land q(X,Y) \land d_1(X,Y,K))),\label{dd6}\\
+&\forall VK(V\in C^*_7(K) \lrar \exists XY(V=(X,Y) \land q(X,Y) \land d_2(X,Y,K)))\label{dd7};
+\end{align}
+\item sentences
+ $H^C_1(d1)$ and $H^C_2(d2)$ which are formulas~\eqref{c4fcdef} and~\eqref{c5fcdef}, respectively; we choose to denote them by $\diagO$ and $\diagT$.
+\end{itemize}
+
+
+
+
+\medskip\noindent{\bf Theorem~\ref{thm:bc}, first reformulation.}
+\emph{The sentence
+  \beq
+  G_B(C^*_2,\dots,C^*_5)\lrar \big(G^p_C(d_1,d2) \to G^o_C(C^*_2, C^*_3, C^*_6, C^*_7,)\big) 
+  \eeq{reform2.1}
+is provable in the theory $T_{ABC}$.}
+
+\medskip
+This reformulation is proved below, and then the
+original version of Theorem~\ref{thm:bc}
+will follow.  Indeed, consider any regular interpretation~$\I$
+of the signature~$\sigma^\#$ that satisfies the antecedent~$\ug$
+of~(\ref{eq:thm:bc}); we need to verify that~$\I$ satisfies the consequent
+of~(\ref{eq:thm:bc}).
+Consider an extension of~$\I$ to the signature of~$T_{ABC}$ that
+satisfies $F^A_1(C_1^*), F^B_2(C_2^*),\dots,F^B_5(C_5^*)$, and $F^C_6(C_6^*,d1),F^C_7(C_7^*,d2)$; such an extension exists by
+Lemma~\ref{lem:eu}(a) and the observation that $F^C_6(C_6^*,d1),F^C_7(C_7^*,d2)$ coincide with the formulas 
+$F^C_6(C_6^*),F^C_7(C_7^*)$, respectively.
+We take the liberty to denote that
+extension by the same symbol~$\I$. Since~$\I$ satisfies all axioms of
+the theory~$T_{ABC}$,
+$\I$ satisfies its theorem~(\ref{reform2.1}), which is equivalent to
+$$%%\beq
+\ba{l}
+\forall C_2\cdots C_5(C_2=C_2^* \land\cdots \land C_5=C_5^* \to 
+\\
+\hspace{30mm}G_B(C_2,C_3,C_4,C_5))\ \lrar\\
+\hspace{0mm}
+\forall D_1 D_2 C_2 C_3 C_6 C_7\Big( 
+  D_1=d1\land
+  D_2=d2\land\\
+\hspace{18mm}
+  C_2=C_2^*\land
+  C_3=C_3^*\land
+  C_6=C_6^*\land
+  C_7=C_7^*\to
+  \\
+\hspace{30mm} 
+\big(G^p_C(D_1,D_2) \to G^o_C(C_2, C_3, C_6, C_7)\big) 
+\Big).
+  \ea
+ $$% \eeq{eq:equivalence1}  
+ Recall that $G^p_C(D_1,D_2)$ is a formula $H_1^C(D_1)\land H_2^C(D_2)$.
+The right-hand side of the equivalence above is equivalent to
+$$
+\ba{l}
+\forall D_1 D_2 C_2 C_3 C_6 C_7\Big( \big(
+  D_1=d1\land
+  D_2=d2\land\\
+\hspace{18mm}
+  C_2=C_2^*\land
+  C_3=C_3^*\land
+  C_6=C_6^*\land
+  C_7=C_7^*\land
+  H^C_1(D_1)\land H^C_2(D_2) \big)\to
+  %G^p_C(D_1,D_2) \to
+  \\
+\hspace{30mm} 
+ G^o_C(C_2, C_3, C_6, C_7) 
+\Big).
+  \ea
+ $$ 
+ 
+From Lemma~\ref{lem:eu}(b) we conclude
+that~$\I$ satisfies also the formulas
+$$
+\ba l
+%\forall C_1(F^A_1(C_1) \lrar C_1=C^*_1),\\
+\forall C_i(F^B_i(C_i) \lrar C_i=C^*_i) \qquad (i=2,\dots,5),\\
+\forall C_j(F^C_j(C_j) \lrar C_j=C^*_j) \qquad (j=6,7),
+\ea
+$$
+and consequently,
+$$
+\ba l
+\forall C_6(F^C_6(C_6,d1) \lrar C_6=C^*_6),\\
+\forall C_7(F^C_7(C_7,d2) \lrar C_7=C^*_7).\\
+\ea
+$$
+By Lemma~\ref{lem:privatedefs},~$\I$ satisfies also the formulas
+$$
+\ba l
+\forall D_1(H^C_1(D_1) \lrar D_1=d1),\\
+\forall D_2(H^C_2(D_2) \lrar D_2=d2).\\
+\ea
+$$
+
+Putting these observations together we conclude that~$\I$ satisfies the equivalence
+$$
+\ba{l}
+\forall C_2\cdots C_5\big(
+  (F^B_2(C_2)\land\cdots \land F^B_5(C_5))\to
+G_B(C_2,\dots,C_5)\big)\lrar\\
+\hspace{0mm}
+\forall D_1 D_2 C_2 C_3 C_6 C_7 \Big(  
+\big(  F^B_2(C_2)\land
+  F^B_3(C_3)\land
+  F^C_6(C_6,D_1)\land
+  F^C_7(C_7,D_2)\land 
+  H^C_1(D_1)\land
+  H^C_2(D_2)\big)
+ \to 
+  \\
+\hspace{16mm} 
+ G^o_C(C_2, C_3, C_6, C_7)\Big).
+\ea$$
+which is identical to
+the consequent $\mathit{comp}(B)\lrar\mathit{comp}(C,\{d1,d2\})$
+of~(\ref{eq:thm:bc}).
+
+\subsection{Second reformulation}
+
+In this section we simplify several subformulas of equivalence~(\ref{reform2.1}).
+Recall that 
+$G_B(C_2,\dots, C_5)$ is the conjunction of
+formulas~(\ref{a1fcdef}), (\ref{b2f}), (\ref{b3f}), (\ref{b4f}),
+and (\ref{b5f})
+and 
+$G^o_C(C_2,C_3,C_6,C_7)$ is the conjunction of
+formulas~(\ref{a1fcdef}), (\ref{b2f}), (\ref{b3f}), (\ref{c6f}), (\ref{c7f}),
+and $G^p_C(D_1,D_2)$ is the conjunction of $H^C_1(D_1)$ and $H^C_2(D_2)$, which are formulas
+(\ref{c4fcdefV}) and
+(\ref{c5fcdefV}), respectively.
+
+
+Recall that theory $T_{ABC}$ includes all statements of theory $T_{AB}$.
+Now we use the  simplifications and notation as
+introduced
+in Section~\ref{sec:reformThm1}
+within items 1, 6,  7, 8, and~9. 
+We observe that the claims of these items hold in the scope of theory $T_{ABC}$ and the considered conjunctions of this section. 
+By~$T'_{ABC}$ we denote the theory obtained by adding~$\dOne$, which is formula (\ref{a1fcdef}),
+to~$T_{ABC}$ as an axiom.
+
+The result of substituting $C_6^*$ for $C_6$ in~(\ref{c6f}) is equivalent
+in~$T_{ABC}$ to the formula
+$$
+\forall KN
+(1\leq K\leq 2\times N-1 \land N=n\to\co(C^*_6(K))\leq 1).
+$$
+denoted by $\bFourfs'$.
+
+The result of substituting $C_7^*$ for $C_7$ in~(\ref{c7f}) is equivalent
+in~$T_{ABC}$ to the formula
+$$
+\forall KN
+(1\leq K\leq 2\times N-1
+\land N=n\to
+\co(C^*_7(K))\leq 1).
+$$
+denoted by $\bFivefs'$.
+
+Note how $H^C_1(d1)$ and $H^C_2(d2)$ are formulas~\eqref{c4fcdef} and~\eqref{c5fcdef}, respectively. We choose to denote them by $\diagO$ and $\diagT$.
+
+
+\medskip
+The stated observations  show that Theorem~\ref{thm:bc} can be further
+reformulated as follows:
+
+\medskip\noindent{\bf Theorem~\ref{thm:bc}, second reformulation.}
+\emph{The formula~\eqref{gamma2}, namely,
+$$
+\ba r
+\bTwofgeq\land \bTwofleq\land \bThreefgeq\;\land\quad\\
+\bThreefleq\;\land\bFourfs\land \bFivefs.
+\ea
+$$%\eeq{gamma2}
+is equivalent in~$T'_{ABC}$ to the formula
+$$
+\ba r
+\diagO\land\diagT\to\hspace{80mm}\\
+\bTwofgeq\land \bTwofleq\land \bThreefgeq\;\land\quad\\
+\bThreefleq\;\land\bFourfs'\land \bFivefs'.
+\ea
+$$%\eeq{gamma3}
+}
+
+\medskip
+The conclusion of the theorem trivially follows from the following claim:
+\emph{The formula
+$$
+\ba r
+\bFourfs\land \bFivefs.
+\ea
+$$%\eeq{gamma2}
+is equivalent in~$T'_{ABC}$ to the formula
+$$
+\ba r
+\diagO\land\diagT\to
+\bFourfs'\land \bFivefs'.
+\ea
+$$
+}
+
+\noindent
+The last claim in turn follows from the following two lemmas.
+\begin{lemma}\label{claim8}
+$T'_{ABC}\vdash \bFourfs \lrar (\diagO\to \bFourfs')$.
+\end{lemma}
+As the formula $\diagO$ is an explicit definition of the predicate constant $d1/3$ in terms of inequalities, formula 
+$$
+\bFourfs \lrar \bFourfs'\land\diagO
+$$
+is equivalent to the formula
+$$
+\bFourfs \lrar (\diagO\to \bFourfs').
+$$
+
+
+\begin{lemma}\label{claim9}
+$T'_{ABC}\vdash \bFivefs \lrar (\diagT\to \bFivefs')$.
+\end{lemma}
+We now prove Lemmas~\ref{claim8} whereas Lemma~\ref{claim9} is proved similarly.
+\begin{proof}
+  We first prove that 
+  $T'_{ABC}\vdash \bFourfs \to \bFourfs'\land\diagO$.
+We observe that $\bFourfs$ is the formula equivalent to
+  $$
+\forall K(1\leq K\leq 2\times n-1   \to \co(C^*_4(K,n))\leq 1);
+$$
+and $\bFourfs'$ is the formula equivalent to
+$$
+\forall K
+(1\leq K\leq 2\times n-1 \to\co(C^*_6(K))\leq 1).
+$$
+Recall that 
+$$\forall VKN(V\in C^*_4(K,N) \lrar \exists IJ(V=(I,J) \land q(I,J)
+   \land K=I-J+N))$$
+is an axiom in $T'_{ABC}$.
+Let us consider its instance with $N=n$:
+$$\forall VK(V\in C^*_4(K,n) \lrar \exists IJ(V=(I,J) \land q(I,J)
+   \land K=I-J+n)).$$
+
+Also,     
+$$ \forall VK(V\in C^*_6(K) \lrar \exists XY(V=(X,Y) \land q(X,Y) \land d_1(X,Y,K)))$$
+ is an axiom in $T'_{ABC}$. 
+Recall that~$\diagO$ is an explicit definition of the predicate constant $d1/3$ in terms of inequalities, we have that the following formula follows:
+$$
+\ba{l}
+\diagO \to 
+\forall VK(V\in C^*_6(K) \lrar \exists XY(V=(X,Y) \land q(X,Y) \land 
+\exists I J  (1\leq I\leq n \land 1\leq J\leq n\\
+\hskip 33mm
+\land\; X=I\land Y=J \land K= I-J+n))
+)
+\ea
+$$
+which in turn is equivalent to 
+$$
+\ba{l}
+\diagO \to 
+\forall VK(V\in C^*_6(K) \lrar \exists I J(V=(I,J) \land q(I,J) \land 
+1\leq I\leq n \land 1\leq J\leq n\\
+\hskip 33mm
+\land K= I-J+n)
+).
+\ea
+$$
+We now recall that $\dOne$ is an axiom in $T'_{ABC}$. It is easy to see that $\dOne$ implies the following formula
+$$
+\forall I J ( q(I,J) \to
+1\leq I\leq n \land 1\leq J\leq n).
+$$
+Consequently, putting the claims of last two formulas together, we have that
+$$
+\ba{l}
+\diagO \to 
+\forall VK(V\in C^*_6(K) \lrar \exists I J(V=(I,J) \land q(I,J) 
+\land K= I-J+n)
+)
+\ea
+$$
+follows from the axioms of $T'_{ABC}$. It is now easy to see that
+$$
+\ba{l}
+\diagO \to 
+\forall VK(V\in C^*_6(K) \lrar 
+V\in C^*_4(K,n) 
+)
+\ea
+$$
+and consequently,
+$$
+\ba{l}
+\diagO \to 
+\forall K(C^*_6(K) =
+C^*_4(K,n) 
+)
+\ea
+$$
+follows from the axioms of $T'_{ABC}$.
+
+....
+
+\end{proof}  
+
+
+\bibliographystyle{named}
+\bibliography{bib}
+\end{adjustwidth}
+
+
+
+\end{document}
+
+\section{Finite sets}
+
+The formula $\exists I(I=\co(S))$, expressing that~$S$ is finite, is denoted
+by~$\fnt(S)$.
+
+The sentences
+\beq
+\forall S(\exists MN\forall X(X\in S \to M\leq X\leq N) \to \fnt(S))
+\eeq{fin1}
+and
+\beq
+\ba r
+\forall S(\exists MN\forall X(X\in S \to
+\exists YZ(X=(Y,Z) \land M\leq Y\leq N\land M\leq Z\leq N)) \to
+\quad\\
+\fnt(S))
+\ea
+\eeq{fin2}
+are satisfied by all regular interpretations.  Hence they are axioms
+of~$T'_{AB}$.
+
+The sentence
+\beq
+\fnt(C_1^*)
+\eeq{finC1}
+is a theorem of~$T'_{AB}$.  Indeed, axioms~(\ref{dd1}) and~$\ug$ imply
+$$
+\exists N\forall V(V\in C^*_1 \to \exists IJ(V=(I,J)\land
+1\leq I\leq N \land 1\leq J\leq N)),
+$$
+and~(\ref{finC1}) follows by~(\ref{fin2}).
+  
+
+\section{Proofs of the Lemmas~\ref{claim3} and~\ref{claim4}}\label{sec:lemmas}
+
+  The proof of Lemma~\ref{claim3} the formula
+\beq
+\fnt(S)\to (\co(S)\leq 1 \lrar \forall XY(X\in S \land Y\in S \to X=Y)).
+\eeq{m}
+(Here, as in Section~\ref{sec:deriving}, by asserting a formula over
+the signature~$\sigma^\#$ we express the clain that is satisfied by all
+regular interpretations.)
+
+
 
 \subsection{First reformulation}
 
@@ -1575,69 +2025,42 @@ follows from the axioms of $T'_{ABC}$.
 \end{proof}  
 
 
-\section{Alternative definition of Private Completion}
 
+\section{Private Completion}
 
-For a program $P$ with private predicate constants $\{p_1,\dots,p_k\}$, we first associate with them pair-wise distinct predicate variables $P_1,\dots,P_k$, respectively so that their arity and sorts coincide. 
-The \emph{private completion} of a normal program~$\Pi$ with private predicate constants $\{p_1,\dots,p_k\}$, denoted by $\mathit{comp}(P,\{p_1,\dots,p_k\})$,
-starts by constructing the following formula
-\beq
-\forall D_1\cdots D_k C_1\cdots C_m 
-\big((F_1(C_1)\land\cdots\land F_m(C_m)  \land G^p(C_1,\dots,C_m) )
-\to  G^o(C_1,\dots,C_m))\big),
-\eeq{compP}
-where
-\begin{itemize}
-\item $G^p(C_1,\dots,C_m)$ is the conjunction of
-\begin{itemize}
-\item the completed definitions of all {\em private} predicate constants occurring
-  in~$\nu(\Pi)$
-\end{itemize}  
-\item $G^o(C_1,\dots,C_m)$ is the conjunction of
-\begin{itemize}
-\item   the completed definitions of all {\em non-private} predicate constants occurring
-  in~$\nu(\Pi)$, and
-\item the formulas~$\nu(R)$ for all constraints~$R$ in~$\Pi$
-\end{itemize}
-\end{itemize}
-Private completion  $\mathit{comp}(P,\{p_1,\dots,p_k\})$ is the universal closure of the formula
-obtained from~\eqref{compP} by replacing the predicate constants $p_1,\dots,p_k$ with the associated predicate variables $P_1,\dots,P_k$, respectively.  
-For a semi-normal program~$\Pi$, $\mathit{comp}(\Pi,\{p_1,\dots,p_k\})$ is defined as
-$\mathit{comp}(\mathit{normal}(\Pi),\{p_1,\dots,p_k\})$.
+THIS SECTION SEEMS WRONG. LOOK BELOW FOR A CORRECT VERSION: Alternative. you will only need Theorem 2 from here.
 
+We now target our next goal to  extablish the precise relationship between n-Queens programs B and C. 
+We start by noting that these programs share predicate constant $q/2$ while predicate constants  $d1/3$ and $d2/3$ are unique to program C.  
+Yet, if we consider the output/extrenal behavior of program $C$ we find atoms constructed with predicate constants $d1/3$, $d2/3$ ``inessential''; it is atoms constructed with predicate constant $q/2$ that encode the solution. \cite{fan23a} formalized the notion of {\em external behavior} and defined the {\em equivalence with respect to a user guide}.
+The key to that equivalence is the allowance to treat predicate symbols differently. In particular, in our sample programs the predicate constant $q/2$ is treated as an \emph{output} one, while $d1/3$ and $d2/3$ are treated as \emph{private} predicate constants.  Such distinction allows us to extend the notion of completion to programs with private predicate constants.
 
-As discussed 
-predicate constants $d1/3$ and $d2/3$ are private to program~$C$. We associate predicate variables $D_1/3$ and $D_2/3$ with them, respectively.
-The private completion of program~$C$ with respect to the 
-private predicate constants $\{d1,d2\}$ -- $\mathit{comp}(C,\{d1,d2\})$ --
+For a program $\Pi$ with private predicate constants $\{p_1,\dots,p_k\}$, we first associate predicate variables $P_1,\dots,P_k$ with them, respectively so that their arity and sorts coincide. Then
+we define the completion of $\Pi$ with respect to $\{p_1,\dots,p_k\}$ as the formula obtained from the completion of $P$ by replacing the predicate constants $p_1,\dots,p_k$ with the associated predicate variables $P_1,\dots,P_k$, respectively.  The resulting formula is denoted by $\mathit{comp}(\Pi,\{p_1,\dots,p_k\})$.
+
+Recall that the completion of program~$C$ is the sentence~\eqref{compC}.
+Predicate constants $d1/3$ and $d2/3$ are private to program~$C$. We associate predicate variables $D_1/3$ and $D_2/3$ with them, respectively.
+The completion of program~$C$ with respect to the private predicate constants $\{d1,d2\}$
 follows
 \beq
 \ba l
-\forall D_1 D_2 C_2 C_3 C_6 C_7\big((F^B_2(C_2)\land F^B_3(C_3)\land F^C_6(C_6,D_1)\land F^C_7(C_7,D_2)
-\land{G}_C^p(D_1,D_2)) 
-\\
+\forall D_1 D_2 C_2 C_3 C_6 C_7(F^B_2(C_2)\land F^B_3(C_3)\land F^C_6(C_6,D_1)\land F^C_7(C_7,D_2)\\
 \hskip 21mm
-\to   
-G^o_C(C_2, C_3, C_6, C_7))\big),
+\to  G_C(C_2, C_3, C_6, C_7,D_1,D_2)),
 \ea
 \eeq{compCP}
-where
-\begin{itemize}
-\item $F^C_6(C_6,D_1)$ is
+where $F^C_6(C_6,D_1)$ is
 $$
 \forall VK(V\in C_6(K) \lrar \exists XY(V=(X,Y) \land q(X,Y) \land D_1(X,Y,K)));
 $$
- \item $F^C_7(C_7,D_2)$ is
+ $F^C_7(C_7,D_2)$ is
 $$
 \forall VK(V\in C_7(K) \lrar \exists XY(V=(X,Y) \land q(X,Y) \land D_2(X,Y,K)));
 $$
-\item $G^o_C(C_2, C_3, C_6, C_7)$ is the conjunction of
+and $G_C(C_2, C_3, C_6, C_7, D_1, D_2)$ is the conjunction of
 formulas
 (\ref{a1fcdef}),
-(\ref{b2f}), (\ref{b3f}), (\ref{c6f}), (\ref{c7f});
-and 
-\item $G^p_C(D_1,D_2)$ is the conjunction of
-formulas
+(\ref{b2f}), (\ref{b3f}), (\ref{c6f}), (\ref{c7f}) and formulas
 \beq
 \ba l
 \forall V_1V_2V_3( D_1(V_1,V_2,V_3)\lrar\\
@@ -1650,369 +2073,13 @@ formulas
 and
 \beq
 \ba l\forall V_1V_2V_3(D_2(V_1,V_2,V_3)\lrar \\
-\hskip 10mm
+\hskip 17mm
 \exists I J  (1\leq I\leq n \land 1\leq J\leq n 
 \land V_1=I \land V_2=J \land V_3= I+J-1)).
 \ea
 \eeq{c5fcdefV}
-\end{itemize}
-
-
-\subsection{First reformulation}
-
-
-
-As the first step towards proving Theorem~\ref{thm:bc}, we reformulate it
-as an assertion about provability in a first-order theory.
-
-Consider one more extension of the signature $\sigma^\#$ obtained 
-from the signature extended in Section~\ref{sec:reform1}
-by adding 
-\begin{itemize}
-%\item predicate
-%constants $d1/3$, $d2/3$ (stemming from the signature of formula encoding Program C) 
-%and 
-\item function constants
-$C_6^*,C_7^*$ similar to the variables 
-$C_6,C_7$, so that~$C_6^*$ and $C_7^*$ are function constants with 
- the value sort \emph{set} and the argument sort is {\em integer}.
-\end{itemize}    
-By~$T_{ABC}$ we denote the
-first-order theory~$T_{AB}$ extended  with the following axioms:
-\begin{itemize}
-\item the first-order sentences  $F^C_6(C^*_6,d1)$, $F^C_7(C^*_7,d2)$ 
-  obtained from $F^C_6(C_6,D_1),F^C_7(C_7,D_2)$ by
-  substituting the constants $C^*_6,C^*_7,d1,d2$ for the variables
-  $C_6,C_7,D_1,D_2$; these sentences are
-\begin{align}
-&\forall VK(V\in C^*_6(K) \lrar \exists XY(V=(X,Y) \land q(X,Y) \land d_1(X,Y,K))),\label{dd6}\\
-&\forall VK(V\in C^*_7(K) \lrar \exists XY(V=(X,Y) \land q(X,Y) \land d_2(X,Y,K)))\label{dd7};
-\end{align}
-\end{itemize}
 
 
 
 
-\medskip\noindent{\bf Theorem~\ref{thm:bc}, first reformulation.}
-\emph{The sentence
-  \beq
-  G_B(C^*_2,\dots,C^*_5)\lrar \big(G^p_C(d_1,d2) \to G^o_C(C^*_2, C^*_3, C^*_6, C^*_7,)\big) 
-  \eeq{reform2.1}
-is provable in the theory $T_{ABC}$.}
-
-\medskip
-This reformulation is proved below, and then the
-original version of Theorem~\ref{thm:bc}
-will follow.  Indeed, consider any regular interpretation~$\I$
-of the signature~$\sigma^\#$ that satisfies the antecedent~$\ug$
-of~(\ref{eq:thm:bc}); we need to verify that~$\I$ satisfies the consequent
-of~(\ref{eq:thm:bc}).
-Consider an extension of~$\I$ to the signature of~$T_{ABC}$ that
-satisfies $F^A_1(C_1^*), F^B_2(C_2^*),\dots,F^B_5(C_5^*)$, and $F^C_6(C_6^*,d1),F^C_7(C_7^*,d2)$; such an extension exists by
-Lemma~\ref{lem:eu}(a) and the observation that $F^C_6(C_6^*,d1),F^C_7(C_7^*,d2)$ coincide with the formulas 
-$F^C_6(C_6^*),F^C_7(C_7^*)$, respectively.
-We take the liberty to denote that
-extension by the same symbol~$\I$. Since~$\I$ satisfies all axioms of
-the theory~$T_{ABC}$,
-$\I$ satisfies its theorem~(\ref{reform2.1}), which is equivalent to
-$$
-\ba{l}
-\forall C_2\cdots C_5(C_2=C_2^* \land\cdots \land C_5=C_5^* \to 
-\\
-\hspace{30mm}G_B(C_2,C_3,C_4,C_5))\ \lrar\\
-\hspace{0mm}
-\forall D_1 D_2 C_2 C_3 C_6 C_7\Big( 
-  D_1=d1\land
-  D_2=d2\land\\
-\hspace{18mm}
-  C_2=C_2^*\land
-  C_3=C_3^*\land
-  C_6=C_6^*\land
-  C_7=C_7^*\to
-  \\
-\hspace{30mm} 
-\big(G^p_C(D_1,D_2) \to G^o_C(C_2, C_3, C_6, C_7)\big) 
-\Big).
-  \ea
-  $$
-From Lemma~\ref{lem:eu}(b) we conclude
-that~$\I$ satisfies also the formulas
-$$
-\ba l
-%\forall C_1(F^A_1(C_1) \lrar C_1=C^*_1),\\
-\forall C_i(F^B_i(C_i) \lrar C_i=C^*_i) \qquad (i=2,\dots,5),\\
-\forall C_j(F^C_j(C_j) \lrar C_j=C^*_j) \qquad (j=6,7),
-\ea
-$$
-and consequently,
-$$
-\ba l
-\forall C_6(F^C_6(C_6,d1) \lrar C_6=C^*_6),\\
-\forall C_7(F^C_7(C_7,d2) \lrar C_7=C^*_7).\\
-\ea
-$$
-
-It follows that~$\I$ satisfies the equivalence
-$$
-\ba{l}
-\forall C_2\cdots C_5(F^B_2(C_2)\land\cdots \land F^B_5(C_5)\to
-G_B(C_2,\dots,C_5))\lrar\\
-\hspace{0mm}
-\forall D_1 D_2 C_2 C_3 C_6 C_7 \Big( 
-  F^B_2(C_2)\land
-  F^B_3(C_3)\land
-  F^C_6(C_6,D_1)\land
-  F^C_7(C_7,D_2)
- \to 
-  \\
-\hspace{16mm} 
-\big(G^p_C(D_1,D_2) \to G^o_C(C_2, C_3, C_6, C_7)\big) 
-\Big),
-\ea$$
-which is equivalent to
-the consequent $\mathit{comp}(B)\lrar\mathit{comp}(C,\{d1,d2\})$
-of~(\ref{eq:thm:bc}).
-
-=====================================
-Below is a copy from above, so needs revision wrt to notation of Alternative Section
-\subsection{Second reformulation}
-
-In this section we simplify several subformulas of equivalence~(\ref{reform2.1}).
-Recall that 
-$G_B(C_2,\dots, C_5)$ is the conjunction of
-formulas~(\ref{a1fcdef}), (\ref{b2f}), (\ref{b3f}), (\ref{b4f}),
-and (\ref{b5f})
-and 
-$G_C(C_2,C_3,C_6,C_7,D_1,D_2)$ is the conjunction of
-formulas~(\ref{a1fcdef}), (\ref{b2f}), (\ref{b3f}), (\ref{c6f}), (\ref{c7f}),  (\ref{c4fcdefV}) and
-(\ref{c5fcdefV}).
-
-Recall that theory $T_{ABC}$ includes all statements of theory $T_{AB}$.
-Now we use the  simplifications and notation as
-introduced
-in Section~\ref{sec:reformThm1}
-within items 1, 6,  7, 8, and~9. 
-We observe that the claims of these items hold in the scope of theory $T_{ABC}$ and the considered conjunctions of this section. 
-By~$T'_{ABC}$ we denote the theory obtained by adding~$\dOne$
-to~$T_{ABC}$ as an axiom.
-
-The result of substituting $C_6^*$ for $C_6$ in~(\ref{c6f}) is equivalent
-in~$T_{ABC}$ to the formula
-$$
-\forall KN
-(1\leq K\leq 2\times N-1 \land N=n\to\co(C^*_6(K))\leq 1).
-$$
-denoted by $\bFourfs'$.
-
-The result of substituting $C_7^*$ for $C_7$ in~(\ref{c7f}) is equivalent
-in~$T_{ABC}$ to the formula
-$$
-\forall KN
-(1\leq K\leq 2\times N-1
-\land N=n\to
-\co(C^*_7(K))\leq 1).
-$$
-denoted by $\bFivefs'$.
-
-Note how
-the result of substituting $d1$ for $D_1$
-in~(\ref{c4fcdefV}) is formula~\eqref{c4fcdef}, denoted by $\diagO$, and
-the result of substituting $d2$ for $D_2$
-in~(\ref{c5fcdefV}) is formula~\eqref{c5fcdef}, denoted by $\diagT$.
-
-
-
-
-\medskip
-The stated observations  show that Theorem~\ref{thm:bc} can be further
-reformulated as follows:
-
-\medskip\noindent{\bf Theorem~\ref{thm:bc}, second reformulation.}
-\emph{The formula~\eqref{gamma2}, namely,
-$$
-\ba r
-\bTwofgeq\land \bTwofleq\land \bThreefgeq\;\land\quad\\
-\bThreefleq\;\land\bFourfs\land \bFivefs.
-\ea
-$$%\eeq{gamma2}
-is equivalent in~$T'_{ABC}$ to the formula
-$$
-\ba r
-\bTwofgeq\land \bTwofleq\land \bThreefgeq\;\land\quad\\
-\bThreefleq\;\land\bFourfs'\land \bFivefs'\land\\\diagO\land\diagT.
-\ea
-$$%\eeq{gamma3}
-}
-
-\medskip
-The conclusion of the theorem trivially follows from the following claim:
-\emph{The formula
-$$
-\ba r
-\bFourfs\land \bFivefs.
-\ea
-$$%\eeq{gamma2}
-is equivalent in~$T'_{ABC}$ to the formula
-$$
-\ba r
-\bFourfs'\land \bFivefs'\land\\\diagO\land\diagT.
-\ea
-$$
-}
-
-\noindent
-The last claim in turn follows from the following two lemmas.
-\begin{lemma}\label{claim8}
-$T'_{ABC}\vdash \bFourfs \lrar \bFourfs'\land\diagO$.
-\end{lemma}
-As the formula $\diagO$ is an explicit definition of the predicate constant $d1/3$ in terms of inequalities, formula 
-$$
-\bFourfs \lrar \bFourfs'\land\diagO
-$$
-is equivalent to the formula
-$$
-\bFourfs \lrar (\diagO\to \bFourfs').
-$$
-
-
-\begin{lemma}\label{claim9}
-$T'_{ABC}\vdash \bFivefs \lrar \bFivefs'\land\diagT$.
-\end{lemma}
-We now prove Lemmas~\ref{claim8} whereas Lemma~\ref{claim9} is proved similarly.
-\begin{proof}
-  We first prove that 
-  $T'_{ABC}\vdash \bFourfs \to \bFourfs'\land\diagO$.
-We observe that $\bFourfs$ is the formula equivalent to
-  $$
-\forall K(1\leq K\leq 2\times n-1   \to \co(C^*_4(K,n))\leq 1);
-$$
-and $\bFourfs'$ is the formula equivalent to
-$$
-\forall K
-(1\leq K\leq 2\times n-1 \to\co(C^*_6(K))\leq 1).
-$$
-Recall that 
-$$\forall VKN(V\in C^*_4(K,N) \lrar \exists IJ(V=(I,J) \land q(I,J)
-   \land K=I-J+N))$$
-is an axiom in $T'_{ABC}$.
-Let us consider its instance with $N=n$:
-$$\forall VK(V\in C^*_4(K,n) \lrar \exists IJ(V=(I,J) \land q(I,J)
-   \land K=I-J+n)).$$
-
-Also,     
-$$ \forall VK(V\in C^*_6(K) \lrar \exists XY(V=(X,Y) \land q(X,Y) \land d_1(X,Y,K)))$$
- is an axiom in $T'_{ABC}$. 
-Recall that~$\diagO$ is an explicit definition of the predicate constant $d1/3$ in terms of inequalities, we have that the following formula follows:
-$$
-\ba{l}
-\diagO \to 
-\forall VK(V\in C^*_6(K) \lrar \exists XY(V=(X,Y) \land q(X,Y) \land 
-\exists I J  (1\leq I\leq n \land 1\leq J\leq n\\
-\hskip 33mm
-\land\; X=I\land Y=J \land K= I-J+n))
-)
-\ea
-$$
-which in turn is equivalent to 
-$$
-\ba{l}
-\diagO \to 
-\forall VK(V\in C^*_6(K) \lrar \exists I J(V=(I,J) \land q(I,J) \land 
-1\leq I\leq n \land 1\leq J\leq n\\
-\hskip 33mm
-\land K= I-J+n)
-).
-\ea
-$$
-We now recall that $\dOne$ is an axiom in $T'_{ABC}$. It is easy to see that $\dOne$ implies the following formula
-$$
-\forall I J ( q(I,J) \to
-1\leq I\leq n \land 1\leq J\leq n).
-$$
-Consequently, putting the claims of last two formulas together, we have that
-$$
-\ba{l}
-\diagO \to 
-\forall VK(V\in C^*_6(K) \lrar \exists I J(V=(I,J) \land q(I,J) 
-\land K= I-J+n)
-)
-\ea
-$$
-follows from the axioms of $T'_{ABC}$. It is now easy to see that
-$$
-\ba{l}
-\diagO \to 
-\forall VK(V\in C^*_6(K) \lrar 
-V\in C^*_4(K,n) 
-)
-\ea
-$$
-and consequently,
-$$
-\ba{l}
-\diagO \to 
-\forall K(C^*_6(K) =
-C^*_4(K,n) 
-)
-\ea
-$$
-follows from the axioms of $T'_{ABC}$.
-
-....
-
-\end{proof}  
-
-
-\bibliographystyle{named}
-\bibliography{bib}
-\end{adjustwidth}
-
-
-
-\end{document}
-
-\section{Finite sets}
-
-The formula $\exists I(I=\co(S))$, expressing that~$S$ is finite, is denoted
-by~$\fnt(S)$.
-
-The sentences
-\beq
-\forall S(\exists MN\forall X(X\in S \to M\leq X\leq N) \to \fnt(S))
-\eeq{fin1}
-and
-\beq
-\ba r
-\forall S(\exists MN\forall X(X\in S \to
-\exists YZ(X=(Y,Z) \land M\leq Y\leq N\land M\leq Z\leq N)) \to
-\quad\\
-\fnt(S))
-\ea
-\eeq{fin2}
-are satisfied by all regular interpretations.  Hence they are axioms
-of~$T'_{AB}$.
-
-The sentence
-\beq
-\fnt(C_1^*)
-\eeq{finC1}
-is a theorem of~$T'_{AB}$.  Indeed, axioms~(\ref{dd1}) and~$\ug$ imply
-$$
-\exists N\forall V(V\in C^*_1 \to \exists IJ(V=(I,J)\land
-1\leq I\leq N \land 1\leq J\leq N)),
-$$
-and~(\ref{finC1}) follows by~(\ref{fin2}).
-  
-
-\section{Proofs of the Lemmas~\ref{claim3} and~\ref{claim4}}\label{sec:lemmas}
-
-  The proof of Lemma~\ref{claim3} the formula
-\beq
-\fnt(S)\to (\co(S)\leq 1 \lrar \forall XY(X\in S \land Y\in S \to X=Y)).
-\eeq{m}
-(Here, as in Section~\ref{sec:deriving}, by asserting a formula over
-the signature~$\sigma^\#$ we express the clain that is satisfied by all
-regular interpretations.)
-
-
-
+%Recall that the completion of program~$C$ is the sentence~\eqref{compC}.
