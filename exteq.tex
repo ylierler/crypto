@@ -1357,12 +1357,30 @@ first-order theory~$T_{AB}$ extended  with the following axioms:
 \end{itemize}
 
 
+\medskip
+\begin{lemma}\label{lem:eu2}
+  Every regular interpretation of $\sigma^\#$ satisfies the formulas
+ \medskip
+ 
+ (a)  $\exists C_6 D_1\,(F^C_6(C_6,D_1)\wedge H^C_1(D_1))$;~~$\exists C_7 D_2\,(F^C_7(C_7,D_2)\wedge H^C_2(D_2))$;
+ 
+ \medskip\noindent and
 
+ \medskip
+ (b)
+ \begin{tabular}{l} 
+  $\forall C_6C'_6D_1D'_1 
+  ((F^C_6(C_6,D_1)\wedge H^C_1(D_1)\wedge F^C_6(C'_6,D'_1)\wedge H^C_1(D'_1)) \to (C_6=C'_6\wedge D_1=D'_1))$;\\
+  $\forall C_7C'_7D_2D'_2 
+  ((F^C_7(C_7,D_2)\wedge H^C_2(D_2)\wedge F^C_7(C'_7,D'_2)\wedge H^C_2(D'_2)) \to (C_7=C'_7\wedge D_2=D'_2))$;\\
+\end{tabular}
+
+\end{lemma}
 
 \medskip\noindent{\bf Theorem~\ref{thm:bc}, first reformulation.}
 \emph{The sentence
   \beq
-  G_B(C^*_2,\dots,C^*_5)\lrar \big(G^p_C(D^*_1,D^*_2) \to G^o_C(C^*_2, C^*_3, C^*_6, C^*_7,)\big) 
+  G_B(C^*_2,\dots,C^*_5)\lrar  G^o_C(C^*_2, C^*_3, C^*_6, C^*_7) 
   \eeq{reform2.1}
 is provable in the theory $T_{ABC}$.}
 
@@ -1375,18 +1393,28 @@ of~(\ref{eq:thm:bc}); we need to verify that~$\I$ satisfies the consequent
 of~(\ref{eq:thm:bc}).
 
 Consider an extension of~$\I$ to the signature of~$T_{ABC}$ that
-satisfies $F^A_1(C_1^*), F^B_2(C_2^*),\dots,F^B_5(C_5^*)$, and $F^C_6(C_6^*,D^*_1),F^C_7(C_7^*,D^*_2)$; such an extension exists by
-Lemma~\ref{lem:eu}(a). While this claim is obvious for the most part, it makes sense to point at the following:
-\begin{itemize}
-\item formula $F^C_6(C_6^*,D^*_1)$ is obtained from the formula $F^C_6(C_6^*)$ by replacing the constant $D_1^*$ with the constant $d1$; by Lemma~\ref{lem:eu}(a) there exists an extension of~$\I$ that satisfies $F^C_6(C_6^*)$. Then we can choose the value of $D_1^*$ in that extension to be that of $d1$;
-and
-\item formula $F^C_7(C_7^*,D^*_2)$ is obtained from the formula $F^C_7(C_7^*)$ by replacing the constant $D_2^*$ with the constant $d2$. The reasoning of the previous bullet applies.
-\end{itemize}
+satisfies 
+$$F^A_1(C_1^*),F^B_2(C_2^*),\dots,F^B_5(C_5^*),F^C_6(C_6^*,D^*_1),F^C_7(C_7^*,D^*_2), H^C_1(D^*_1),\hbox{ and }H^C_2(D^*_2);$$ 
+such an extension exists by
+Lemmas~\ref{lem:eu}(a) and~\ref{lem:eu2}(a). 
+
+%While this claim is obvious for the most part, it makes sense to point at the following:
+%\begin{itemize}
+%\item formula $F^C_6(C_6^*,D^*_1)$ is obtained from the formula $F^C_6(C_6^*)$ by replacing the constant $D_1^*$ with the constant $d1$; by Lemma~\ref{lem:eu}(a) there exists an extension of~$\I$ that satisfies $F^C_6(C_6^*)$. Then we can choose the value of $D_1^*$ in that extension to be that of $d1$;
+%and
+%\item formula $F^C_7(C_7^*,D^*_2)$ is obtained from the formula $F^C_7(C_7^*)$ by replacing the constant $D_2^*$ with the constant $d2$. The reasoning of the previous bullet applies.
+%\end{itemize}
 
 We take the liberty to denote that
 extension by the same symbol~$\I$. Since~$\I$ satisfies all axioms of
 the theory~$T_{ABC}$,
-$\I$ satisfies its theorem~(\ref{reform2.1}), which is equivalent to
+$\I$ satisfies its theorem~(\ref{reform2.1}).
+It is easy to see from the provability of~(\ref{reform2.1}) in~$T_{ABC}$ that the
+following formula is also provable in~$T_{ABC}$ given that $H^*1(D^*_1)$ and $H^*_2(D^*_2)$ are its axioms:
+ \beq
+  G_B(C^*_2,\dots,C^*_5)\lrar (G^p_C(D^*_1,D^*_2) \to G^o_C(C^*_2, C^*_3, C^*_6, C^*_7)) 
+  \eeq{reform2.1.1}
+Once more, $\I$ satisfies~\eqref{reform2.1.1}, which is equivalent to
 $$%%\beq
 \ba{l}
 \forall C_2\cdots C_5(C_2=C_2^* \land\cdots \land C_5=C_5^* \to 
@@ -1394,8 +1422,8 @@ $$%%\beq
 \hspace{30mm}G_B(C_2,C_3,C_4,C_5))\ \lrar\\
 \hspace{0mm}
 \forall D_1 D_2 C_2 C_3 C_6 C_7\Big( 
-  D_1=d1\land
-  D_2=d2\land\\
+  D_1=D^*_1\land
+  D_2=D^*_2\land\\
 \hspace{18mm}
   C_2=C_2^*\land
   C_3=C_3^*\land
@@ -1404,29 +1432,33 @@ $$%%\beq
   \\
 \hspace{30mm} 
 \big(G^p_C(D_1,D_2) \to G^o_C(C_2, C_3, C_6, C_7)\big) 
-\Big).
+\Big),
   \ea
- $$% \eeq{eq:equivalence1}  
- Recall that $G^p_C(D_1,D_2)$ is a formula $H_1^C(D_1)\land H_2^C(D_2)$.
-The right-hand side of the equivalence above is equivalent to
-$$
+ $$
+ and which in turn is equivalent to
+$$%%\beq
 \ba{l}
-\forall D_1 D_2 C_2 C_3 C_6 C_7\Big( \big(
-  D_1=d1\land
-  D_2=d2\land\\
+\forall C_2\cdots C_5(C_2=C_2^* \land\cdots \land C_5=C_5^* \to 
+\\
+\hspace{30mm}G_B(C_2,C_3,C_4,C_5))\ \lrar\\
+\hspace{0mm}
+\forall D_1 D_2 C_2 C_3 C_6 C_7\big(\big( 
+  D_1=D^*_1\land
+  D_2=D^*_2\land\\
 \hspace{18mm}
   C_2=C_2^*\land
   C_3=C_3^*\land
   C_6=C_6^*\land
-  C_7=C_7^*\land
-  H^C_1(D_1)\land H^C_2(D_2) \big)\to
-  %G^p_C(D_1,D_2) \to
+  C_7=C_7^* \land
+  H^C_1(D_1)\land H^C_2(D_2)\big)
   \\
 \hspace{30mm} 
- G^o_C(C_2, C_3, C_6, C_7) 
-\Big).
+ \to G^o_C(C_2, C_3, C_6, C_7) 
+\big).
   \ea
- $$ 
+ $$
+
+===================================
  
 From Lemma~\ref{lem:eu}(b) we conclude
 that~$\I$ satisfies also the formulas
