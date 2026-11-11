@@ -1374,8 +1374,14 @@ first-order theory~$T_{AB}$ extended  with the following axioms:
   $\forall C_7C'_7D_2D'_2 
   ((F^C_7(C_7,D_2)\wedge H^C_2(D_2)\wedge F^C_7(C'_7,D'_2)\wedge H^C_2(D'_2)) \to (C_7=C'_7\wedge D_2=D'_2))$;\\
 \end{tabular}
-
 \end{lemma}
+\begin{proof}
+    
+  We illustrate the proof for the first formula; the second one is proved similarly.
+  
+
+  TODO
+\end{proof}
 
 \medskip\noindent{\bf Theorem~\ref{thm:bc}, first reformulation.}
 \emph{The sentence
@@ -1410,11 +1416,12 @@ extension by the same symbol~$\I$. Since~$\I$ satisfies all axioms of
 the theory~$T_{ABC}$,
 $\I$ satisfies its theorem~(\ref{reform2.1}).
 It is easy to see from the provability of~(\ref{reform2.1}) in~$T_{ABC}$ that the
-following formula is also provable in~$T_{ABC}$ given that $H^*1(D^*_1)$ and $H^*_2(D^*_2)$ are its axioms:
- \beq
-  G_B(C^*_2,\dots,C^*_5)\lrar (G^p_C(D^*_1,D^*_2) \to G^o_C(C^*_2, C^*_3, C^*_6, C^*_7)) 
+following formula is also provable in~$T_{ABC}$ given that $H^*_1(D^*_1)$ and $H^*_2(D^*_2)$ are its axioms:
+and the fact that $G^p_C(D^*_1,D^*_2)$ is a conjunction of formulas~$H^*_1(D^*_1)$ and $H^*_2(D^*_2)$:
+\beq
+  G_B(C^*_2,\dots,C^*_5)\lrar (G^p_C(D^*_1,D^*_2) \to G^o_C(C^*_2, C^*_3, C^*_6, C^*_7)). 
   \eeq{reform2.1.1}
-Once more, $\I$ satisfies~\eqref{reform2.1.1}, which is equivalent to
+Interpretation $\I$ satisfies~\eqref{reform2.1.1}, which is equivalent to
 $$%%\beq
 \ba{l}
 \forall C_2\cdots C_5(C_2=C_2^* \land\cdots \land C_5=C_5^* \to 
@@ -1458,31 +1465,32 @@ $$%%\beq
   \ea
  $$
 
-===================================
+%===================================
  
 From Lemma~\ref{lem:eu}(b) we conclude
 that~$\I$ satisfies also the formulas
 $$
 \ba l
 %\forall C_1(F^A_1(C_1) \lrar C_1=C^*_1),\\
-\forall C_i(F^B_i(C_i) \lrar C_i=C^*_i) \qquad (i=2,\dots,5),\\
-\forall C_j(F^C_j(C_j) \lrar C_j=C^*_j) \qquad (j=6,7),
+\forall C_i(F^B_i(C_i) \lrar C_i=C^*_i) \qquad (i=2,\dots,5).\\
+%\forall C_j(F^C_j(C_j) \lrar C_j=C^*_j) \qquad (j=6,7).
 \ea
 $$
-and consequently,
+From Lemma~\ref{lem:eu2}(b) we conclude
+that~$\I$ satisfies also the formulas
 $$
 \ba l
-\forall C_6(F^C_6(C_6,d1) \lrar C_6=C^*_6),\\
-\forall C_7(F^C_7(C_7,d2) \lrar C_7=C^*_7).\\
+\forall C_6D_1((F^C_6(C_6,D_1)\wedge  H^C_1(D_1)) \lrar (C_6=C^*_6\wedge D_1=D^*_1)),\\
+\forall C_7D_2((F^C_7(C_7,D_2) \wedge H^C_2(D_2)) \lrar (C_7=C^*_7\wedge D_2=D^*_2)).\\
 \ea
 $$
-By Lemma~\ref{lem:privatedefs},~$\I$ satisfies also the formulas
-$$
-\ba l
-\forall D_1(H^C_1(D_1) \lrar D_1=d1),\\
-\forall D_2(H^C_2(D_2) \lrar D_2=d2).\\
-\ea
-$$
+%By Lemma~\ref{lem:privatedefs},~$\I$ satisfies also the formulas
+%$$
+%\ba l
+%\forall D_1(H^C_1(D_1) \lrar D_1=D^*_1),\\
+%\forall D_2(H^C_2(D_2) \lrar D_2=D^*_2).\\
+%\ea
+%$$
 
 Putting these observations together we conclude that~$\I$ satisfies the equivalence
 $$
@@ -1516,10 +1524,10 @@ formulas~(\ref{a1fcdef}), (\ref{b2f}), (\ref{b3f}), (\ref{b4f}),
 and (\ref{b5f})
 and 
 $G^o_C(C_2,C_3,C_6,C_7)$ is the conjunction of
-formulas~(\ref{a1fcdef}), (\ref{b2f}), (\ref{b3f}), (\ref{c6f}), (\ref{c7f}),
-and $G^p_C(D_1,D_2)$ is the conjunction of $H^C_1(D_1)$ and $H^C_2(D_2)$, which are formulas
-(\ref{c4fcdefV}) and
-(\ref{c5fcdefV}), respectively.
+formulas~(\ref{a1fcdef}), (\ref{b2f}), (\ref{b3f}), (\ref{c6f}), (\ref{c7f}).
+%and $G^p_C(D_1,D_2)$ is the conjunction of $H^C_1(D_1)$ and $H^C_2(D_2)$, which are formulas
+%(\ref{c4fcdefV}) and
+%(\ref{c5fcdefV}), respectively.
 
 
 Recall that theory $T_{ABC}$ includes all statements of theory $T_{AB}$.
@@ -1549,8 +1557,6 @@ $$
 $$
 denoted by $\bFivefs'$.
 
-Note how $H^C_1(d1)$ and $H^C_2(d2)$ are formulas~\eqref{c4fcdef} and~\eqref{c5fcdef}, respectively. We choose to denote them by $\diagO$ and $\diagT$.
-
 
 \medskip
 The stated observations  show that Theorem~\ref{thm:bc} can be further
@@ -1567,7 +1573,6 @@ $$%\eeq{gamma2}
 is equivalent in~$T'_{ABC}$ to the formula
 $$
 \ba r
-\diagO\land\diagT\to\hspace{80mm}\\
 \bTwofgeq\land \bTwofleq\land \bThreefgeq\;\land\quad\\
 \bThreefleq\;\land\bFourfs'\land \bFivefs'.
 \ea
@@ -1585,7 +1590,6 @@ $$%\eeq{gamma2}
 is equivalent in~$T'_{ABC}$ to the formula
 $$
 \ba r
-\diagO\land\diagT\to
 \bFourfs'\land \bFivefs'.
 \ea
 $$
@@ -1594,25 +1598,22 @@ $$
 \noindent
 The last claim in turn follows from the following two lemmas.
 \begin{lemma}\label{claim8}
-$T'_{ABC}\vdash \bFourfs \lrar (\diagO\to \bFourfs')$.
+$T'_{ABC}\vdash \bFourfs \lrar  \bFourfs'$.
 \end{lemma}
-As the formula $\diagO$ is an explicit definition of the predicate constant $d1/3$ in terms of inequalities, formula 
-$$
-\bFourfs \lrar \bFourfs'\land\diagO
-$$
-is equivalent to the formula
-$$
-\bFourfs \lrar (\diagO\to \bFourfs').
-$$
 
 
 \begin{lemma}\label{claim9}
-$T'_{ABC}\vdash \bFivefs \lrar (\diagT\to \bFivefs')$.
+$T'_{ABC}\vdash \bFivefs \lrar  \bFivefs'$.
 \end{lemma}
 We now prove Lemmas~\ref{claim8} whereas Lemma~\ref{claim9} is proved similarly.
 \begin{proof}
-  We first prove that 
-  $T'_{ABC}\vdash \bFourfs \to \bFourfs'\land\diagO$.
+  Recall $\diagO$ is an axiom in $T'_{ABC}$ and consequently,
+
+  $$T'_{ABC}\vdash \diagO\to(\bFourfs \to \bFourfs').$$
+
+  =============================
+  THINK OF THE REMAINDER AND GO BACK TO MISSING LEMMA
+
 We observe that $\bFourfs$ is the formula equivalent to
   $$
 \forall K(1\leq K\leq 2\times n-1   \to \co(C^*_4(K,n))\leq 1);
