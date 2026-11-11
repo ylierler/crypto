@@ -1607,6 +1607,48 @@ $T'_{ABC}\vdash \bFivefs \lrar  \bFivefs'$.
 \end{lemma}
 We now prove Lemmas~\ref{claim8} whereas Lemma~\ref{claim9} is proved similarly.
 \begin{proof}
+We start by showing that
+$$T'_{ABC}\vdash  \bFourfs \to  \bFourfs'$$
+and hence we assume the left-hand side of the implication:
+$$T'_{ABC},\bFourfs\vdash  \bFourfs.$$
+
+We observe that $\bFourfs$ is the formula equivalent to
+  $$
+\forall K(1\leq K\leq 2\times n-1   \to \co(C^*_4(K,n))\leq 1).
+$$
+Thus,
+$$T'_{ABC},\bFourfs\vdash  \forall K(1\leq K\leq 2\times n-1   \to \co(C^*_4(K,n))\leq 1).$$
+
+
+Recall that 
+$$\forall VKN(V\in C^*_4(K,N) \lrar \exists IJ(V=(I,J) \land q(I,J)
+   \land K=I-J+N))$$
+is an axiom in $T'_{ABC}$.
+Let us consider its instance with $N=n$:
+$$\forall VK(V\in C^*_4(K,n) \lrar \exists IJ(V=(I,J) \land q(I,J)
+   \land K=I-J+n)).$$
+
+======
+
+and $\bFourfs'$ is the formula equivalent to
+$$
+\forall K
+(1\leq K\leq 2\times n-1 \to\co(C^*_6(K))\leq 1).
+$$
+Thus, the goal is to show that
+$$T'_{ABC}\vdash
+\forall K(1\leq K\leq 2\times n-1   \to \co(C^*_4(K,n))\leq 1)
+\lrar
+\forall K
+(1\leq K\leq 2\times n-1 \to\co(C^*_6(K))\leq 1).
+$$
+
+
+
+
+
+
+
   Recall $\diagO$ is an axiom in $T'_{ABC}$ and consequently,
 
   $$T'_{ABC}\vdash \diagO\to(\bFourfs \to \bFourfs').$$
@@ -1623,18 +1665,11 @@ $$
 \forall K
 (1\leq K\leq 2\times n-1 \to\co(C^*_6(K))\leq 1).
 $$
-Recall that 
-$$\forall VKN(V\in C^*_4(K,N) \lrar \exists IJ(V=(I,J) \land q(I,J)
-   \land K=I-J+N))$$
-is an axiom in $T'_{ABC}$.
-Let us consider its instance with $N=n$:
-$$\forall VK(V\in C^*_4(K,n) \lrar \exists IJ(V=(I,J) \land q(I,J)
-   \land K=I-J+n)).$$
 
 Also,     
-$$ \forall VK(V\in C^*_6(K) \lrar \exists XY(V=(X,Y) \land q(X,Y) \land d_1(X,Y,K)))$$
+$$ \forall VK(V\in C^*_6(K) \lrar \exists XY(V=(X,Y) \land q(X,Y) \land D^*_1(X,Y,K)))$$
  is an axiom in $T'_{ABC}$. 
-Recall that~$\diagO$ is an explicit definition of the predicate constant $d1/3$ in terms of inequalities, we have that the following formula follows:
+Recall that~$\diagO$ is an explicit definition of the predicate constant $D^*_1/3$ in terms of inequalities, we have that the following formula follows:
 $$
 \ba{l}
 \diagO \to 
@@ -1698,6 +1733,51 @@ follows from the axioms of $T'_{ABC}$.
 \bibliographystyle{named}
 \bibliography{bib}
 \end{adjustwidth}
+
+
+\section{Finite sets}
+
+The formula $\exists I(I=\co(S))$, expressing that~$S$ is finite, is denoted
+by~$\fnt(S)$.
+
+The sentences
+\beq
+\forall S(\exists MN\forall X(X\in S \to M\leq X\leq N) \to \fnt(S))
+\eeq{fin1}
+and
+\beq
+\ba r
+\forall S(\exists MN\forall X(X\in S \to
+\exists YZ(X=(Y,Z) \land M\leq Y\leq N\land M\leq Z\leq N)) \to
+\quad\\
+\fnt(S))
+\ea
+\eeq{fin2}
+are satisfied by all regular interpretations.  Hence they are axioms
+of~$T'_{AB}$.
+
+The sentence
+\beq
+\fnt(C_1^*)
+\eeq{finC1}
+is a theorem of~$T'_{AB}$.  Indeed, axioms~(\ref{dd1}) and~$\ug$ imply
+$$
+\exists N\forall V(V\in C^*_1 \to \exists IJ(V=(I,J)\land
+1\leq I\leq N \land 1\leq J\leq N)),
+$$
+and~(\ref{finC1}) follows by~(\ref{fin2}).
+  
+
+\section{Proofs of the Lemmas~\ref{claim3} and~\ref{claim4}}\label{sec:lemmas}
+
+  The proof of Lemma~\ref{claim3} the formula
+\beq
+\fnt(S)\to (\co(S)\leq 1 \lrar \forall XY(X\in S \land Y\in S \to X=Y)).
+\eeq{m}
+(Here, as in Section~\ref{sec:deriving}, by asserting a formula over
+the signature~$\sigma^\#$ we express the clain that is satisfied by all
+regular interpretations.)
+
 
 
 
