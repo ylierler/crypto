@@ -1620,13 +1620,42 @@ Thus,
 $$T'_{ABC},\bFourfs\vdash  \forall K(1\leq K\leq 2\times n-1   \to \co(C^*_4(K,n))\leq 1).$$
 
 
-Recall that 
-$$\forall VKN(V\in C^*_4(K,N) \lrar \exists IJ(V=(I,J) \land q(I,J)
-   \land K=I-J+N))$$
-is an axiom in $T'_{ABC}$.
-Let us consider its instance with $N=n$:
-$$\forall VK(V\in C^*_4(K,n) \lrar \exists IJ(V=(I,J) \land q(I,J)
+Recall that  $F^C_4(C^*_4)$ is an axiom in $T'_{ABC}$. Then, $T'_{ABC}$ entails its instance with $N=n$, namely:
+
+$$T'_{ABC}\vdash \forall VK(V\in C^*_4(K,n) \lrar \exists IJ(V=(I,J) \land q(I,J)
    \land K=I-J+n)).$$
+
+   Also, $F^C_6(C^*_6,D^*_1)$ and $\diagO$ are the axioms in $T'_{ABC}$. It is easy to see that $\diagO$ is equivalent to formula:
+$$\ba l
+\forall V_1V_2V_3( D^*_1(V_1,V_2,V_3)\lrar\\
+\hskip 21mm
+\exists I J  (1\leq I\leq n \land 1\leq J\leq n\\
+\hskip 33mm
+\land\; V_1=I\land V_2=J \land V_3= I-J+n)).
+\ea
+$$
+Now, $F^C_6(C^*_6,D^*_1)$ and $\diagO$ together give ground for:
+$$T'_{ABC}\vdash \forall VK(V\in C^*_6(K) \lrar \exists IJ(V=(I,J) \land q(I,J)
+   \land K=I-J+n)).$$
+We are ready to conclude that 
+$$T'_{ABC}\vdash 
+\forall VK(V\in C^*_6(K)\lrar V\in C^*_4(K,n))$$ 
+and hence
+$$T'_{ABC}\vdash 
+\forall K(C^*_6(K)=C^*_4(K,n))$$ 
+
+
+   Let us write these out:
+   $$ \forall VK(V\in C^*_6(K) \lrar \exists XY(V=(X,Y) \land q(X,Y) \land D^*_1(X,Y,K)))$$
+
+
+$$
+\forall X Y (q(X,Y) \to
+1 \leq X \leq n \land 1 \leq Y \leq n \land \exists I(I=X)
+\land \exists J(J=Y) \land \exists N(N=n)).
+$$
+
+By putting  $F^C_6(C^*_6,D^*_1)$ and $\diagO$ together, we conclude that
 
 ======
 
