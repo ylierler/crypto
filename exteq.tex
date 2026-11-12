@@ -747,22 +747,6 @@ $F^C_7(C_7)$ is~(\ref{d7}),
  and $G_C(C_2, C_3, C_6, C_7)$ is the conjunction of
 formulas~(\ref{a1fcdef}),~(\ref{c4fcdef}),~(\ref{c5fcdef}),  (\ref{b2f}), (\ref{b3f}), (\ref{c6f}) and (\ref{c7f}).
 
-\beq\ba l
-\forall V_1V_2V_3( d1(V_1,V_2,V_3)\lrar\\
-\hskip 21mm
-\exists I J  N(1\leq I\leq N \land 1\leq J\leq N \land N=n \\
-\hskip 33mm
-\land\; V_1=I\land V_2=J \land V_3= I-J+N));
-\ea
-\eeq{c4fcdef}
-and
-\beq
-\ba l\forall V_1V_2V_3(d2(V_1,V_2,V_3)\lrar \\
-\hskip 17mm
-\exists I J  (1\leq I\leq n \land 1\leq J\leq n 
-\land V_1=I \land V_2=J \land V_3= I+J-1)).
-\ea
-\eeq{c5fcdef}
 
 \section{Regular Interpretations}\label{sec:regint}
 An interpretation~$\I$ of the signature~$\sigma^\#$ is \emph{regular} if
@@ -1316,7 +1300,7 @@ which is equivalent to $D=D'$.
 \begin{theorem}\label{thm:bc}
 The formula
 \beq
-\exists N(N=n\land N>0) \to (\mathit{comp}(B)\lrar\mathit{comp}(C,\{d1,d2\}))
+\exists N(N=n\land N>0) \land H_1^C(d_1) \land H_2^C(d_2) \to (\mathit{comp}(B)\lrar\mathit{comp}(C,\{d1,d2\}))
 \eeq{eq:thm:bc}
 is satisfied by all regular interpretations of $\sigma^\#$.
 \end{theorem}
@@ -1359,7 +1343,9 @@ first-order theory~$T_{AB}$ extended  with the following axioms:
 
 \medskip
 \begin{lemma}\label{lem:eu2}
-  Every regular interpretation of $\sigma^\#$ satisfies the formulas
+  Every regular interpretation of $\sigma^\#$ that satisfies 
+  $H_1^C(d1) \land H_2^C(d2)$ also satisfies
+  the formulas
  \medskip
  
  (a)  $\exists C_6 D_1\,(F^C_6(C_6,D_1)\wedge H^C_1(D_1))$;~~$\exists C_7 D_2\,(F^C_7(C_7,D_2)\wedge H^C_2(D_2))$;
@@ -1375,12 +1361,25 @@ first-order theory~$T_{AB}$ extended  with the following axioms:
   ((F^C_7(C_7,D_2)\wedge H^C_2(D_2)\wedge F^C_7(C'_7,D'_2)\wedge H^C_2(D'_2)) \to (C_7=C'_7\wedge D_2=D'_2))$;\\
 \end{tabular}
 \end{lemma}
-\begin{proof}
-    
+\begin{proof}  
   We illustrate the proof for the first formula; the second one is proved similarly.
-  
 
-  TODO
+Proof of ``claim(a)''.  By Lemma~\ref{lem:eu}, we know that
+every regular interpretation of $\sigma^\#$ satisfies the formula
+$\exists C_6 F^C_6(C_6)$. We observe that $F^C_6(C_6)$ is identical to  formula $F^C_6(C_6,d1)$.
+Recall that $H^C_1(d1)$ is satisfied by the considered interpretations of this lemma.
+Thus, such interpretations satisfies the formula
+$\exists C_6 (F^C_6(C_6,d1)\wedge H^C_1(d1))$ and consequently, they satisfy
+$\exists C_6 D_1(F^C_6(C_6,D_1)\wedge H^C_1(D_1))$.
+
+
+Proof of ``claim(b)''.
+By Lemma~\ref{lem:privatedefs} and the fact that $H^C_1(d1)$ is satisfied by the considered interpretations of this lemma, we conclude that such interpretations satisfy the formula 
+$$
+\forall D_1(H^C_1(D_1)\lrar D_1=d1).
+$$
+
+
 \end{proof}
 
 \medskip\noindent{\bf Theorem~\ref{thm:bc}, first reformulation.}
@@ -1608,8 +1607,10 @@ $T'_{ABC}\vdash \bFivefs \lrar  \bFivefs'$.
 We now prove Lemmas~\ref{claim8} whereas Lemma~\ref{claim9} is proved similarly.
 \begin{proof}
 We start by showing that
-$$T'_{ABC}\vdash  \bFourfs \to  \bFourfs'$$
-and hence we assume the left-hand side of the implication:
+\beq
+T'_{ABC}\vdash  \bFourfs \to  \bFourfs'.
+\eeq{eq:claim8rightdirection}
+First, we assume the left-hand side of the implication:
 $$T'_{ABC},\bFourfs\vdash  \bFourfs.$$
 
 We observe that $\bFourfs$ is the formula equivalent to
@@ -1617,13 +1618,17 @@ We observe that $\bFourfs$ is the formula equivalent to
 \forall K(1\leq K\leq 2\times n-1   \to \co(C^*_4(K,n))\leq 1).
 $$
 Thus,
-$$T'_{ABC},\bFourfs\vdash  \forall K(1\leq K\leq 2\times n-1   \to \co(C^*_4(K,n))\leq 1).$$
+\beq
+T'_{ABC},\bFourfs\vdash  \forall K(1\leq K\leq 2\times n-1   \to \co(C^*_4(K,n))\leq 1).
+\eeq{eq:claim8.1}
 
 
-Recall that  $F^C_4(C^*_4)$ is an axiom in $T'_{ABC}$. Then, $T'_{ABC}$ entails its instance with $N=n$, namely:
 
-$$T'_{ABC}\vdash \forall VK(V\in C^*_4(K,n) \lrar \exists IJ(V=(I,J) \land q(I,J)
-   \land K=I-J+n)).$$
+Recall that  $F^C_4(C^*_4)$ is an axiom in $T'_{ABC}$. Then, $T'_{ABC}$ entails its instance with $N=n$, and consequently:
+\beq
+T'_{ABC}\vdash \forall VK(V\in C^*_4(K,n) \lrar \exists IJ(V=(I,J) \land q(I,J)
+   \land K=I-J+n)).
+   \eeq{eq:claim8.2}
 
    Also, $F^C_6(C^*_6,D^*_1)$ and $\diagO$ are the axioms in $T'_{ABC}$. It is easy to see that $\diagO$ is equivalent to formula:
 $$\ba l
@@ -1634,135 +1639,81 @@ $$\ba l
 \land\; V_1=I\land V_2=J \land V_3= I-J+n)).
 \ea
 $$
+
 Now, $F^C_6(C^*_6,D^*_1)$ and $\diagO$ together give ground for:
-$$T'_{ABC}\vdash \forall VK(V\in C^*_6(K) \lrar \exists IJ(V=(I,J) \land q(I,J)
-   \land K=I-J+n)).$$
-We are ready to conclude that 
-$$T'_{ABC}\vdash 
-\forall VK(V\in C^*_6(K)\lrar V\in C^*_4(K,n))$$ 
-and hence
-$$T'_{ABC}\vdash 
-\forall K(C^*_6(K)=C^*_4(K,n))$$ 
+\beq
+\ba{l}
+T'_{ABC}\vdash \forall VK(V\in C^*_6(K) \lrar \exists IJ(
+V=(I,J)\land\\  
+\hspace{30mm}
+1\leq I\leq n \land 1\leq J\leq n \land q(I,J)
+   \land K=I-J+n)).
+   \ea
+   \eeq{eq:claim8.2.1}
 
-
-   Let us write these out:
-   $$ \forall VK(V\in C^*_6(K) \lrar \exists XY(V=(X,Y) \land q(X,Y) \land D^*_1(X,Y,K)))$$
-
-
-$$
+   Recall that $\dOne$ is an axiom of  $T'_{ABC}$ and has the form:
+   $$
 \forall X Y (q(X,Y) \to
 1 \leq X \leq n \land 1 \leq Y \leq n \land \exists I(I=X)
 \land \exists J(J=Y) \land \exists N(N=n)).
 $$
-
-By putting  $F^C_6(C^*_6,D^*_1)$ and $\diagO$ together, we conclude that
-
-======
-
-and $\bFourfs'$ is the formula equivalent to
+Consequently,
+$$T'_{ABC}\vdash \forall I J (q(I,J) \to  1 \leq I \leq n \land 1 \leq J \leq n).
 $$
-\forall K
-(1\leq K\leq 2\times n-1 \to\co(C^*_6(K))\leq 1).
+Putting this together with claim~\eqref{eq:claim8.2.1} we conclude that
 $$
-Thus, the goal is to show that
-$$T'_{ABC}\vdash
-\forall K(1\leq K\leq 2\times n-1   \to \co(C^*_4(K,n))\leq 1)
-\lrar
-\forall K
-(1\leq K\leq 2\times n-1 \to\co(C^*_6(K))\leq 1).
+\ba{l}
+T'_{ABC}\vdash \forall VK(V\in C^*_6(K) \lrar \exists IJ(
+V=(I,J)
+\land q(I,J)
+   \land K=I-J+n)).
+   \ea
+$$  
+The last claim together with claim \eqref{eq:claim8.2} allows us to conclude that
+$$T'_{ABC}\vdash 
+\forall VK(V\in C^*_6(K)\lrar V\in C^*_4(K,n))$$ 
+and hence
+\beq
+T'_{ABC}\vdash 
+\forall K(C^*_6(K)=C^*_4(K,n)).
+\eeq{eq:claim8.3}
+This claim together with claim \eqref{eq:claim8.1} allows us to conclude that
+$$T'_{ABC},\bFourfs\vdash  \forall K(1\leq K\leq 2\times n-1   \to \co(C^*_6(K))\leq 1).
 $$
+Note how the right hand side of the entailment symbol is formula $\bFourfs'$. Consequently, claim~\eqref{eq:claim8rightdirection} follows.
 
 
+We now show that
+\beq
+T'_{ABC}\vdash    \bFourfs' \to \bFourfs.
+\eeq{eq:claim8leftdirection}
+We assume the left-hand side of the implication:
+\beq
+T'_{ABC},\bFourfs'\vdash  \bFourfs'.
+\eeq{eq:claim8.4}  
 
-
-
-
-
-  Recall $\diagO$ is an axiom in $T'_{ABC}$ and consequently,
-
-  $$T'_{ABC}\vdash \diagO\to(\bFourfs \to \bFourfs').$$
-
-  =============================
-  THINK OF THE REMAINDER AND GO BACK TO MISSING LEMMA
-
-We observe that $\bFourfs$ is the formula equivalent to
+We observe that $\bFourfs'$ is the formula
   $$
-\forall K(1\leq K\leq 2\times n-1   \to \co(C^*_4(K,n))\leq 1);
+  \forall K(1\leq K\leq 2\times n-1   \to \co(C^*_6(K))\leq 1).
 $$
-and $\bFourfs'$ is the formula equivalent to
+By claim~\eqref{eq:claim8.3}, this formula is equivalent in $T'_{ABC}$ to formula
 $$
-\forall K
-(1\leq K\leq 2\times n-1 \to\co(C^*_6(K))\leq 1).
+\forall K(1\leq K\leq 2\times n-1   \to \co(C^*_4(K,n))\leq 1),
 $$
+which is equivalent to formula $\bFourfs$. Using claim~\eqref{eq:claim8.4}, we conclude that
+$$T'_{ABC},\bFourfs'\vdash  \bFourfs$$
+and hence claim~\eqref{eq:claim8leftdirection} follows.
+\end{proof}
 
-Also,     
-$$ \forall VK(V\in C^*_6(K) \lrar \exists XY(V=(X,Y) \land q(X,Y) \land D^*_1(X,Y,K)))$$
- is an axiom in $T'_{ABC}$. 
-Recall that~$\diagO$ is an explicit definition of the predicate constant $D^*_1/3$ in terms of inequalities, we have that the following formula follows:
-$$
-\ba{l}
-\diagO \to 
-\forall VK(V\in C^*_6(K) \lrar \exists XY(V=(X,Y) \land q(X,Y) \land 
-\exists I J  (1\leq I\leq n \land 1\leq J\leq n\\
-\hskip 33mm
-\land\; X=I\land Y=J \land K= I-J+n))
-)
-\ea
-$$
-which in turn is equivalent to 
-$$
-\ba{l}
-\diagO \to 
-\forall VK(V\in C^*_6(K) \lrar \exists I J(V=(I,J) \land q(I,J) \land 
-1\leq I\leq n \land 1\leq J\leq n\\
-\hskip 33mm
-\land K= I-J+n)
-).
-\ea
-$$
-We now recall that $\dOne$ is an axiom in $T'_{ABC}$. It is easy to see that $\dOne$ implies the following formula
-$$
-\forall I J ( q(I,J) \to
-1\leq I\leq n \land 1\leq J\leq n).
-$$
-Consequently, putting the claims of last two formulas together, we have that
-$$
-\ba{l}
-\diagO \to 
-\forall VK(V\in C^*_6(K) \lrar \exists I J(V=(I,J) \land q(I,J) 
-\land K= I-J+n)
-)
-\ea
-$$
-follows from the axioms of $T'_{ABC}$. It is now easy to see that
-$$
-\ba{l}
-\diagO \to 
-\forall VK(V\in C^*_6(K) \lrar 
-V\in C^*_4(K,n) 
-)
-\ea
-$$
-and consequently,
-$$
-\ba{l}
-\diagO \to 
-\forall K(C^*_6(K) =
-C^*_4(K,n) 
-)
-\ea
-$$
-follows from the axioms of $T'_{ABC}$.
 
-....
 
-\end{proof}  
+
 
 
 \bibliographystyle{named}
 \bibliography{bib}
 \end{adjustwidth}
-
+\end{document}
 
 \section{Finite sets}
 
