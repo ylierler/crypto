@@ -1269,7 +1269,7 @@ We denote formulas~\eqref{c4fcdefV} and~\eqref{c5fcdefV} by $H^C_1(D_1)$ and $H^
   \forall D D' (H^C_2(D)\land H^C_2(D')\to D=D')\\
   \ea
   $$
-  are tautologies of first-order logic.
+  are tautologies of second-order logic.
 \end{lemma}
 \begin{proof}
 We illustrate the proof for the first formula; the second one is proved similarly.
@@ -1292,7 +1292,7 @@ This formula implies
 $$
 \forall V_1V_2V_3( D(V_1,V_2,V_3)\lrar D'(V_1,V_2,V_3))
 $$
-which is equivalent to $D=D'$. 
+for which $D=D'$ is a shorthand.
 \end{proof}
 
 \section{Statement of Theorem~\ref{thm:bc}:\\ Relating n-Queens Programs B and C}
@@ -1362,9 +1362,9 @@ first-order theory~$T_{AB}$ extended  with the following axioms:
 \end{tabular}
 \end{lemma}
 \begin{proof}  
-  We illustrate the proof for the first formula; the second one is proved similarly.
+  We illustrate the proof for the first formulas in (a) and (b). % the second ones is proved similarly.
 
-Proof of ``claim(a)''.  By Lemma~\ref{lem:eu}, we know that
+Proof of ``claim (a)''.  By Lemma~\ref{lem:eu}, we know that
 every regular interpretation of $\sigma^\#$ satisfies the formula
 $\exists C_6 F^C_6(C_6)$. We observe that $F^C_6(C_6)$ is identical to  formula $F^C_6(C_6,d1)$.
 Recall that $H^C_1(d1)$ is satisfied by the considered interpretations of this lemma.
@@ -1373,13 +1373,24 @@ $\exists C_6 (F^C_6(C_6,d1)\wedge H^C_1(d1))$ and consequently, they satisfy
 $\exists C_6 D_1(F^C_6(C_6,D_1)\wedge H^C_1(D_1))$.
 
 
-Proof of ``claim(b)''.
-By Lemma~\ref{lem:privatedefs} and the fact that $H^C_1(d1)$ is satisfied by the considered interpretations of this lemma, we conclude that such interpretations satisfy the formula 
+Proof of ``claim (b)''.
+Consider the premis of the first implication of claim~(b):
 $$
-\forall D_1(H^C_1(D_1)\lrar D_1=d1).
+F^C_6(C_6,D_1)\wedge H^C_1(D_1)\wedge F^C_6(C'_6,D'_1)\wedge H^C_1(D'_1)
 $$
-
-
+By Lemma~\ref{lem:privatedefs}, we derive that $D_1=D'_1$ is implied by it. We are left to show that $C_6=C'_6$ is also implied.
+By Lemma~\ref{lem:privatedefs} and the fact that $H^C_1(d1)$ is satisfied by the considered interpretations of this lemma, we conclude that such interpretations satisfy the formulas 
+$$
+\ba {l}
+\forall D_1(H^C_1(D_1)\lrar D_1=d1),\\
+\forall D'_1(H^C_1(D'_1)\lrar D'_1=d1).
+\ea
+$$
+Consequently, any such interpretation satisfying the premise of the first implication of claim (b) also satisfies the formula
+$$
+F^C_6(C_6,d1)\wedge F^C_6(C'_6,d1),
+$$
+which by Lemma~\ref{lem:eu}(b) implies that $C_6=C'_6$.
 \end{proof}
 
 \medskip\noindent{\bf Theorem~\ref{thm:bc}, first reformulation.}
