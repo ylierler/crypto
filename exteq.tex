@@ -1185,7 +1185,7 @@ $\aFivefs$ follows by Lemma~\ref{claim5}.
 For a program $\Pi$ with private predicate constants $\{p_1,\dots,p_k\}$, we first associate with them pair-wise distinct predicate variables $P_1,\dots,P_k$, respectively so that their arity and sorts coincide. 
 The \emph{private completion} of a normal program~$\Pi$ with private predicate constants $\{p_1,\dots,p_k\}$, denoted by $\mathit{pcomp}(\Pi)$,
 starts by constructing 
- the completion of $\Pi$ and then
+ the completion of~$\Pi$ and then
   by replacing the predicate constants $p_1,\dots,p_k$ with the associated predicate variables $P_1,\dots,P_k$ and binding these existentially.
   
   
@@ -1310,10 +1310,64 @@ for which $D=D'$ is a shorthand.
   \exists D H^C_2(D)\\
   \ea
   $$
-  are tautologies of second-order logic under assumption $\exists N(N=n\land N>0)$.
+  are tautologies of second-order logic. % under assumption $\exists N(N=n\land N>0)$.
 \end{lemma}
+
+\noindent
+Indeed, these formulas are instances of comprehension axioms of second-order logic.
+
+We now revisit Lemma~\ref{lem:eu-general}. If we consider its proof we can see that a more general result also holds.
+We first introduce some notation to state this result.
+Let $\overline{p}=p_1,\dots,p_k$ be a list of predicate constants; 
+let
+us associate this list with a list of pair-wise distinct predicate variables $\overline{P}=P_1,\dots,P_k$ of the same arity and sorts as the corresponding predicate constants; we call such list {\em matching}. For a forumla $F$,
+by $F_{[\overline{p}\mapsto\overline{P}]}$ we denote a formula obtained from $F$ by replacing the predicate constants $p_1,\dots,p_k$ with the corresponding predicate variables $P_1,\dots,P_k$. We are now ready to state the following generalization of Lemma~\ref{lem:eu-general}.
+
+
+\begin{lemma}\label{lem:eu-verygeneral}
+  For a formula $F(C)$  that is the description of an aggregate expression so that~$C$ is the variable associated with that expression, let $\overline{p}$ be any list of predicate constants occuring in $F(C)$ and different from $\in$ and let $\overline{P}$  be a matching list of predicate variables. Then  
+  every regular interpretation of $\sigma^\#$ satisfies the formulas
+ \medskip
+ 
+ (a) $\forall \overline{P} \exists C\,F(C)_{[\overline{p}\mapsto\overline{P}]}$
+
+ \medskip\noindent and
+
+ \medskip
+ (b)
+ \begin{tabular}{l} 
+  $\forall \overline{P}\forall C C'(F(C)_{[\overline{p}\mapsto\overline{P}]} \land F(C')_{[\overline{p}\mapsto\overline{P}]} \to C=C')$.
+\end{tabular}
+\end{lemma}
+
+Lemma below is immediate consequence of Lemma~\ref{lem:eu-verygeneral}.
+\medskip
+\begin{lemma}\label{lem:eu2}
+  Every regular interpretation of $\sigma^\#$ satisfies the formulas
+ \medskip
+ 
+ (a)
+  \begin{tabular}{l} 
+ $\forall D_1\exists C_6\,F^C_6(C_6)[d1\mapsto D_1]$;\\  
+ $\forall D_2 \exists C_7\,F^C_7(C_7)[d2\mapsto D_2]$;
+  \end{tabular}
+
+ 
+ \medskip\noindent and
+
+ \medskip
+ (b)
+ \begin{tabular}{l} 
+   $\forall D_1 C_6C'_6(F^C_6(C_6)\land F^C_6(C'_6) \to C_6=C'_6)[d1\mapsto D_1]$\\
+   $\forall D_2 C_7C'_7(F^C_7(C_7)\land F^C_7(C'_7) \to C_7=C'_7)[d2\mapsto D_2]$\\ 
+\end{tabular}
+
+\end{lemma}
+
+\begin{comment}
 \begin{proof}
-We illustrate the proof for the first formula; the second one is proved similarly.
+ 
+ We illustrate the proof for the first formula; the second one is proved similarly.
   Formula $H^C_1(D)$ has the form 
 $$
 \ba l
@@ -1329,6 +1383,8 @@ Consider any interpretation $I$ that satisfies $\exists N(N=n\land N>0)$. Conseq
 Take a relation $R$ to contain all the tuples of the form $(i,j,i-j+n)$ for all $1\leq i\leq n^I$ and $1\leq j\leq n^I$. 
 The formula $H^C_1(R^\xi)$ is satisfied by the interpretation $I$. Consequently, the formula $\exists D H^C_1(D)$ is satisfied by the interpretation $I$.
 \end{proof}
+\end{comment} 
+
 
 
 \section{Statement of Theorem~\ref{thm:bc}:\\ Relating n-Queens Programs B and C}
@@ -1380,12 +1436,17 @@ first-order theory~$T_{AB}$ extended  with the following axioms:
 
 \medskip
 \begin{lemma}\label{lem:eu2}
-  Every regular interpretation of $\sigma^\#$ that satisfies 
-  $H_1^C(d1) \land H_2^C(d2)$ also satisfies
+  Every regular interpretation of $\sigma^\#$ 
+  %that satisfies 
+  %$H_1^C(d1) \land H_2^C(d2)$ also 
+  satisfies
   the formulas
  \medskip
  
- (a)  $\exists C_6 D_1\,(F^C_6(C_6,D_1)\wedge H^C_1(D_1))$;~~$\exists C_7 D_2\,(F^C_7(C_7,D_2)\wedge H^C_2(D_2))$;
+ (a)   \begin{tabular}{l} 
+$\exists C_6 D_1\,(F^C_6(C_6,D_1)\wedge H^C_1(D_1))$;\\$\exists C_7 D_2\,(F^C_7(C_7,D_2)\wedge H^C_2(D_2))$;
+ \end{tabular}
+
  
  \medskip\noindent and
 
@@ -1400,14 +1461,15 @@ first-order theory~$T_{AB}$ extended  with the following axioms:
 \end{lemma}
 \begin{proof}  
   We illustrate the proof for the first formulas in (a) and (b). % the second ones is proved similarly.
+  Consider arbitrary regular interpretation $I$ of $\sigma^\#$.
+ By Lemma~\ref{lem:eu2},
+  interpretation $I$ satisfies the formula
+  $\forall D_1\exists C_6\,F^C_6(C_6)[d1\mapsto D_1]$. It is easy to see that $F^C_6(C_6)[d1\mapsto D_1]$ is identical to the formula $F^C_6(C_6,D_1)$.  Consequenlty, interpretation $I$ satisfies  formula $\forall D_1\exists C_6 F^C_6(C_6,D_1)$.
+By Lemma~\ref{lem:privatedefs2},  interpretation $I$ satisfies the formula $\exists D_1 H^C_1(D_1)$. We conclude that interpretation $I$ satisfies
+the first formula in (a).
+%the formula $\exists C_6 D_1\,(F^C_6(C_6,D_1)\wedge H^C_1(D_1))$.
+ 
 
-Proof of ``claim (a)''.  By Lemma~\ref{lem:eu}, we know that
-every regular interpretation of $\sigma^\#$ satisfies the formula
-$\exists C_6 F^C_6(C_6)$. We observe that $F^C_6(C_6)$ is identical to  formula $F^C_6(C_6,d1)$.
-Recall that $H^C_1(d1)$ is satisfied by the considered interpretations of this lemma.
-Thus, such interpretations satisfies the formula
-$\exists C_6 (F^C_6(C_6,d1)\wedge H^C_1(d1))$ and consequently, they satisfy
-$\exists C_6 D_1(F^C_6(C_6,D_1)\wedge H^C_1(D_1))$.
 
 
 Proof of ``claim (b)''.
@@ -1416,6 +1478,8 @@ $$
 F^C_6(C_6,D_1)\wedge H^C_1(D_1)\wedge F^C_6(C'_6,D'_1)\wedge H^C_1(D'_1)
 $$
 By Lemma~\ref{lem:privatedefs}, we derive that $D_1=D'_1$ is implied by it. We are left to show that $C_6=C'_6$ is also implied.
+It is easy to see that
+
 By Lemma~\ref{lem:privatedefs} and the fact that $H^C_1(d1)$ is satisfied by the considered interpretations of this lemma, we conclude that such interpretations satisfy the formulas 
 $$
 \ba {l}
@@ -1489,6 +1553,67 @@ $$%%\beq
 \Big),
   \ea
  $$
+ Let us consider the right hand side of the equivalence above. It is equivalent to
+$$%%\beq
+\ba{l}
+\forall D_1 D_2 C_2 C_3 C_6 C_7\Big( 
+  D_1=D^*_1\land
+  D_2=D^*_2\land\\
+\hspace{18mm}
+  C_2=C_2^*\land
+  C_3=C_3^*\land
+  C_6=C_6^*\land
+  C_7=C_7^* \land 
+  G^p_C(D_1,D_2) 
+\to
+  \\
+\hspace{30mm} 
+ G^o_C(C_2, C_3, C_6, C_7) 
+\Big),
+  \ea
+ $$
+ which we can rewrite as
+ $$%%\beq
+\ba{l}
+\forall D_1 D_2 C_2 C_3 C_6 C_7\Big( 
+  D_1=D^*_1\land
+  D_2=D^*_2\land\\
+\hspace{18mm}
+  C_2=C_2^*\land
+  C_3=C_3^*\land
+  C_6=C_6^*\land
+  C_7=C_7^* \land 
+   H^C_1(D_1)\land H^C_2(D_2) 
+\to
+  \\
+\hspace{30mm} 
+ G^o_C(C_2, C_3, C_6, C_7) 
+\Big).
+  \ea
+ $$
+ %   
+By Lemma~\ref{lem:privatedefs}, interpretation $\I$ that satisfies this formula also satisfies the formula
+  $$%%\beq
+  \ba l
+  \exists D_1 D_2 C_2 C_3 C_6 C_7\Big( 
+  D_1=D^*_1\land
+  D_2=D^*_2\land\\
+\hspace{18mm}
+  C_2=C_2^*\land
+  C_3=C_3^*\land
+  C_6=C_6^*\land
+  C_7=C_7^* \land 
+   H^C_1(D_1)\land H^C_2(D_2) 
+\to
+  \\
+\hspace{30mm} 
+ G^o_C(C_2, C_3, C_6, C_7) 
+\Big).
+  \ea
+ $$
+ as it satisfies the formulas $H^C_1(D^*_1)$ and $H^C_2(D^*_2)$, which are axioms of the theory $T_{ABC}$.
+ 
+ By Lemma~\ref{lem:privatedefs}, we can replace $G^p_C(D_1,D_2)$ with $H^C_1(D_1)\land H^C_2(D_2)$,
  and which in turn is equivalent to
 $$%%\beq
 \ba{l}
@@ -1546,20 +1671,20 @@ $$
   (F^B_2(C_2)\land\cdots \land F^B_5(C_5))\to
 G_B(C_2,\dots,C_5)\big)\lrar\\
 \hspace{0mm}
-\forall D_1 D_2 C_2 C_3 C_6 C_7 \Big(  
+\exists D_1 D_2 \forall  C_2 C_3 C_6 C_7 \Big(  
 \big(  F^B_2(C_2)\land
   F^B_3(C_3)\land
   F^C_6(C_6,D_1)\land
-  F^C_7(C_7,D_2)\land 
-  H^C_1(D_1)\land
-  H^C_2(D_2)\big)
+  F^C_7(C_7,D_2)
+  \big)
  \to 
   \\
-\hspace{16mm} 
- G^o_C(C_2, C_3, C_6, C_7)\Big).
+\hspace{16mm} (H^C_1(D_1)\land
+  H^C_2(D_2)\land
+ G^o_C(C_2, C_3, C_6, C_7))\Big).
 \ea$$
 which is identical to
-the consequent $\mathit{comp}(B)\lrar\mathit{comp}(C,\{d1,d2\})$
+the consequent $\mathit{pcomp}(B)\lrar\mathit{pcomp}(C)$
 of~(\ref{eq:thm:bc}).
 
 \subsection{Second reformulation}
