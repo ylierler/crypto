@@ -1180,7 +1180,10 @@ $\aFivefs$ follows by Lemma~\ref{claim5}.
 
 
 \section{Private Completion}
-
+Program $C$ is deifferet from programs $A$ and $B$ not only in structure and content of its rules but also in that it contains additional predicate constants $d1/3$ and $d2/3$. Yet, if we studye the role of such constants they can be viewed as auxiliary symbols while it is the predicate constant $q/2$ that is of interest when we inspect the answer sets of these programs to identify solutions. In this section we introduce a notion of private completion that allows us to treat such auxiliary symbols in a way that 
+we may still study the relationship between programs  $B$ and $C$ 
+in a simmilar way as we did for programs $A$ and $B$,
+despite the fact that program $C$ contains additional predicate constants. 
 
 For a program $\Pi$ with private predicate constants $\{p_1,\dots,p_k\}$, we first associate with them pair-wise distinct predicate variables $P_1,\dots,P_k$, respectively so that their arity and sorts coincide. 
 The \emph{private completion} of a normal program~$\Pi$ with private predicate constants $\{p_1,\dots,p_k\}$, denoted by $\mathit{pcomp}(\Pi)$,
@@ -1218,8 +1221,7 @@ $\mathit{pcomp}(\mathit{normal}(\Pi))$.
 \end{comment}
 
 
-As discussed 
-predicate constants $d1/3$ and $d2/3$ are private to program~$C$. We associate predicate variables $D_1/3$ and $D_2/3$ with them, respectively.
+Predicate constants $d1/3$ and $d2/3$ are private to program~$C$. We associate predicate variables $D_1/3$ and $D_2/3$ with them, respectively.
 The private completion of program~$C$ with respect to the 
 private predicate constants $\{d1,d2\}$ -- $\mathit{pcomp}(C)$ --
 follows
@@ -1348,8 +1350,8 @@ Lemma below is immediate consequence of Lemma~\ref{lem:eu-verygeneral}.
  
  (a)
   \begin{tabular}{l} 
- $\forall D_1\exists C_6\,F^C_6(C_6)[d1\mapsto D_1]$;\\  
- $\forall D_2 \exists C_7\,F^C_7(C_7)[d2\mapsto D_2]$;
+ $\forall D_1\exists C_6\,F^C_6(C_6)_{[d1\mapsto D_1]}$;\\  
+ $\forall D_2 \exists C_7\,F^C_7(C_7)_{[d2\mapsto D_2]}$;
   \end{tabular}
 
  
@@ -1358,8 +1360,8 @@ Lemma below is immediate consequence of Lemma~\ref{lem:eu-verygeneral}.
  \medskip
  (b)
  \begin{tabular}{l} 
-   $\forall D_1 C_6C'_6(F^C_6(C_6)\land F^C_6(C'_6) \to C_6=C'_6)[d1\mapsto D_1]$\\
-   $\forall D_2 C_7C'_7(F^C_7(C_7)\land F^C_7(C'_7) \to C_7=C'_7)[d2\mapsto D_2]$\\ 
+   $\forall D_1 C_6C'_6(F^C_6(C_6)\land F^C_6(C'_6) \to C_6=C'_6)_{[d1\mapsto D_1]}$\\
+   $\forall D_2 C_7C'_7(F^C_7(C_7)\land F^C_7(C'_7) \to C_7=C'_7)_{[d2\mapsto D_2]}$\\ 
 \end{tabular}
 
 \end{lemma}
@@ -1435,7 +1437,7 @@ first-order theory~$T_{AB}$ extended  with the following axioms:
 
 
 \medskip
-\begin{lemma}\label{lem:eu2}
+\begin{lemma}\label{lem:eu2.2}
   Every regular interpretation of $\sigma^\#$ 
   %that satisfies 
   %$H_1^C(d1) \land H_2^C(d2)$ also 
@@ -1453,45 +1455,23 @@ $\exists C_6 D_1\,(F^C_6(C_6,D_1)\wedge H^C_1(D_1))$;\\$\exists C_7 D_2\,(F^C_7(
  \medskip
  (b)
  \begin{tabular}{l} 
-  $\forall C_6C'_6D_1D'_1 
-  ((F^C_6(C_6,D_1)\wedge H^C_1(D_1)\wedge F^C_6(C'_6,D'_1)\wedge H^C_1(D'_1)) \to (C_6=C'_6\wedge D_1=D'_1))$;\\
-  $\forall C_7C'_7D_2D'_2 
-  ((F^C_7(C_7,D_2)\wedge H^C_2(D_2)\wedge F^C_7(C'_7,D'_2)\wedge H^C_2(D'_2)) \to (C_7=C'_7\wedge D_2=D'_2))$;\\
+  $\forall D C_6C'_6
+  ((F^C_6(C_6,D)\wedge F^C_6(C'_6,D)) \to C_6=C'_6)$;\\
+  $\forall D C_7C'_7 
+  ((F^C_7(C_7,D)\wedge F^C_7(C'_7,D)) \to C_7=C'_7)$;\\
 \end{tabular}
 \end{lemma}
 \begin{proof}  
   We illustrate the proof for the first formulas in (a) and (b). % the second ones is proved similarly.
-  Consider arbitrary regular interpretation $I$ of $\sigma^\#$.
+  Consider arbitrary regular interpretation $\I$ of $\sigma^\#$.
  By Lemma~\ref{lem:eu2},
-  interpretation $I$ satisfies the formula
-  $\forall D_1\exists C_6\,F^C_6(C_6)[d1\mapsto D_1]$. It is easy to see that $F^C_6(C_6)[d1\mapsto D_1]$ is identical to the formula $F^C_6(C_6,D_1)$.  Consequenlty, interpretation $I$ satisfies  formula $\forall D_1\exists C_6 F^C_6(C_6,D_1)$.
-By Lemma~\ref{lem:privatedefs2},  interpretation $I$ satisfies the formula $\exists D_1 H^C_1(D_1)$. We conclude that interpretation $I$ satisfies
+  interpretation $\I$ satisfies the formula
+  $\forall D_1\exists C_6\,F^C_6(C_6)_{[d1\mapsto D_1]}$. It is easy to see that $F^C_6(C_6)_{[d1\mapsto D_1]}$ is identical to the formula $F^C_6(C_6,D_1)$.  Consequenlty, interpretation $\I$ satisfies  formula $\forall D_1\exists C_6 F^C_6(C_6,D_1)$.
+By Lemma~\ref{lem:privatedefs2},  interpretation $\I$ satisfies the formula $\exists D_1 H^C_1(D_1)$. We conclude that interpretation $\I$ satisfies
 the first formula in (a).
 %the formula $\exists C_6 D_1\,(F^C_6(C_6,D_1)\wedge H^C_1(D_1))$.
- 
 
-
-
-Proof of ``claim (b)''.
-Consider the premis of the first implication of claim~(b):
-$$
-F^C_6(C_6,D_1)\wedge H^C_1(D_1)\wedge F^C_6(C'_6,D'_1)\wedge H^C_1(D'_1)
-$$
-By Lemma~\ref{lem:privatedefs}, we derive that $D_1=D'_1$ is implied by it. We are left to show that $C_6=C'_6$ is also implied.
-It is easy to see that
-
-By Lemma~\ref{lem:privatedefs} and the fact that $H^C_1(d1)$ is satisfied by the considered interpretations of this lemma, we conclude that such interpretations satisfy the formulas 
-$$
-\ba {l}
-\forall D_1(H^C_1(D_1)\lrar D_1=d1),\\
-\forall D'_1(H^C_1(D'_1)\lrar D'_1=d1).
-\ea
-$$
-Consequently, any such interpretation satisfying the premise of the first implication of claim (b) also satisfies the formula
-$$
-F^C_6(C_6,d1)\wedge F^C_6(C'_6,d1),
-$$
-which by Lemma~\ref{lem:eu}(b) implies that $C_6=C'_6$.
+Proof of ``claim (b)''. Follows immedietaly from Lemma~\ref{lem:eu2}(b) and the fact that $F^C_6(C_6,D_1)$ is identical to $F^C_6(C_6)_{[d1\mapsto D_1]}$.  
 \end{proof}
 
 \medskip\noindent{\bf Theorem~\ref{thm:bc}, first reformulation.}
@@ -1513,7 +1493,7 @@ Consider an extension of~$\I$ to the signature of~$T_{ABC}$ that
 satisfies 
 $$F^A_1(C_1^*),F^B_2(C_2^*),\dots,F^B_5(C_5^*),F^C_6(C_6^*,D^*_1),F^C_7(C_7^*,D^*_2), H^C_1(D^*_1),\hbox{ and }H^C_2(D^*_2);$$ 
 such an extension exists by
-Lemmas~\ref{lem:eu}(a) and~\ref{lem:eu2}(a). 
+Lemmas~\ref{lem:eu}(a) and~\ref{lem:eu2.2}(a). 
 
 %While this claim is obvious for the most part, it makes sense to point at the following:
 %\begin{itemize}
@@ -1533,7 +1513,7 @@ and the fact that $G^p_C(D^*_1,D^*_2)$ is a conjunction of formulas~$H^*_1(D^*_1
   G_B(C^*_2,\dots,C^*_5)\lrar (G^p_C(D^*_1,D^*_2) \to G^o_C(C^*_2, C^*_3, C^*_6, C^*_7)). 
   \eeq{reform2.1.1}
 Interpretation $\I$ satisfies~\eqref{reform2.1.1}, which is equivalent to
-$$%%\beq
+\beq
 \ba{l}
 \forall C_2\cdots C_5(C_2=C_2^* \land\cdots \land C_5=C_5^* \to 
 \\
@@ -1552,7 +1532,7 @@ $$%%\beq
 \big(G^p_C(D_1,D_2) \to G^o_C(C_2, C_3, C_6, C_7)\big) 
 \Big),
   \ea
- $$
+ \eeq{eq:2}
  Let us consider the right hand side of the equivalence above. It is equivalent to
 $$%%\beq
 \ba{l}
@@ -1573,7 +1553,7 @@ $$%%\beq
   \ea
  $$
  which we can rewrite as
- $$%%\beq
+\beq
 \ba{l}
 \forall D_1 D_2 C_2 C_3 C_6 C_7\Big( 
   D_1=D^*_1\land
@@ -1590,19 +1570,58 @@ $$%%\beq
  G^o_C(C_2, C_3, C_6, C_7) 
 \Big).
   \ea
- $$
+\eeq{eq:1}
+ From Lemma~\ref{lem:eu}(b) we conclude
+that~$\I$ satisfies  the formulas
+$$
+\ba l
+%\forall C_1(F^A_1(C_1) \lrar C_1=C^*_1),\\
+\forall C_i(F^B_i(C_i) \lrar C_i=C^*_i) \qquad (i=2,\dots,5).\\
+%\forall C_j(F^C_j(C_j) \lrar C_j=C^*_j) \qquad (j=6,7).
+\ea
+$$
+From Lemma~\ref{lem:eu2.2}(b) we conclude
+that~$\I$ satisfies  the formulas
+$$
+\ba l
+\forall D_1\,C_6(F^C_6(C_6,D_1) \lrar C_6=C^*_6),\\
+\forall D_2\,C_7(F^C_7(C_7,D_2) \lrar C_7=C^*_7).\\
+\ea
+$$
+From Lemma~\ref{lem:privatedefs} we conclude
+that~$\I$ satisfies  the formulas
+$$
+\ba l
+\forall D_1 (H^C_1(D_1) \lrar D_1=D^*_1),\\
+\forall D_2 (H^C_2(D_2) \lrar D_2=D^*_2).\\
+\ea
+$$
+Consequently,~$\I$ satisfies the formula~\eqref{eq:1} if and only if it satisfies the formula
+$$
+\ba{l}
+\forall D_1 D_2 C_2 C_3 C_6 C_7\Big( 
+  %D_1=D^*_1\land
+  %D_2=D^*_2\land\\
+%\hspace{18mm}
+  F^B_2(C_2)\land F^B_3(C_3)\land
+  F^C_6(C_6,D_1)\land
+  F^C_7(C_7,D_2)\land  
+   H^C_1(D_1)\land H^C_2(D_2) 
+\to
+  \\
+\hspace{30mm} 
+ G^o_C(C_2, C_3, C_6, C_7) 
+\Big).
+  \ea
+$$
  %   
-By Lemma~\ref{lem:privatedefs}, interpretation $\I$ that satisfies this formula also satisfies the formula
+By Lemmas~\ref{lem:privatedefs} and Lemma~\ref{lem:privatedefs2} (uniqueness and existence), this formulas is equivalent to  the formula
   $$%%\beq
   \ba l
-  \exists D_1 D_2 C_2 C_3 C_6 C_7\Big( 
-  D_1=D^*_1\land
-  D_2=D^*_2\land\\
-\hspace{18mm}
-  C_2=C_2^*\land
-  C_3=C_3^*\land
-  C_6=C_6^*\land
-  C_7=C_7^* \land 
+  \exists D_1 D_2 \forall C_2 C_3 C_6 C_7\Big( 
+ F^B_2(C_2)\land F^B_3(C_3)\land
+  F^C_6(C_6,D_1)\land
+  F^C_7(C_7,D_2)\land  
    H^C_1(D_1)\land H^C_2(D_2) 
 \to
   \\
@@ -1611,78 +1630,46 @@ By Lemma~\ref{lem:privatedefs}, interpretation $\I$ that satisfies this formula 
 \Big).
   \ea
  $$
- as it satisfies the formulas $H^C_1(D^*_1)$ and $H^C_2(D^*_2)$, which are axioms of the theory $T_{ABC}$.
- 
- By Lemma~\ref{lem:privatedefs}, we can replace $G^p_C(D_1,D_2)$ with $H^C_1(D_1)\land H^C_2(D_2)$,
- and which in turn is equivalent to
-$$%%\beq
-\ba{l}
-\forall C_2\cdots C_5(C_2=C_2^* \land\cdots \land C_5=C_5^* \to 
-\\
-\hspace{30mm}G_B(C_2,C_3,C_4,C_5))\ \lrar\\
-\hspace{0mm}
-\forall D_1 D_2 C_2 C_3 C_6 C_7\big(\big( 
-  D_1=D^*_1\land
-  D_2=D^*_2\land\\
-\hspace{18mm}
-  C_2=C_2^*\land
-  C_3=C_3^*\land
-  C_6=C_6^*\land
-  C_7=C_7^* \land
-  H^C_1(D_1)\land H^C_2(D_2)\big)
+ and consequently to
+ $$%%\beq
+  \ba l
+  \exists D_1 D_2 \forall C_2 C_3 C_6 C_7\Big( 
+ F^B_2(C_2)\land F^B_3(C_3)\land
+  F^C_6(C_6,D_1)\land
+  F^C_7(C_7,D_2) 
+\to
   \\
 \hspace{30mm} 
- \to G^o_C(C_2, C_3, C_6, C_7) 
-\big).
+ G^p_C(D_1, D_2) \land G^o_C(C_2, C_3, C_6, C_7) 
+\Big).
   \ea
  $$
 
-%===================================
- 
-From Lemma~\ref{lem:eu}(b) we conclude
-that~$\I$ satisfies also the formulas
+Earlier it has been shown that the left-hand side of~\eqref{eq:2} is equivalent to
 $$
 \ba l
-%\forall C_1(F^A_1(C_1) \lrar C_1=C^*_1),\\
-\forall C_i(F^B_i(C_i) \lrar C_i=C^*_i) \qquad (i=2,\dots,5).\\
-%\forall C_j(F^C_j(C_j) \lrar C_j=C^*_j) \qquad (j=6,7).
+\forall C_2 C_3 C_4 C_5\Big(        
+  F^B_2(C_2)\land F^B_3(C_3)\land F^B_4(C_4)\land F^B_5(C_5) \to G_B(C_2,C_3,C_4,C_5)
+\Big).
 \ea
 $$
-From Lemma~\ref{lem:eu2}(b) we conclude
-that~$\I$ satisfies also the formulas
+We now put the observations about the right-hand side and left-hand side of ~\eqref{eq:2} together and conclude that it is equavlent to
 $$
 \ba l
-\forall C_6D_1((F^C_6(C_6,D_1)\wedge  H^C_1(D_1)) \lrar (C_6=C^*_6\wedge D_1=D^*_1)),\\
-\forall C_7D_2((F^C_7(C_7,D_2) \wedge H^C_2(D_2)) \lrar (C_7=C^*_7\wedge D_2=D^*_2)).\\
-\ea
-$$
-%By Lemma~\ref{lem:privatedefs},~$\I$ satisfies also the formulas
-%$$
-%\ba l
-%\forall D_1(H^C_1(D_1) \lrar D_1=D^*_1),\\
-%\forall D_2(H^C_2(D_2) \lrar D_2=D^*_2).\\
-%\ea
-%$$
-
-Putting these observations together we conclude that~$\I$ satisfies the equivalence
-$$
-\ba{l}
-\forall C_2\cdots C_5\big(
-  (F^B_2(C_2)\land\cdots \land F^B_5(C_5))\to
-G_B(C_2,\dots,C_5)\big)\lrar\\
-\hspace{0mm}
-\exists D_1 D_2 \forall  C_2 C_3 C_6 C_7 \Big(  
-\big(  F^B_2(C_2)\land
-  F^B_3(C_3)\land
+\forall C_2 C_3 C_4 C_5\Big(        
+  F^B_2(C_2)\land F^B_3(C_3)\land F^B_4(C_4)\land F^B_5(C_5) \to G_B(C_2,C_3,C_4,C_5)
+\Big) \lrar\\
+ \exists D_1 D_2 \forall C_2 C_3 C_6 C_7\Big( 
+ F^B_2(C_2)\land F^B_3(C_3)\land
   F^C_6(C_6,D_1)\land
-  F^C_7(C_7,D_2)
-  \big)
- \to 
+  F^C_7(C_7,D_2) 
+\to
   \\
-\hspace{16mm} (H^C_1(D_1)\land
-  H^C_2(D_2)\land
- G^o_C(C_2, C_3, C_6, C_7))\Big).
-\ea$$
+\hspace{30mm} 
+ G^p_C(D_1, D_2) \land G^o_C(C_2, C_3, C_6, C_7) 
+\Big).
+\ea
+$$
 which is identical to
 the consequent $\mathit{pcomp}(B)\lrar\mathit{pcomp}(C)$
 of~(\ref{eq:thm:bc}).
@@ -1807,9 +1794,9 @@ T'_{ABC}\vdash \forall VK(V\in C^*_4(K,n) \lrar \exists IJ(V=(I,J) \land q(I,J)
 $$\ba l
 \forall V_1V_2V_3( D^*_1(V_1,V_2,V_3)\lrar\\
 \hskip 21mm
-\exists I J  (1\leq I\leq n \land 1\leq J\leq n\\
+\exists I J  (1\leq I\leq n \land 1\leq J\leq n\;\land\\
 \hskip 33mm
-\land\; V_1=I\land V_2=J \land V_3= I-J+n)).
+ V_1=I\land V_2=J \land V_3= I-J+n)).
 \ea
 $$
 
