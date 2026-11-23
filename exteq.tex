@@ -1318,31 +1318,105 @@ for which $D=D'$ is a shorthand.
 \noindent
 Indeed, these formulas are instances of comprehension axioms of second-order logic.
 
-We now revisit Lemma~\ref{lem:eu-general}. If we consider its proof we can see that a more general result also holds.
-We first introduce some notation to state this result.
-Let $\overline{p}=p_1,\dots,p_k$ be a list of predicate constants; 
+%We now revisit Lemma~\ref{lem:eu-general}.
+% If we consider its proof we can see that a more general result also holds.
+%We first introduce some notation to state this result.
+Let ${\bf p}=p_1,\dots,p_k$ be a list of predicate constants; 
 let
-us associate this list with a list of pair-wise distinct predicate variables $\overline{P}=P_1,\dots,P_k$ of the same arity and sorts as the corresponding predicate constants; we call such list {\em matching}. For a forumla $F$,
-by $F_{[\overline{p}\mapsto\overline{P}]}$ we denote a formula obtained from $F$ by replacing the predicate constants $p_1,\dots,p_k$ with the corresponding predicate variables $P_1,\dots,P_k$. We are now ready to state the following generalization of Lemma~\ref{lem:eu-general}.
+us associate this list with a list of pair-wise distinct predicate variables ${\bf P}=P_1,\dots,P_k$ of the same arity and sorts as the corresponding predicate constants; we call such list {\em matching}. 
+%For a forumla $F$,
+%by $F_{[\overline{p}\mapsto\overline{P}]}$ we denote a formula obtained from $F$ by replacing the predicate constants $p_1,\dots,%p_k$ with the corresponding predicate variables $P_1,\dots,P_k$. We are now ready to state the following generalization of %Lemma~\ref{lem:eu-general}.
 
 
-\begin{lemma}\label{lem:eu-verygeneral}
-  For a formula $F(C)$  that is the description of an aggregate expression so that~$C$ is the variable associated with that expression, let $\overline{p}$ be any list of predicate constants occuring in $F(C)$ and different from $\in$ and let $\overline{P}$  be a matching list of predicate variables. Then  
+\begin{proposition}\label{lem:eu-verygeneral}
+ Let ${\bf p}$ be a list of predicate constants different from $\in$ such that 
+$F(C,\bf p)$  is the description of an aggregate expression so that~$C$ is the variable associated with that expression; 
+let ${\bf P}$  be a matching list (with respect to ${\bf p}$) of predicate variables. Then  
   every regular interpretation of $\sigma^\#$ satisfies the formulas
  \medskip
  
- (a) $\forall \overline{P} \exists C\,F(C)_{[\overline{p}\mapsto\overline{P}]}$
+ (a) $\forall {\bf P} \exists C\,F(C,\bf P)$
 
  \medskip\noindent and
 
  \medskip
  (b)
  \begin{tabular}{l} 
-  $\forall \overline{P}\forall C C'(F(C)_{[\overline{p}\mapsto\overline{P}]} \land F(C')_{[\overline{p}\mapsto\overline{P}]} \to C=C')$.
+  $\forall {\bf P}\forall C C'(F(C,{\bf P}) \land F(C',{\bf P}) \to C=C')$.
 \end{tabular}
-\end{lemma}
+\end{proposition}
+\begin{proof}
+%Consider arbitrary aggregate expression
+Let  $X_1,\dots,X_k :{\bf L}$ denote an aggregate expression that $F(C,{\bf p})$ is a description of.
+There are two cases to consider. One when this aggregate expression does not contain global variables, and the other when it does. We focus on the second case, as the first case is similar and simpler.
+Take $W_1,\dots,W_l$ to be the global variables occurring in ${\bf L}$. Variable  $C$ is a function variable and formula $F(C,{\bf p})$ has the form~\eqref{eq:descr2}. Let $Q({\bf P})$ be the formula obtained from $\nu({\bf L})$ 
+ by replacing occurrences of predicate constants $\bf p$ with matching predicate variables $\bf P$.
+ In this case, formula (a) is
+$$
+\ba l
+\forall {\bf P}
+\exists C(
+  \forall V \nu(W_1) \cdots \nu(W_l)(V\in C(\nu(W_1),\dots,\nu(W_l))\\
+\hskip 4cm\lrar
+\exists\, \nu(X_1)\cdots\nu(X_k)\,(V=(\nu(X_1),\dots,\nu(X_k))
+\land 
+Q({\bf P})))).
+\ea
+$$    
+It is entailed by the formula
+$$
+\ba l
+\forall {\bf P}
+\forall \nu(W_1) \cdots \nu(W_l) \exists S \forall V (V\in S 
+\\
+\hskip 4cm\lrar
+\exists\, \nu(X_1)\cdots\nu(X_k)\,(V=(\nu(X_1),\dots,\nu(X_k))
+\land 
+Q({\bf P}))),
+\ea
+$$
+which is satisfied by all regular interpretations, because the domain of
+the sort \emph{set} is the entire powerset of the domain of the sort
+\emph{general}.  
+Furthermore, formula~(b) is
+$$\ba l
+\forall {\bf P}
+\forall C C'\Big( \Big( \big(
+ \forall V \nu(W_1) \cdots \nu(W_l)(V\in C(\nu(W_1),\dots,\nu(W_l))\\
+\hskip 4cm\lrar
+\exists\, \nu(X_1)\cdots\nu(X_k)\,(V=(\nu(X_1),\dots,\nu(X_k))
+\land 
+Q({\bf P}))) \big)  \wedge\\
+\ \ \ \ \ \ \ \  \ \ \  \big(\forall V \nu(W_1) \cdots \nu(W_l)(V\in C'(\nu(W_1),\dots,\nu(W_l))\\
+\hskip 4cm\lrar
+\exists\, \nu(X_1)\cdots\nu(X_k)\,(V=(\nu(X_1),\dots,\nu(X_k))
+\land 
+Q({\bf P})))\big)\Big)\\
+\hskip 7.5cm
+\to C=C'\Big).
+\ea
+$$
+The conjunction in the antecedent implies
+$$
+\ba l
 
-Lemma below is immediate consequence of Lemma~\ref{lem:eu-verygeneral}.
+\forall V \nu(W_1) \cdots \nu(W_l) (V\in C(\nu(W_1),\dots,\nu(W_l))\\
+\hskip 4cm\lrar
+V\in C'(\nu(W_1),\dots,\nu(W_l)))
+\ea
+$$
+and consequently
+$$
+\forall \nu(W_1) \cdots \nu(W_l) (C(\nu(W_1),\dots,\nu(W_l))= C'(\nu(W_1),\dots,\nu(W_l)))
+$$
+and hence $C=C'$.
+\end{proof}
+
+
+
+It is now time to note that  how $F^C_6(C_6,d1)$ is formula~\eqref{d6} which is the description of an aggregate element~\eqref{ae6} with $C_6$ as the associated variable;
+similarly, $F^C_7(C_7,d2)$ is formula ~\eqref{d7} which is the description of an aggregate element~\eqref{ae7} with~$C_7$ as the associated variable.
+Lemma below is immediate consequence of Proposition~\ref{lem:eu-verygeneral}.
 \medskip
 \begin{lemma}\label{lem:eu2}
   Every regular interpretation of $\sigma^\#$ satisfies the formulas
@@ -1350,8 +1424,8 @@ Lemma below is immediate consequence of Lemma~\ref{lem:eu-verygeneral}.
  
  (a)
   \begin{tabular}{l} 
- $\forall D_1\exists C_6\,F^C_6(C_6)_{[d1\mapsto D_1]}$;\\  
- $\forall D_2 \exists C_7\,F^C_7(C_7)_{[d2\mapsto D_2]}$;
+ $\forall D_1\exists C_6\,F^C_6(C_6,D_1)$;\\  
+ $\forall D_2 \exists C_7\,F^C_7(C_7,D_2)$;
   \end{tabular}
 
  
@@ -1360,11 +1434,13 @@ Lemma below is immediate consequence of Lemma~\ref{lem:eu-verygeneral}.
  \medskip
  (b)
  \begin{tabular}{l} 
-   $\forall D_1 C_6C'_6(F^C_6(C_6)\land F^C_6(C'_6) \to C_6=C'_6)_{[d1\mapsto D_1]}$\\
-   $\forall D_2 C_7C'_7(F^C_7(C_7)\land F^C_7(C'_7) \to C_7=C'_7)_{[d2\mapsto D_2]}$\\ 
+   $\forall D_1 C_6C'_6(F^C_6(C_6,D_1)\land F^C_6(C'_6,D_1) \to C_6=C'_6)$\\
+   $\forall D_2 C_7C'_7(F^C_7(C_7,D_2)\land F^C_7(C'_7,D_2) \to C_7=C'_7)$\\ 
 \end{tabular}
 
 \end{lemma}
+
+
 
 \begin{comment}
 \begin{proof}
@@ -1466,7 +1542,7 @@ $\exists C_6 D_1\,(F^C_6(C_6,D_1)\wedge H^C_1(D_1))$;\\$\exists C_7 D_2\,(F^C_7(
   Consider arbitrary regular interpretation $\I$ of $\sigma^\#$.
  By Lemma~\ref{lem:eu2},
   interpretation $\I$ satisfies the formula
-  $\forall D_1\exists C_6\,F^C_6(C_6)_{[d1\mapsto D_1]}$. It is easy to see that $F^C_6(C_6)_{[d1\mapsto D_1]}$ is identical to the formula $F^C_6(C_6,D_1)$.  Consequenlty, interpretation $\I$ satisfies  formula $\forall D_1\exists C_6 F^C_6(C_6,D_1)$.
+  $\forall D_1\exists C_6\,F^C_6(C_6,D_1)$. It is easy to see that $F^C_6(C_6,D_1)$ is identical to the formula $F^C_6(C_6,D_1)$.  Consequenlty, interpretation $\I$ satisfies  formula $\forall D_1\exists C_6 F^C_6(C_6,D_1)$.
 By Lemma~\ref{lem:privatedefs2},  interpretation $\I$ satisfies the formula $\exists D_1 H^C_1(D_1)$. We conclude that interpretation $\I$ satisfies
 the first formula in (a).
 %the formula $\exists C_6 D_1\,(F^C_6(C_6,D_1)\wedge H^C_1(D_1))$.
