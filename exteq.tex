@@ -1496,9 +1496,18 @@ $C_6^*,C_7^*$ similar to the variables
 $C_6,C_7$, so that~$C_6^*$ and $C_7^*$ are function constants with 
  the value sort \emph{set} and the argument sort is {\em integer}.
 \end{itemize}    
-By~$T_{ABC}$ we denote the
-first-order theory~$T_{AB}$ extended  with the following axioms:
+By~$T_{BC}$ we denote the
+first-order theory over the extended signature 
+with the following axioms:
 \begin{itemize}
+\item the sentences over~$\sigma^\#$ that are satisfied by all regular
+  interpretations;
+\item the antecedent $\exists N(N=n\land N>0)$ of~(\ref{eq:thm:bc}),
+  denoted by~$\ug$;
+\item the first-order sentences $F^B_2(C^*_2),\dots,F^B_5(C^*_5)$;
+%  obtained from $F^B_2(C_2)$, $\dots,$ $F^B_5(C_5)$ by
+%  substituting the constants $C^*_1,\dots,C^*_5$ for the variables
+%  $C_1,\dots,C_5$; 
 \item the first-order sentences  $F^C_6(C^*_6,D^*_1)$, $F^C_7(C^*_7,D^*_2)$ 
   obtained from $F^C_6(C_6,D_1),F^C_7(C_7,D_2)$ by
   substituting the constants $C^*_6,C^*_7,D^*_1,D^*_2$ for the variables
@@ -1508,7 +1517,27 @@ first-order theory~$T_{AB}$ extended  with the following axioms:
 &\forall VK(V\in C^*_7(K) \lrar \exists XY(V=(X,Y) \land q(X,Y) \land D^*_2(X,Y,K)))\label{dd7};
 \end{align}
 \item sentences
- $H^C_1(D^*_1)$ and $H^C_2(D^*_2)$, respectively; we choose to denote them by $\diagO$ and $\diagT$.
+ $H^C_1(D^*_1)$ and $H^C_2(D^*_2)$
+ obtained from $H^C_1(D_1)$, $\dots,$ $H^C_2(D_2)$ by
+  substituting the constant
+ $D^*_1,D^*_2$ for the variables $D_1,D_2$; we will denote these axioms by $\diagO$ and $\diagT$, respectively; these sentences are
+ \beq
+\ba l
+\forall V_1V_2V_3( D^*_1(V_1,V_2,V_3)\lrar\\
+\hskip 21mm
+\exists I J  N(1\leq I\leq N \land 1\leq J\leq N \land N=n \\
+\hskip 33mm
+\land\; V_1=I\land V_2=J \land V_3= I-J+N)),
+\ea
+\eeq{c4fcdefV*}
+and
+\beq
+\ba l\forall V_1V_2V_3(D^*_2(V_1,V_2,V_3)\lrar \\
+\hskip 10mm
+\exists I J  (1\leq I\leq n \land 1\leq J\leq n 
+\land V_1=I \land V_2=J \land V_3= I+J-1)).
+\ea
+\eeq{c5fcdefV*}
 \end{itemize}
 
 
@@ -1521,33 +1550,21 @@ first-order theory~$T_{AB}$ extended  with the following axioms:
   the formulas
  \medskip
  
- (a)   \begin{tabular}{l} 
+   \begin{tabular}{l} 
 $\exists C_6 D_1\,(F^C_6(C_6,D_1)\wedge H^C_1(D_1))$;\\$\exists C_7 D_2\,(F^C_7(C_7,D_2)\wedge H^C_2(D_2))$;
  \end{tabular}
 
- 
- \medskip\noindent and
-
- \medskip
- (b)
- \begin{tabular}{l} 
-  $\forall D C_6C'_6
-  ((F^C_6(C_6,D)\wedge F^C_6(C'_6,D)) \to C_6=C'_6)$;\\
-  $\forall D C_7C'_7 
-  ((F^C_7(C_7,D)\wedge F^C_7(C'_7,D)) \to C_7=C'_7)$;\\
-\end{tabular}
 \end{lemma}
 \begin{proof}  
-  We illustrate the proof for the first formulas in (a) and (b). % the second ones is proved similarly.
+  We illustrate the proof for the first formula. % the second ones is proved similarly.
   Consider arbitrary regular interpretation $\I$ of $\sigma^\#$.
  By Lemma~\ref{lem:eu2},
   interpretation $\I$ satisfies the formula
-  $\forall D_1\exists C_6\,F^C_6(C_6,D_1)$. It is easy to see that $F^C_6(C_6,D_1)$ is identical to the formula $F^C_6(C_6,D_1)$.  Consequenlty, interpretation $\I$ satisfies  formula $\forall D_1\exists C_6 F^C_6(C_6,D_1)$.
+  $\forall D_1\exists C_6\,F^C_6(C_6,D_1)$. 
 By Lemma~\ref{lem:privatedefs2},  interpretation $\I$ satisfies the formula $\exists D_1 H^C_1(D_1)$. We conclude that interpretation $\I$ satisfies
-the first formula in (a).
+the first formula in the lemma statement.
 %the formula $\exists C_6 D_1\,(F^C_6(C_6,D_1)\wedge H^C_1(D_1))$.
-
-Proof of ``claim (b)''. Follows immedietaly from Lemma~\ref{lem:eu2}(b) and the fact that $F^C_6(C_6,D_1)$ is identical to $F^C_6(C_6)_{[d1\mapsto D_1]}$.  
+%Proof of ``claim (b)''. Follows immedietaly from Lemma~\ref{lem:eu2}(b) and the fact that $F^C_6(C_6,D_1)$ is identical to $F^C_6(C_6)_{[d1\mapsto D_1]}$.  
 \end{proof}
 
 \medskip\noindent{\bf Theorem~\ref{thm:bc}, first reformulation.}
@@ -1555,7 +1572,7 @@ Proof of ``claim (b)''. Follows immedietaly from Lemma~\ref{lem:eu2}(b) and the 
   \beq
   G_B(C^*_2,\dots,C^*_5)\lrar  G^o_C(C^*_2, C^*_3, C^*_6, C^*_7) 
   \eeq{reform2.1}
-is provable in the theory $T_{ABC}$.}
+is provable in the theory $T_{BC}$.}
 
 \medskip
 This reformulation is proved below, and then the
@@ -1565,11 +1582,11 @@ of the signature~$\sigma^\#$ that satisfies the antecedent~$\ug$
 of~(\ref{eq:thm:bc}); we need to verify that~$\I$ satisfies the consequent
 of~(\ref{eq:thm:bc}).
 
-Consider an extension of~$\I$ to the signature of~$T_{ABC}$ that
+Consider an extension of~$\I$ to the signature of~$T_{BC}$ that
 satisfies 
-$$F^A_1(C_1^*),F^B_2(C_2^*),\dots,F^B_5(C_5^*),F^C_6(C_6^*,D^*_1),F^C_7(C_7^*,D^*_2), H^C_1(D^*_1),\hbox{ and }H^C_2(D^*_2);$$ 
+$$F^B_2(C_2^*),\dots,F^B_5(C_5^*),F^C_6(C_6^*,D^*_1),F^C_7(C_7^*,D^*_2), H^C_1(D^*_1),\hbox{ and }H^C_2(D^*_2);$$ 
 such an extension exists by
-Lemmas~\ref{lem:eu}(a) and~\ref{lem:eu2.2}(a). 
+Lemmas~\ref{lem:eu}(a) and~\ref{lem:eu2.2}. 
 
 %While this claim is obvious for the most part, it makes sense to point at the following:
 %\begin{itemize}
@@ -1580,10 +1597,10 @@ Lemmas~\ref{lem:eu}(a) and~\ref{lem:eu2.2}(a).
 
 We take the liberty to denote that
 extension by the same symbol~$\I$. Since~$\I$ satisfies all axioms of
-the theory~$T_{ABC}$,
+the theory~$T_{BC}$,
 $\I$ satisfies its theorem~(\ref{reform2.1}).
-It is easy to see from the provability of~(\ref{reform2.1}) in~$T_{ABC}$ that the
-following formula is also provable in~$T_{ABC}$ given that $H^*_1(D^*_1)$ and $H^*_2(D^*_2)$ are its axioms:
+It is easy to see from the provability of~(\ref{reform2.1}) in~$T_{BC}$ that the
+following formula is also provable in~$T_{BC}$ given that $H^*_1(D^*_1)$ and $H^*_2(D^*_2)$ are its axioms
 and the fact that $G^p_C(D^*_1,D^*_2)$ is a conjunction of formulas~$H^*_1(D^*_1)$ and $H^*_2(D^*_2)$:
 \beq
   G_B(C^*_2,\dots,C^*_5)\lrar (G^p_C(D^*_1,D^*_2) \to G^o_C(C^*_2, C^*_3, C^*_6, C^*_7)). 
@@ -1656,7 +1673,7 @@ $$
 %\forall C_j(F^C_j(C_j) \lrar C_j=C^*_j) \qquad (j=6,7).
 \ea
 $$
-From Lemma~\ref{lem:eu2.2}(b) we conclude
+From Lemma~\ref{lem:eu2}(b) we conclude
 that~$\I$ satisfies  the formulas
 $$
 \ba l
@@ -1690,33 +1707,90 @@ $$
 \Big).
   \ea
 $$
- %   
-By Lemmas~\ref{lem:privatedefs} and Lemma~\ref{lem:privatedefs2} (uniqueness and existence), this formulas is equivalent to  the formula
-  $$%%\beq
-  \ba l
-  \exists D_1 D_2 \forall C_2 C_3 C_6 C_7\Big( 
- F^B_2(C_2)\land F^B_3(C_3)\land
-  F^C_6(C_6,D_1)\land
+which is equivalent to 
+$$
+\ba{l}
+\forall D_1 D_2 C_2 C_3 C_6 C_7\Big( 
+  %D_1=D^*_1\land
+  %D_2=D^*_2\land\\
+%\hspace{18mm}
+(  F^C_6(C_6,D_1)\land
   F^C_7(C_7,D_2)\land  
-   H^C_1(D_1)\land H^C_2(D_2) 
+   H^C_1(D_1)\land H^C_2(D_2) )
 \to
   \\
 \hspace{30mm} 
+  (F^B_2(C_2)\land F^B_3(C_3))\to
  G^o_C(C_2, C_3, C_6, C_7) 
 \Big).
   \ea
- $$
+$$
+and which is then equivalent to
+$$
+\ba{l}
+\forall D_1 D_2 C_6 C_7\Big( 
+  %D_1=D^*_1\land
+  %D_2=D^*_2\land\\
+%\hspace{18mm}
+(  F^C_6(C_6,D_1)\land
+  F^C_7(C_7,D_2)\land  
+   H^C_1(D_1)\land H^C_2(D_2) )
+\to
+  \\
+\hspace{30mm} 
+ \forall C_2 C_3 (  (F^B_2(C_2)\land F^B_3(C_3))\to
+ G^o_C(C_2, C_3, C_6, C_7) )
+\Big).
+  \ea
+$$
+By Lemma~\ref{lem:eu2.2} (existence) and Lemma~\ref{lem:privatedefs} (uniqueness), this formula is equivalent to the formula
+$$
+\ba{l}
+\exists D_1 D_2 \forall C_6 C_7\Big( 
+  %D_1=D^*_1\land
+  %D_2=D^*_2\land\\
+%\hspace{18mm}
+(  F^C_6(C_6,D_1)\land
+  F^C_7(C_7,D_2)\land  
+   H^C_1(D_1)\land H^C_2(D_2) )
+\to
+  \\
+\hspace{30mm} 
+ \forall C_2 C_3 (  (F^B_2(C_2)\land F^B_3(C_3))\to
+ G^o_C(C_2, C_3, C_6, C_7) )
+\Big),
+  \ea
+$$
+which in turn is equivalent to 
+$$
+\ba{l}
+\exists D_1 D_2 \forall C_2 C_3 C_6 C_7\Big( 
+  %D_1=D^*_1\land
+  %D_2=D^*_2\land\\
+%\hspace{18mm}
+(  F^C_6(C_6,D_1)\land
+  F^C_7(C_7,D_2)\land  
+F^B_2(C_2)\land F^B_3(C_3)\land
+
+   H^C_1(D_1)\land H^C_2(D_2) )
+\to
+  \\
+\hspace{30mm} 
+  G^o_C(C_2, C_3, C_6, C_7) 
+\Big),
+  \ea
+$$
  and consequently to
  $$%%\beq
   \ba l
   \exists D_1 D_2 \forall C_2 C_3 C_6 C_7\Big( 
- F^B_2(C_2)\land F^B_3(C_3)\land
+ (F^B_2(C_2)\land F^B_3(C_3)\land
   F^C_6(C_6,D_1)\land
-  F^C_7(C_7,D_2) 
+  F^C_7(C_7,D_2)) 
 \to
   \\
 \hspace{30mm} 
- G^p_C(D_1, D_2) \land G^o_C(C_2, C_3, C_6, C_7) 
+ (G^p_C(D_1, D_2) \land G^o_C(C_2, C_3, C_6, C_7) )
 \Big).
   \ea
  $$
@@ -1765,17 +1839,18 @@ formulas~(\ref{a1fcdef}), (\ref{b2f}), (\ref{b3f}), (\ref{c6f}), (\ref{c7f}).
 %(\ref{c5fcdefV}), respectively.
 
 
-Recall that theory $T_{ABC}$ includes all statements of theory $T_{AB}$.
+
+Note how theory $T_{BC}$ includes many of the statements of theory $T_{AB}$.
 Now we use the  simplifications and notation as
 introduced
 in Section~\ref{sec:reformThm1}
 within items 1, 6,  7, 8, and~9. 
-We observe that the claims of these items hold in the scope of theory $T_{ABC}$ and the considered conjunctions of this section. 
-By~$T'_{ABC}$ we denote the theory obtained by adding~$\dOne$, which is formula (\ref{a1fcdef}),
-to~$T_{ABC}$ as an axiom.
+We observe that the claims of these items hold in the scope of theory $T_{BC}$ and the considered conjunctions of this section. 
+By~$T'_{BC}$ we denote the theory obtained by adding~$\dOne$, which is formula (\ref{a1fcdef}),
+to~$T_{BC}$ as an axiom.
 
 The result of substituting $C_6^*$ for $C_6$ in~(\ref{c6f}) is equivalent
-in~$T_{ABC}$ to the formula
+in~$T_{BC}$ to the formula
 $$
 \forall KN
 (1\leq K\leq 2\times N-1 \land N=n\to\co(C^*_6(K))\leq 1).
@@ -1783,7 +1858,7 @@ $$
 denoted by $\bFourfs'$.
 
 The result of substituting $C_7^*$ for $C_7$ in~(\ref{c7f}) is equivalent
-in~$T_{ABC}$ to the formula
+in~$T_{BC}$ to the formula
 $$
 \forall KN
 (1\leq K\leq 2\times N-1
@@ -1805,7 +1880,7 @@ $$
 \bThreefleq\;\land\bFourfs\land \bFivefs.
 \ea
 $$%\eeq{gamma2}
-is equivalent in~$T'_{ABC}$ to the formula
+is equivalent in~$T'_{BC}$ to the formula
 $$
 \ba r
 \bTwofgeq\land \bTwofleq\land \bThreefgeq\;\land\quad\\
@@ -1822,7 +1897,7 @@ $$
 \bFourfs\land \bFivefs.
 \ea
 $$%\eeq{gamma2}
-is equivalent in~$T'_{ABC}$ to the formula
+is equivalent in~$T'_{BC}$ to the formula
 $$
 \ba r
 \bFourfs'\land \bFivefs'.
@@ -1833,21 +1908,21 @@ $$
 \noindent
 The last claim in turn follows from the following two lemmas.
 \begin{lemma}\label{claim8}
-$T'_{ABC}\vdash \bFourfs \lrar  \bFourfs'$.
+$T'_{BC}\vdash \bFourfs \lrar  \bFourfs'$.
 \end{lemma}
 
 
 \begin{lemma}\label{claim9}
-$T'_{ABC}\vdash \bFivefs \lrar  \bFivefs'$.
+$T'_{BC}\vdash \bFivefs \lrar  \bFivefs'$.
 \end{lemma}
 We now prove Lemmas~\ref{claim8} whereas Lemma~\ref{claim9} is proved similarly.
 \begin{proof}
 We start by showing that
 \beq
-T'_{ABC}\vdash  \bFourfs \to  \bFourfs'.
+T'_{BC}\vdash  \bFourfs \to  \bFourfs'.
 \eeq{eq:claim8rightdirection}
 First, we assume the left-hand side of the implication:
-$$T'_{ABC},\bFourfs\vdash  \bFourfs.$$
+$$T'_{BC},\bFourfs\vdash  \bFourfs.$$
 
 We observe that $\bFourfs$ is the formula equivalent to
   $$
@@ -1855,18 +1930,18 @@ We observe that $\bFourfs$ is the formula equivalent to
 $$
 Thus,
 \beq
-T'_{ABC},\bFourfs\vdash  \forall K(1\leq K\leq 2\times n-1   \to \co(C^*_4(K,n))\leq 1).
+T'_{BC},\bFourfs\vdash  \forall K(1\leq K\leq 2\times n-1   \to \co(C^*_4(K,n))\leq 1).
 \eeq{eq:claim8.1}
 
 
 
-Recall that  $F^C_4(C^*_4)$ is an axiom in $T'_{ABC}$. Then, $T'_{ABC}$ entails its instance with $N=n$, and consequently:
+Recall that  $F^C_4(C^*_4)$ is an axiom in $T'_{BC}$. Then, $T'_{BC}$ entails its instance with $N=n$, and consequently:
 \beq
-T'_{ABC}\vdash \forall VK(V\in C^*_4(K,n) \lrar \exists IJ(V=(I,J) \land q(I,J)
+T'_{BC}\vdash \forall VK(V\in C^*_4(K,n) \lrar \exists IJ(V=(I,J) \land q(I,J)
    \land K=I-J+n)).
    \eeq{eq:claim8.2}
 
-   Also, $F^C_6(C^*_6,D^*_1)$ and $\diagO$ are the axioms in $T'_{ABC}$. It is easy to see that $\diagO$ is equivalent to formula:
+   Also, $F^C_6(C^*_6,D^*_1)$ and $\diagO$ are the axioms in $T'_{BC}$. It is easy to see that $\diagO$ is equivalent to formula:
 $$\ba l
 \forall V_1V_2V_3( D^*_1(V_1,V_2,V_3)\lrar\\
 \hskip 21mm
@@ -1879,7 +1954,7 @@ $$
 Now, $F^C_6(C^*_6,D^*_1)$ and $\diagO$ together give ground for:
 \beq
 \ba{l}
-T'_{ABC}\vdash \forall VK(V\in C^*_6(K) \lrar \exists IJ(
+T'_{BC}\vdash \forall VK(V\in C^*_6(K) \lrar \exists IJ(
 V=(I,J)\land\\  
 \hspace{30mm}
 1\leq I\leq n \land 1\leq J\leq n \land q(I,J)
@@ -1887,57 +1962,57 @@ V=(I,J)\land\\
    \ea
    \eeq{eq:claim8.2.1}
 
-   Recall that $\dOne$ is an axiom of  $T'_{ABC}$ and has the form:
+   Recall that $\dOne$ is an axiom of  $T'_{BC}$ and has the form:
    $$
 \forall X Y (q(X,Y) \to
 1 \leq X \leq n \land 1 \leq Y \leq n \land \exists I(I=X)
 \land \exists J(J=Y) \land \exists N(N=n)).
 $$
 Consequently,
-$$T'_{ABC}\vdash \forall I J (q(I,J) \to  1 \leq I \leq n \land 1 \leq J \leq n).
+$$T'_{BC}\vdash \forall I J (q(I,J) \to  1 \leq I \leq n \land 1 \leq J \leq n).
 $$
 Putting this together with claim~\eqref{eq:claim8.2.1} we conclude that
 $$
 \ba{l}
-T'_{ABC}\vdash \forall VK(V\in C^*_6(K) \lrar \exists IJ(
+T'_{BC}\vdash \forall VK(V\in C^*_6(K) \lrar \exists IJ(
 V=(I,J)
 \land q(I,J)
    \land K=I-J+n)).
    \ea
 $$  
 The last claim together with claim \eqref{eq:claim8.2} allows us to conclude that
-$$T'_{ABC}\vdash 
+$$T'_{BC}\vdash 
 \forall VK(V\in C^*_6(K)\lrar V\in C^*_4(K,n))$$ 
 and hence
 \beq
-T'_{ABC}\vdash 
+T'_{BC}\vdash 
 \forall K(C^*_6(K)=C^*_4(K,n)).
 \eeq{eq:claim8.3}
 This claim together with claim \eqref{eq:claim8.1} allows us to conclude that
-$$T'_{ABC},\bFourfs\vdash  \forall K(1\leq K\leq 2\times n-1   \to \co(C^*_6(K))\leq 1).
+$$T'_{BC},\bFourfs\vdash  \forall K(1\leq K\leq 2\times n-1   \to \co(C^*_6(K))\leq 1).
 $$
 Note how the right hand side of the entailment symbol is formula $\bFourfs'$. Consequently, claim~\eqref{eq:claim8rightdirection} follows.
 
 
 We now show that
 \beq
-T'_{ABC}\vdash    \bFourfs' \to \bFourfs.
+T'_{BC}\vdash    \bFourfs' \to \bFourfs.
 \eeq{eq:claim8leftdirection}
 We assume the left-hand side of the implication:
 \beq
-T'_{ABC},\bFourfs'\vdash  \bFourfs'.
+T'_{BC},\bFourfs'\vdash  \bFourfs'.
 \eeq{eq:claim8.4}  
 
 We observe that $\bFourfs'$ is the formula
   $$
   \forall K(1\leq K\leq 2\times n-1   \to \co(C^*_6(K))\leq 1).
 $$
-By claim~\eqref{eq:claim8.3}, this formula is equivalent in $T'_{ABC}$ to formula
+By claim~\eqref{eq:claim8.3}, this formula is equivalent in $T'_{BC}$ to formula
 $$
 \forall K(1\leq K\leq 2\times n-1   \to \co(C^*_4(K,n))\leq 1),
 $$
 which is equivalent to formula $\bFourfs$. Using claim~\eqref{eq:claim8.4}, we conclude that
-$$T'_{ABC},\bFourfs'\vdash  \bFourfs$$
+$$T'_{BC},\bFourfs'\vdash  \bFourfs$$
 and hence claim~\eqref{eq:claim8leftdirection} follows.
 \end{proof}
 
@@ -2063,7 +2138,7 @@ $C_6^*,C_7^*$ similar to the variables
 $C_6,C_7$, so that~$C_6^*$ and $C_7^*$ are function constants with 
  the value sort \emph{set} and the argument sort is {\em integer}.
 \end{itemize}    
-By~$T_{ABC}$ we denote the
+By~$T_{BC}$ we denote the
 first-order theory~$T_{AB}$ extended  with the following axioms:
 \begin{itemize}
 \item the first-order sentences  $F^C_6(C^*_6,d1)$, $F^C_7(C^*_7,d2)$ 
@@ -2084,7 +2159,7 @@ first-order theory~$T_{AB}$ extended  with the following axioms:
   \beq
   G_B(C^*_2,\dots,C^*_5)\lrar G_C(C^*_2, C^*_3, C^*_6, C^*_7,d1,d2) 
   \eeq{reform2.1}
-is provable in the theory $T_{ABC}$.}
+is provable in the theory $T_{BC}$.}
 
 \medskip
 This reformulation is proved below, and then the
@@ -2093,13 +2168,13 @@ will follow.  Indeed, consider any regular interpretation~$\I$
 of the signature~$\sigma^\#$ that satisfies the antecedent~$\ug$
 of~(\ref{eq:thm:bc}); we need to verify that~$\I$ satisfies the consequent
 of~(\ref{eq:thm:bc}).
-Consider an extension of~$\I$ to the signature of~$T_{ABC}$ that
+Consider an extension of~$\I$ to the signature of~$T_{BC}$ that
 satisfies $F^A_1(C_1^*), F^B_2(C_2^*),\dots,F^B_5(C_5^*)$, and $F^C_6(C_6^*,d1),F^C_7(C_7^*,d2)$; such an extension exists by
 Lemma~\ref{lem:eu}(a) and the observation that $F^C_6(C_6^*,d1),F^C_7(C_7^*,d2)$ coincide with the formulas 
 $F^C_6(C_6^*),F^C_7(C_7^*)$, respectively.
 We take the liberty to denote that
 extension by the same symbol~$\I$. Since~$\I$ satisfies all axioms of
-the theory~$T_{ABC}$,
+the theory~$T_{BC}$,
 $\I$ satisfies its theorem~(\ref{reform2.1}), which is equivalent to
 $$
 \ba{l}
@@ -2184,17 +2259,17 @@ $G_C(C_2,C_3,C_6,C_7,D_1,D_2)$ is the conjunction of
 formulas~(\ref{a1fcdef}), (\ref{b2f}), (\ref{b3f}), (\ref{c6f}), (\ref{c7f}),  (\ref{c4fcdefV}) and
 (\ref{c5fcdefV}).
 
-Recall that theory $T_{ABC}$ includes all statements of theory $T_{AB}$.
+Recall that theory $T_{BC}$ includes all statements of theory $T_{AB}$.
 Now we use the  simplifications and notation as
 introduced
 in Section~\ref{sec:reformThm1}
 within items 1, 6,  7, 8, and~9. 
-We observe that the claims of these items hold in the scope of theory $T_{ABC}$ and the considered conjunctions of this section. 
-By~$T'_{ABC}$ we denote the theory obtained by adding~$\dOne$
-to~$T_{ABC}$ as an axiom.
+We observe that the claims of these items hold in the scope of theory $T_{BC}$ and the considered conjunctions of this section. 
+By~$T'_{BC}$ we denote the theory obtained by adding~$\dOne$
+to~$T_{BC}$ as an axiom.
 
 The result of substituting $C_6^*$ for $C_6$ in~(\ref{c6f}) is equivalent
-in~$T_{ABC}$ to the formula
+in~$T_{BC}$ to the formula
 $$
 \forall KN
 (1\leq K\leq 2\times N-1 \land N=n\to\co(C^*_6(K))\leq 1).
@@ -2202,7 +2277,7 @@ $$
 denoted by $\bFourfs'$.
 
 The result of substituting $C_7^*$ for $C_7$ in~(\ref{c7f}) is equivalent
-in~$T_{ABC}$ to the formula
+in~$T_{BC}$ to the formula
 $$
 \forall KN
 (1\leq K\leq 2\times N-1
@@ -2232,7 +2307,7 @@ $$
 \bThreefleq\;\land\bFourfs\land \bFivefs.
 \ea
 $$%\eeq{gamma2}
-is equivalent in~$T'_{ABC}$ to the formula
+is equivalent in~$T'_{BC}$ to the formula
 $$
 \ba r
 \bTwofgeq\land \bTwofleq\land \bThreefgeq\;\land\quad\\
@@ -2249,7 +2324,7 @@ $$
 \bFourfs\land \bFivefs.
 \ea
 $$%\eeq{gamma2}
-is equivalent in~$T'_{ABC}$ to the formula
+is equivalent in~$T'_{BC}$ to the formula
 $$
 \ba r
 \bFourfs'\land \bFivefs'\land\\\diagO\land\diagT.
@@ -2260,7 +2335,7 @@ $$
 \noindent
 The last claim in turn follows from the following two lemmas.
 \begin{lemma}\label{claim8}
-$T'_{ABC}\vdash \bFourfs \lrar \bFourfs'\land\diagO$.
+$T'_{BC}\vdash \bFourfs \lrar \bFourfs'\land\diagO$.
 \end{lemma}
 As the formula $\diagO$ is an explicit definition of the predicate constant $d1/3$ in terms of inequalities, formula 
 $$
@@ -2273,12 +2348,12 @@ $$
 
 
 \begin{lemma}\label{claim9}
-$T'_{ABC}\vdash \bFivefs \lrar \bFivefs'\land\diagT$.
+$T'_{BC}\vdash \bFivefs \lrar \bFivefs'\land\diagT$.
 \end{lemma}
 We now prove Lemmas~\ref{claim8} whereas Lemma~\ref{claim9} is proved similarly.
 \begin{proof}
   We first prove that 
-  $T'_{ABC}\vdash \bFourfs \to \bFourfs'\land\diagO$.
+  $T'_{BC}\vdash \bFourfs \to \bFourfs'\land\diagO$.
 We observe that $\bFourfs$ is the formula equivalent to
   $$
 \forall K(1\leq K\leq 2\times n-1   \to \co(C^*_4(K,n))\leq 1);
@@ -2291,14 +2366,14 @@ $$
 Recall that 
 $$\forall VKN(V\in C^*_4(K,N) \lrar \exists IJ(V=(I,J) \land q(I,J)
    \land K=I-J+N))$$
-is an axiom in $T'_{ABC}$.
+is an axiom in $T'_{BC}$.
 Let us consider its instance with $N=n$:
 $$\forall VK(V\in C^*_4(K,n) \lrar \exists IJ(V=(I,J) \land q(I,J)
    \land K=I-J+n)).$$
 
 Also,     
 $$ \forall VK(V\in C^*_6(K) \lrar \exists XY(V=(X,Y) \land q(X,Y) \land d_1(X,Y,K)))$$
- is an axiom in $T'_{ABC}$. 
+ is an axiom in $T'_{BC}$. 
 Recall that~$\diagO$ is an explicit definition of the predicate constant $d1/3$ in terms of inequalities, we have that the following formula follows:
 $$
 \ba{l}
@@ -2321,7 +2396,7 @@ $$
 ).
 \ea
 $$
-We now recall that $\dOne$ is an axiom in $T'_{ABC}$. It is easy to see that $\dOne$ implies the following formula
+We now recall that $\dOne$ is an axiom in $T'_{BC}$. It is easy to see that $\dOne$ implies the following formula
 $$
 \forall I J ( q(I,J) \to
 1\leq I\leq n \land 1\leq J\leq n).
@@ -2335,7 +2410,7 @@ $$
 )
 \ea
 $$
-follows from the axioms of $T'_{ABC}$. It is now easy to see that
+follows from the axioms of $T'_{BC}$. It is now easy to see that
 $$
 \ba{l}
 \diagO \to 
@@ -2353,7 +2428,7 @@ C^*_4(K,n)
 )
 \ea
 $$
-follows from the axioms of $T'_{ABC}$.
+follows from the axioms of $T'_{BC}$.
 
 ....
 
